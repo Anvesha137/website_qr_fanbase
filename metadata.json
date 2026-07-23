@@ -1,0 +1,6 @@
+{
+  "name": "Fanbase - Instagram DM Automation",
+  "description": "A high-fidelity clone of fanbase.gg, featuring an interactive landing page, automated DM simulation, pricing calculator, and a campaign builder playground.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
