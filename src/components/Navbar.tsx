@@ -6,8 +6,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
-  viewMode: 'landing' | 'dashboard' | 'link-in-bio' | 'features' | 'slots';
-  setViewMode: (mode: 'landing' | 'dashboard' | 'link-in-bio' | 'features' | 'slots') => void;
+  viewMode: 'landing' | 'link-in-bio' | 'features' | 'slots';
+  setViewMode: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots') => void;
   onSelectFeature?: (featureId: string) => void;
 }
 
@@ -94,7 +94,7 @@ const dropdownVariants = {
 };
 
 
-export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
+export default function Navbar({ viewMode, setViewMode, onSelectFeature }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<'features' | 'resources' | null>(null);
 
@@ -180,7 +180,13 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
                           {triggersItems.map((item) => (
                             <button
                               key={item.title}
-                              onClick={() => scrollToSection('playground')}
+                              onClick={() => {
+                                setViewMode('features');
+                                setActiveDropdown(null);
+                                if (onSelectFeature) {
+                                  onSelectFeature(item.id);
+                                }
+                              }}
                               className="w-full flex items-start gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors text-left group"
                             >
                               <div className="h-8 w-8 rounded-lg bg-[#e8e6fc] flex items-center justify-center shrink-0 mt-0.5">
@@ -330,14 +336,14 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
               </button>
             </div>
 
-            {/* Right: Login */}
+            {/* Right: Sandbox Button */}
             <div className="hidden md:flex items-center">
               <button
-                onClick={() => setViewMode(viewMode === 'dashboard' ? 'landing' : 'dashboard')}
+                onClick={() => setViewMode(viewMode === 'features' ? 'landing' : 'features')}
                 className="rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:shadow-lg transition-all duration-300 active:scale-95"
                 id="nav-login-btn"
               >
-                {viewMode === 'dashboard' ? 'Exit App' : 'Log in'}
+                {viewMode === 'features' ? 'Exit Sandbox' : 'Sandbox Mode'}
               </button>
             </div>
 
@@ -404,12 +410,12 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
               <div className="pt-4 border-t border-slate-100">
                 <button
                   onClick={() => {
-                    setViewMode(viewMode === 'dashboard' ? 'landing' : 'dashboard');
+                    setViewMode(viewMode === 'features' ? 'landing' : 'features');
                     setMobileMenuOpen(false);
                   }}
                   className="w-full py-3 bg-[#695dd4] hover:bg-[#5a50c6] text-white rounded-xl font-bold text-sm shadow-md transition-all"
                 >
-                  {viewMode === 'dashboard' ? 'Exit App' : 'Log in'}
+                  {viewMode === 'features' ? 'Exit Sandbox' : 'Sandbox Mode'}
                 </button>
               </div>
             </motion.div>

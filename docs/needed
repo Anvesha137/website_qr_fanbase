@@ -1,0 +1,2520 @@
+can u add 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import QuickRevertLogo from "./QuickRevertLogo";
+import Navbar from "./Navbar";
+import { 
+  MessageSquare, UserPlus, Sliders, Database, 
+  Tv, Send, Flame, Sparkles, Check, RotateCcw, 
+  AlertCircle, Sparkle, Zap, ArrowLeft, ShieldCheck,
+  Instagram, Lock, User, Mail, Phone, ExternalLink,
+  Volume2, VolumeX
+} from "lucide-react";
+
+interface FeaturesPageProps {
+  initialActiveTab?: string;
+  navigateTo: (path: string) => void;
+  triggerOAuthSimulation: () => void;
+  soundEnabled: boolean;
+  setSoundEnabled: (enabled: boolean) => void;
+  soundType: string;
+  setSoundType: (type: string) => void;
+  onRedirectClick?: (e: React.MouseEvent) => void;
+}
+
+export default function FeaturesPage({ 
+  initialActiveTab, 
+  navigateTo, 
+  triggerOAuthSimulation,
+  soundEnabled,
+  setSoundEnabled,
+  soundType,
+  setSoundType,
+  onRedirectClick = () => {}
+}: FeaturesPageProps) {
+  const [activeTab, setActiveTab] = useState<string>(initialActiveTab || "Comment Multiplier");
+
+  const playSoundSample = (type: string) => {
+    try {
+      let url = "";
+      if (type === "mechanical") {
+        url = "https://raw.githubusercontent.com/ionictheme/ionic2-chat/master/src/assets/sounds/button-16.mp3";
+      } else if (type === "keyboard") {
+        url = "https://www.soundjay.com/buttons/sounds/button-3.mp3";
+      } else if (type === "retro") {
+        url = "https://www.soundjay.com/buttons/sounds/button-10.mp3";
+      } else if (type === "cyber_synth") {
+        const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+        
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(3200, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.012);
+        
+        filter.type = "highpass";
+        filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        
+        gainNode.gain.setValueAtTime(0.35, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.012);
+        
+        osc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.015);
+        
+        const bufferSize = audioCtx.sampleRate * 0.01;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        
+        const noiseNode = audioCtx.createBufferSource();
+        noiseNode.buffer = buffer;
+        
+        const noiseFilter = audioCtx.createBiquadFilter();
+        noiseFilter.type = "bandpass";
+        noiseFilter.frequency.setValueAtTime(3500, audioCtx.currentTime);
+        noiseFilter.Q.setValueAtTime(4, audioCtx.currentTime);
+        
+        const noiseGain = audioCtx.createGain();
+        noiseGain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.01);
+        
+        noiseNode.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(audioCtx.destination);
+        
+        noiseNode.start();
+        return;
+      }
+
+      if (url) {
+        const audio = new Audio(url);
+        audio.volume = type === "retro" ? 0.35 : 0.6;
+        audio.play().catch(() => {});
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  // Sync state if initialActiveTab changes
+  useEffect(() => {
+    if (initialActiveTab) {
+      setActiveTab(initialActiveTab);
+    }
+  }, [initialActiveTab]);
+
+  // 1. Comment Multiplier states
+  const [commentText, setCommentText] = useState("");
+  const [multiplierComments, setMultiplierComments] = useState<Array<{ sender: string; text: string; time: string; isUser?: boolean }>>([
+    { sender: "natalie_codes", text: "Need this so bad! 🔥", time: "2m" },
+    { sender: "growth_hacker", text: "Is this safe?", time: "1m" },
+  ]);
+  const [multiplierDMs, setMultiplierDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([]);
+  const [isTypingReply, setIsTypingReply] = useState(false);
+
+  // 2. The Follower Gate states
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followCheckStep, setFollowCheckStep] = useState<"initial" | "checking" | "failed" | "following" | "verifying" | "success">("initial");
+  const [gateDMs, setGateDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([]);
+
+  // 3. Carousel Targeting states
+  const [carouselDMs, setCarouselDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Swipe through our Carousel post to discover how you can scale your profile on complete auto-pilot!" }
+  ]);
+  const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+
+  // 4. Zero-Click Lead Capture states
+  const [leadStep, setLeadStep] = useState(1);
+  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", interested: "" });
+  const [leadTyping, setLeadTyping] = useState(false);
+  const [leadChat, setLeadChat] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Hey! Let's get you set up with our Exclusive Creator Pack. To get started, what is your full name? ✍️" }
+  ]);
+
+  // 5. Story Interaction Hack states
+  const [storyProgress, setStoryProgress] = useState(0);
+  const [storyDMs, setStoryDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([]);
+  const [storyNotification, setStoryNotification] = useState<string | null>(null);
+
+  // 6. DM Responder states
+  const [responderDMs, setResponderDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Welcome to QuickRevert! Choose one of the active pathways below to guide your automation flow:" }
+  ]);
+
+  // Carousel Cards Data
+  const CAROUSEL_CARDS = [
+    { id: 1, title: "1. Mindset Shift", desc: "Why traditional Instagram organic reach is dead.", action: "Get PDF Guide", bg: "bg-brand-coral/10" },
+    { id: 2, title: "2. The Strategy", desc: "How to reverse-engineer viral Reel algorithms.", action: "Strategy Checklist", bg: "bg-brand-lime/10" },
+    { id: 3, title: "3. Auto-Pilot", desc: "Setting up your first high-converting funnel.", action: "Automation Map", bg: "bg-brand-cream-dark" },
+    { id: 4, title: "4. High Ticket", desc: "Frictionless appointments booking inside DMs.", action: "Booking Blueprints", bg: "bg-brand-coral/5" },
+    { id: 5, title: "5. Case Study", desc: "How Annie reached 100k views in 14 days flat.", action: "Case Study Access", bg: "bg-brand-lime/5" },
+    { id: 6, title: "6. Master Tool", desc: "Unlock 30% off Creator Elite plans today.", action: "Claim 30% Off", bg: "bg-amber-50" },
+  ];
+
+  // Story Progress effect
+  useEffect(() => {
+    if (activeTab === "Story Interaction Hack") {
+      setStoryProgress(0);
+      const interval = setInterval(() => {
+        setStoryProgress((prev) => {
+          if (prev >= 100) return 0;
+          return prev + 1.5;
+        });
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab]);
+
+  // Handle Comment Trigger
+  const handleAddComment = (text: string) => {
+    if (!text.trim()) return;
+    const userComment = text.trim();
+    setMultiplierComments((prev) => [...prev, { sender: "your_awesome_follower", text: userComment, time: "Just now", isUser: true }]);
+    setCommentText("");
+    setIsTypingReply(true);
+
+    setTimeout(() => {
+      setMultiplierComments((prev) => [
+        ...prev,
+        {
+          sender: "quickrevert_ai",
+          text: `@your_awesome_follower Check your requests! I just dropped the link inside! 📥`,
+          time: "Just now",
+        },
+      ]);
+      setIsTypingReply(false);
+
+      // Slide in DM
+      setMultiplierDMs([
+        { sender: "user", text: `Commented "${userComment}" on your Reel` },
+        { sender: "bot", text: "Yo! Thanks for dropping a comment on my Reel. Here is your exclusive pass to bypass manual effort and scale your business: quickrevert.com/start 🚀 Let's level up!" }
+      ]);
+    }, 1500);
+  };
+
+  // Follower Gate Flow
+  const startFollowCheck = () => {
+    setFollowCheckStep("checking");
+    setTimeout(() => {
+      setFollowCheckStep("failed");
+      setGateDMs([
+        { sender: "bot", text: "Hey! I noticed you don't follow the page yet. Follow @quickrevert_ai first, then tap Verify below to unlock your automated reward! 👇" }
+      ]);
+    }, 1500);
+  };
+
+  const handleFollowUser = () => {
+    setIsFollowing(true);
+    setFollowCheckStep("following");
+  };
+
+  const handleVerifyFollow = () => {
+    setFollowCheckStep("verifying");
+    setTimeout(() => {
+      setFollowCheckStep("success");
+      setGateDMs((prev) => [
+        ...prev,
+        { sender: "bot", text: "Awesome, thank you for the support! Verification check complete... and YES, you follow the page! Here is your private 20% discount code: VIRAL20. Keep crushing it! 🔥" }
+      ]);
+    }, 1500);
+  };
+
+  const resetFollowGate = () => {
+    setIsFollowing(false);
+    setFollowCheckStep("initial");
+    setGateDMs([]);
+  };
+
+  // Carousel click handler
+  const handleCarouselClick = (cardTitle: string, actionText: string) => {
+    setCarouselDMs((prev) => [
+      ...prev,
+      { sender: "user", text: `Requested: [${actionText}] from slide: "${cardTitle}"` },
+      { sender: "bot", text: `Direct delivery! Here is your requested resource for "${cardTitle}": quickrevert.com/resources/dl-pdf. Click to download and get started! 📥` }
+    ]);
+  };
+
+  // Zero click lead capture progression
+  const advanceLeadCapture = (inputVal: string, optionKey?: keyof typeof leadForm) => {
+    if (leadTyping) return;
+
+    const currentForm = { ...leadForm };
+    if (optionKey) {
+      currentForm[optionKey] = inputVal;
+      setLeadForm(currentForm);
+    }
+
+    setLeadChat((prev) => [...prev, { sender: "user", text: inputVal }]);
+    setLeadTyping(true);
+
+    setTimeout(() => {
+      setLeadTyping(false);
+      if (leadStep === 1) {
+        setLeadStep(2);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: `Incredible, ${inputVal}! Next up, what is your primary email address so we can register your files? 📧` }]);
+      } else if (leadStep === 2) {
+        setLeadStep(3);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: "Perfect. And what is your best WhatsApp or Phone number for priority lead alerts? 📱" }]);
+      } else if (leadStep === 3) {
+        setLeadStep(4);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: "Got it! Lastly, are you interested in receiving an exclusive 20% discount coupon code too? 🎁" }]);
+      } else if (leadStep === 4) {
+        setLeadStep(5);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: "Boom! Your lead profile has been securely synchronized directly with your QuickRevert dashboard! 🚀 Coupon and files have been sent." }]);
+      }
+    }, 1200);
+  };
+
+  const resetLeadCapture = () => {
+    setLeadStep(1);
+    setLeadForm({ name: "", email: "", phone: "", interested: "" });
+    setLeadChat([
+      { sender: "bot", text: "Hey! Let's get you set up with our Exclusive Creator Pack. To get started, what is your full name? ✍️" }
+    ]);
+  };
+
+  // DM Responder action clicks
+  const handleResponderClick = (option: string, reply: string) => {
+    setResponderDMs((prev) => [
+      ...prev,
+      { sender: "user", text: option },
+      { sender: "bot", text: reply }
+    ]);
+  };
+
+  // Story Interaction emoji trigger
+  const handleStoryReaction = (emoji: string) => {
+    setStoryNotification("Story Reaction Captured!");
+    setTimeout(() => setStoryNotification(null), 3000);
+
+    setStoryDMs([
+      { sender: "user", text: `Reacted ${emoji} to your Story` },
+      { sender: "bot", text: `OMG, thank you so much for the love on our Story! 💖 We appreciate you! Here is your exclusive masterclass fast-pass: quickrevert.com/gift. Let's grow together! 🚀` }
+    ]);
+  };
+
+  const ALL_TABS = [
+    { title: "Comment Multiplier", icon: MessageSquare, soon: false, desc: "Auto-reply to comments and slide freebies directly to their DM inbox." },
+    { title: "The Follower Gate", icon: UserPlus, soon: false, desc: "Check if they follow you before unlocking. Instant viral growth loop." },
+    { title: "Carousel Targeting", icon: Sliders, soon: false, desc: "Target replies to specific slides of your carousel to maximize slide score." },
+    { title: "Zero-Click Lead Capture", icon: Database, soon: false, desc: "Automatically scrape high-intent emails and phone numbers inside the chat." },
+    { title: "Story Interaction Hack", icon: Flame, soon: false, desc: "Auto-reply when fans react, tag you, or mention your profile in stories." },
+    { title: "DM Responder", icon: Send, soon: false, desc: "Auto-respond with smart-links, booking calendars, or application forms." },
+    { title: "Live Stream Heat", icon: Tv, soon: true, desc: "Auto-dispatch DM gates to active stream viewers in real-time." },
+    { title: "Brain rot-free AI", icon: Sparkles, soon: true, desc: "Ultra-natural custom trained voice responses without robotic fluff." },
+  ];
+
+  return (
+    <div className="min-h-screen bg-brand-cream text-brand-charcoal flex flex-col font-sans selection:bg-brand-coral selection:text-white">
+      {/* HEADER SECTION */}
+      <Navbar currentPath="/features" navigateTo={navigateTo} onRedirectClick={onRedirectClick} />
+
+      {/* DASHBOARD HERO GRID */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col gap-6">
+        
+        {/* Title Card banner */}
+        <div className="bg-brand-coral border-4 border-brand-charcoal rounded-3xl p-6 lg:p-8 text-white relative overflow-hidden shadow-[8px_8px_0px_0px_#111a08]">
+          <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl transform translate-x-10 -translate-y-10" />
+          <div className="relative z-10 max-w-2xl space-y-2 text-left">
+            <div className="inline-block bg-brand-charcoal text-brand-lime font-mono text-[10px] font-black uppercase px-2.5 py-1 rounded border border-brand-charcoal mb-2">
+              🚀 Interactive Developer Sandbox
+            </div>
+            <h1 className="text-3xl lg:text-5xl font-display font-black tracking-tight leading-none uppercase">
+              Configure Your Automation Engines
+            </h1>
+            <p className="text-sm lg:text-base font-semibold text-white/80 leading-relaxed max-w-xl">
+              Ditch the popup limits. Use this comprehensive layout to simulate, fine-tune, and verify your zero-maintenance social pipelines.
+            </p>
+          </div>
+        </div>
+
+        {/* WORKSPACE SIDEBAR + INTERACTIVE DISPLAY GRID */}
+        <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+          
+          {/* Left Column: Tab switcher cards */}
+          <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3">
+            <div className="bg-white border-2 border-brand-charcoal rounded-2xl p-4 shadow-[4px_4px_0px_0px_#111a08] text-left">
+              <h3 className="font-display font-black text-lg text-brand-charcoal">Select Automation</h3>
+              <p className="text-xs text-brand-charcoal/50 font-semibold mt-1">
+                Choose a channel to watch real-time simulated client-side responses.
+              </p>
+            </div>
+
+            <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none pr-1">
+              {ALL_TABS.map((tab) => {
+                const TabIcon = tab.icon;
+                const isSelected = activeTab === tab.title;
+                return (
+                  <button
+                    key={tab.title}
+                    onClick={() => setActiveTab(tab.title)}
+                    className={`shrink-0 lg:shrink-1 flex items-center justify-between p-3.5 rounded-xl border-2 text-left transition-all duration-150 cursor-pointer ${
+                      isSelected 
+                        ? "bg-brand-lime border-brand-charcoal text-brand-charcoal shadow-[4px_4px_0px_0px_#111a08]" 
+                        : "bg-white border-brand-charcoal/10 hover:border-brand-charcoal text-brand-charcoal/80"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`p-1.5 rounded-lg border ${isSelected ? "bg-white border-brand-charcoal" : "bg-neutral-50 border-neutral-200"}`}>
+                        <TabIcon className="w-4 h-4 text-brand-charcoal" />
+                      </div>
+                      <div className="text-xs font-bold leading-none">
+                        <span className="block">{tab.title}</span>
+                        <span className="text-[10px] text-brand-charcoal/50 font-normal mt-0.5 hidden lg:block max-w-[180px] truncate">{tab.desc}</span>
+                      </div>
+                    </div>
+                    {tab.soon && (
+                      <span className="text-[8px] font-mono font-extrabold bg-brand-coral text-white px-1.5 py-0.5 rounded border border-brand-charcoal uppercase scale-90 ml-2">
+                        SOON
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column: Dynamic sandbox panel with full sizing */}
+          <div className="flex-1 flex flex-col">
+            <div className="bg-white border-4 border-brand-charcoal rounded-3xl p-6 shadow-[8px_8px_0px_0px_#111a08] min-h-[500px] flex flex-col justify-between">
+              
+              {/* Active Tab info card */}
+              <div className="border-b-2 border-neutral-100 pb-4 mb-6 text-left">
+                <div className="flex items-center gap-3 mb-1">
+                  <h2 className="text-2xl font-display font-black text-brand-charcoal uppercase tracking-tight">
+                    {activeTab}
+                  </h2>
+                  {ALL_TABS.find((t) => t.title === activeTab)?.soon && (
+                    <span className="text-xs font-mono font-black bg-brand-coral text-white px-2 py-0.5 rounded border border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08]">
+                      COMING SOON
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs lg:text-sm font-semibold text-brand-charcoal/70">
+                  {activeTab === "Comment Multiplier" && "Automated thread responder that listens for comments on any target Reel and instantly pushes custom gated freebies straight to DM."}
+                  {activeTab === "The Follower Gate" && "Meta API safe verification step that double-checks whether the user is an active follower before triggering downloads."}
+                  {activeTab === "Carousel Targeting" && "A vertical deck of up to 6 swipeable informational slides with individual interactive keywords."}
+                  {activeTab === "Zero-Click Lead Capture" && "Interactive wizard sequence that collects qualified, clean prospect profiles inside the dialogue flow."}
+                  {activeTab === "Story Interaction Hack" && "Live micro-reaction story screen that captures tags, mentions, or emoji taps and dispatches instant links."}
+                  {activeTab === "DM Responder" && "Guided pathway menu guide directing prospects to schedules, support channels, or freebies in 1-click."}
+                  {activeTab === "Live Stream Heat" && "Automated trigger system that watches your live broadcast comment feeds and auto-dispatches gated resources."}
+                  {activeTab === "Brain rot-free AI" && "Ultra-personalized response engine tailored strictly to your design, brand guidelines, and unique human voice."}
+                </p>
+              </div>
+
+              {/* DYNAMIC COMPONENT WORKSPACE WITH GENEROUS HEIGHTS */}
+              <div className="flex-1 flex flex-col justify-center">
+                
+                {/* 1. COMMENT MULTIPLIER */}
+                {activeTab === "Comment Multiplier" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    {/* IG Post Card */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-neutral-50 shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="flex items-center gap-3 border-b border-brand-charcoal/10 pb-3 mb-4">
+                          <div className="w-9 h-9 rounded-full bg-brand-coral border-2 border-brand-charcoal flex items-center justify-center font-mono text-sm font-bold text-white shadow-[2px_2px_0px_0px_#111a08]">Q</div>
+                          <div>
+                            <p className="text-xs font-bold text-brand-charcoal leading-none">quickrevert_ai</p>
+                            <p className="text-[10px] text-brand-charcoal/50 font-semibold mt-0.5">Sponsored • Instagram Reel</p>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-brand-cream border-2 border-brand-charcoal rounded-xl text-xs font-semibold text-brand-charcoal mb-4 shadow-[2px_2px_0px_0px_#111a08]">
+                          <p className="font-extrabold text-brand-coral mb-1">🔥 FREE INSTAGRAM ACCELERATOR GUIDE!</p>
+                          <p className="text-brand-charcoal/70 leading-relaxed">
+                            Comment the word <span className="font-mono font-black bg-brand-lime px-2 py-0.5 rounded border border-brand-charcoal/20 text-brand-charcoal inline-block my-0.5">EASY</span> below and our system will instantly slide the download link straight to your inbox!
+                          </p>
+                        </div>
+
+                        <div className="space-y-3 max-h-[180px] overflow-y-auto mb-4 pr-1">
+                          {multiplierComments.map((c, i) => (
+                            <div key={i} className="text-xs leading-relaxed border-b border-neutral-100 pb-2">
+                              <span className="font-bold text-brand-charcoal mr-2">@{c.sender}</span>
+                              <span className="text-brand-charcoal/80 font-semibold">{c.text}</span>
+                              <span className="text-[10px] text-brand-charcoal/30 ml-2">{c.time}</span>
+                            </div>
+                          ))}
+                          {isTypingReply && (
+                            <div className="text-xs text-brand-charcoal/40 font-mono animate-pulse">
+                              quickrevert_ai is replying...
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2.5">
+                        <button
+                          onClick={() => handleAddComment("EASY")}
+                          className="bg-brand-lime border-2 border-brand-charcoal text-brand-charcoal font-mono font-black text-xs px-4 py-2.5 rounded-xl uppercase shadow-[3px_3px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer shrink-0"
+                        >
+                          Type "EASY"
+                        </button>
+                        <div className="flex-1 flex gap-2 border-2 border-brand-charcoal rounded-xl overflow-hidden bg-white px-3 items-center">
+                          <input
+                            type="text"
+                            value={commentText}
+                            onChange={(e) => setCommentText(e.target.value)}
+                            placeholder="Type a custom comment..."
+                            className="w-full text-xs bg-transparent border-0 outline-none font-medium h-9"
+                            onKeyDown={(e) => e.key === "Enter" && handleAddComment(commentText)}
+                          />
+                          <button 
+                            onClick={() => handleAddComment(commentText)}
+                            className="text-xs font-black text-brand-coral cursor-pointer hover:underline"
+                          >
+                            Post
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* IG DM Inbox */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-brand-cream-dark shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="border-b border-brand-charcoal/10 pb-3 mb-4 flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full bg-brand-coral flex items-center justify-center font-mono text-xs font-bold text-white shadow-[1px_1px_0px_0px_#111a08]">Q</div>
+                          <div>
+                            <p className="text-xs font-bold text-brand-charcoal leading-none">quickrevert_ai</p>
+                            <p className="text-[9px] text-brand-lime font-mono font-bold uppercase mt-0.5">● Active Pipeline</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 max-h-[220px] overflow-y-auto mb-4 pr-1">
+                          {multiplierDMs.length === 0 ? (
+                            <div className="text-center py-12 text-xs text-brand-charcoal/40 font-bold border-2 border-dashed border-brand-charcoal/20 rounded-xl bg-white/50">
+                              Waiting for "EASY" comment to trigger DM sequence...
+                            </div>
+                          ) : (
+                            multiplierDMs.map((dm, idx) => (
+                              <div 
+                                key={idx} 
+                                className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                              >
+                                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs font-semibold border-2 border-brand-charcoal shadow-[3px_3px_0px_0px_#111a08] ${
+                                  dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                                }`}>
+                                  {dm.text}
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+
+                      {multiplierDMs.length > 0 && (
+                        <button 
+                          onClick={() => {
+                            setMultiplierComments([
+                              { sender: "natalie_codes", text: "Need this so bad! 🔥", time: "2m" },
+                              { sender: "growth_hacker", text: "Is this safe?", time: "1m" },
+                            ]);
+                            setMultiplierDMs([]);
+                          }}
+                          className="w-full py-2.5 rounded-xl border-2 border-brand-charcoal bg-white font-mono text-xs font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5"
+                        >
+                          <RotateCcw className="w-4 h-4" />
+                          Reset Simulation Loop
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* 2. THE FOLLOWER GATE */}
+                {activeTab === "The Follower Gate" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    {/* Gate State Config */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-neutral-50 shadow-[4px_4px_0px_0px_#111a08] text-left">
+                      <div className="space-y-5">
+                        <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-3">
+                          <span className="text-[10px] font-mono font-black text-brand-charcoal/40 uppercase">Follower State Check</span>
+                          <div className="flex items-center gap-1.5">
+                            <div className={`w-3 h-3 rounded-full ${isFollowing ? "bg-brand-lime" : "bg-brand-coral"}`} />
+                            <span className="text-xs font-mono font-bold">
+                              {isFollowing ? "FOLLOWING" : "NOT FOLLOWING"}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-3 text-xs">
+                          <p className="font-bold text-brand-charcoal">Verification Checklist Steps:</p>
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2.5">
+                              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-mono font-bold border-2 ${
+                                followCheckStep !== "initial" ? "bg-brand-lime text-brand-charcoal border-brand-charcoal" : "bg-neutral-200 text-neutral-400 border-neutral-300"
+                              }`}>1</span>
+                              <span className="font-semibold text-brand-charcoal/70">Comment trigger word 'GROWTH'</span>
+                            </div>
+                            <div className="flex items-center gap-2.5">
+                              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-mono font-bold border-2 ${
+                                followCheckStep === "failed" || followCheckStep === "following" || followCheckStep === "verifying" || followCheckStep === "success" ? "bg-brand-lime text-brand-charcoal border-brand-charcoal" : "bg-neutral-200 text-neutral-400 border-neutral-300"
+                              }`}>2</span>
+                              <span className="font-semibold text-brand-charcoal/70">Scan Profile Database</span>
+                            </div>
+                            <div className="flex items-center gap-2.5">
+                              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-mono font-bold border-2 ${
+                                followCheckStep === "success" ? "bg-brand-lime text-brand-charcoal border-brand-charcoal" : "bg-neutral-200 text-neutral-400 border-neutral-300"
+                              }`}>3</span>
+                              <span className="font-semibold text-brand-charcoal/70">Deliver Premium Reward</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Display active state */}
+                        <div className="p-4 bg-brand-cream border-2 border-brand-charcoal rounded-2xl text-xs font-semibold shadow-[2px_2px_0px_0px_#111a08]">
+                          {followCheckStep === "initial" && (
+                            <p className="text-brand-charcoal/80">👉 Tap the button below to simulate comment trigger <span className="font-black text-brand-coral bg-white border border-brand-charcoal/20 px-1.5 py-0.5 rounded shadow-[1px_1px_0px_0px_#111a08]">"GROWTH"</span> without following yet.</p>
+                          )}
+                          {followCheckStep === "checking" && (
+                            <div className="flex items-center gap-2.5 text-brand-charcoal">
+                              <div className="w-4 h-4 border-2 border-brand-coral border-t-transparent rounded-full animate-spin" />
+                              <span>Verifying follow state on Instagram Graph API...</span>
+                            </div>
+                          )}
+                          {followCheckStep === "failed" && (
+                            <div className="space-y-3">
+                              <p className="text-brand-coral font-black flex items-center gap-1.5">
+                                <AlertCircle className="w-4 h-4 shrink-0" /> Follower verification check failed!
+                              </p>
+                              <p className="text-brand-charcoal/70 text-[11px] font-semibold">
+                                The follower gate successfully intercepted the request. User must follow your account to unlock the coupon code.
+                              </p>
+                              <button
+                                onClick={handleFollowUser}
+                                className="bg-brand-charcoal text-white hover:bg-neutral-800 text-xs font-mono font-black uppercase px-4 py-2 rounded-xl border-2 border-brand-charcoal cursor-pointer shadow-[3px_3px_0px_0px_#111a08] hover:translate-y-[1px]"
+                              >
+                                Follow @quickrevert_ai
+                              </button>
+                            </div>
+                          )}
+                          {followCheckStep === "following" && (
+                            <div className="space-y-2">
+                              <p className="text-brand-lime font-black bg-brand-charcoal px-3 py-1 rounded inline-block text-[11px]">✅ Follower Verified on Client</p>
+                              <p className="text-brand-charcoal/70 text-xs font-semibold leading-relaxed">
+                                Now click the verification button in the simulated DM on the right to sync follow status with server.
+                              </p>
+                            </div>
+                          )}
+                          {followCheckStep === "verifying" && (
+                            <div className="flex items-center gap-2.5 text-brand-charcoal">
+                              <div className="w-4 h-4 border-2 border-brand-lime border-t-transparent rounded-full animate-spin" />
+                              <span>Double-checking Live Meta Server Database...</span>
+                            </div>
+                          )}
+                          {followCheckStep === "success" && (
+                            <div className="space-y-1.5 text-brand-charcoal">
+                              <p className="font-black text-brand-lime uppercase tracking-wider flex items-center gap-1.5 bg-brand-charcoal text-white px-3 py-1.5 rounded-xl text-xs shadow-[2px_2px_0px_0px_#111a08]">
+                                <Check className="w-4 h-4 text-brand-lime" /> Follower Verified & Reward Sent!
+                              </p>
+                              <p className="text-[10px] text-brand-charcoal/50">
+                                Meta API returned status: SUCCESS. Loop closed successfully.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 mt-5">
+                        {followCheckStep === "initial" && (
+                          <button
+                            onClick={startFollowCheck}
+                            className="w-full bg-brand-lime border-2 border-brand-charcoal text-brand-charcoal font-mono font-black text-xs py-3 rounded-xl uppercase shadow-[4px_4px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer text-center"
+                          >
+                            Simulate Comment: "GROWTH"
+                          </button>
+                        )}
+                        {followCheckStep !== "initial" && (
+                          <button
+                            onClick={resetFollowGate}
+                            className="w-full bg-white border-2 border-brand-charcoal text-brand-charcoal font-mono font-black text-xs py-3 rounded-xl uppercase shadow-[4px_4px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer flex items-center justify-center gap-1.5"
+                          >
+                            <RotateCcw className="w-4 h-4" /> Restart Loop
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Gate DMs */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-brand-cream-dark shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="border-b border-brand-charcoal/10 pb-3 mb-4 flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full bg-brand-lime flex items-center justify-center font-mono text-xs font-bold text-brand-charcoal border-2 border-brand-charcoal shadow-[1px_1px_0px_0px_#111a08]">G</div>
+                          <div>
+                            <p className="text-xs font-bold text-brand-charcoal leading-none">The Follower Gate</p>
+                            <p className="text-[9px] text-brand-coral font-mono font-bold uppercase mt-0.5">🔐 Verification Loop</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 max-h-[220px] overflow-y-auto mb-4 pr-1">
+                          {gateDMs.length === 0 ? (
+                            <div className="text-center py-12 text-xs text-brand-charcoal/40 font-bold border-2 border-dashed border-brand-charcoal/20 rounded-xl bg-white/50">
+                              Waiting for follower check trigger to fire...
+                            </div>
+                          ) : (
+                            gateDMs.map((dm, idx) => (
+                              <div 
+                                key={idx} 
+                                className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                              >
+                                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs font-semibold border-2 border-brand-charcoal shadow-[3px_3px_0px_0px_#111a08] ${
+                                  dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                                }`}>
+                                  {dm.text}
+                                </div>
+                              </div>
+                            ))
+                          )}
+
+                          {followCheckStep === "following" && (
+                            <div className="flex justify-start">
+                              <button
+                                onClick={handleVerifyFollow}
+                                className="bg-brand-lime hover:bg-brand-lime-dark text-brand-charcoal text-xs font-mono font-black border-2 border-brand-charcoal px-4 py-2.5 rounded-xl shadow-[3px_3px_0px_0px_#111a08] cursor-pointer hover:translate-y-[1px]"
+                              >
+                                ⚡ TAP HERE TO VERIFY FOLLOW
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="text-[10px] font-mono font-bold text-brand-charcoal/40 text-center">
+                        Meta Partner Graph Approved • 100% Secure Integration
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. CAROUSEL TARGETING */}
+                {activeTab === "Carousel Targeting" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch animate-fade-in">
+                    {/* Carousel Slides */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-neutral-50 shadow-[4px_4px_0px_0px_#111a08] text-left relative overflow-hidden">
+                      <div>
+                        <div className="flex justify-between items-center mb-3 border-b border-neutral-100 pb-2">
+                          <span className="text-[10px] font-mono font-black text-brand-coral bg-white border border-brand-charcoal px-2.5 py-0.5 rounded shadow-[1px_1px_0px_0px_#111a08]">
+                            Swipeable Carousel (6 slides)
+                          </span>
+                          <span className="text-xs font-bold text-brand-charcoal/60">
+                            Active: Slide {selectedSlideIndex + 1}
+                          </span>
+                        </div>
+
+                        {/* Horizontal track with 1/4 next visible */}
+                        <div className="text-[10px] font-mono font-black text-brand-charcoal/45 mb-2.5 flex items-center justify-between">
+                          <span>👈 SWIPE / DRAG HORIZONTALLY TO EXPLORE 👉</span>
+                          <span className="animate-pulse text-brand-coral">🟢 DIRECT CLICK TRIGGERS SIMULATOR</span>
+                        </div>
+
+                        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-none scroll-smooth">
+                          {CAROUSEL_CARDS.map((card, i) => (
+                            <div
+                              key={card.id}
+                              onClick={() => setSelectedSlideIndex(i)}
+                              className={`snap-center shrink-0 w-[78%] md:w-[72%] rounded-2xl border-2 border-brand-charcoal p-4 flex flex-col justify-between shadow-[4px_4px_0px_0px_#0f172a] transition-all cursor-pointer ${
+                                selectedSlideIndex === i 
+                                  ? `${card.bg} border-brand-coral ring-2 ring-brand-coral/40 scale-[1.01]` 
+                                  : "bg-white opacity-85 hover:opacity-100"
+                              }`}
+                            >
+                              <div className="space-y-3.5">
+                                {/* Slide Graphic */}
+                                {renderSlideImage(card.id)}
+
+                                <div className="space-y-1">
+                                  <h5 className="text-xs font-display font-black text-brand-charcoal uppercase tracking-tight flex items-center justify-between">
+                                    <span>{card.title}</span>
+                                    {selectedSlideIndex === i && (
+                                      <span className="text-[8px] font-mono font-black text-white bg-brand-coral px-1.5 py-0.5 rounded uppercase">Active</span>
+                                    )}
+                                  </h5>
+                                  <p className="text-[10px] text-brand-charcoal/70 font-semibold leading-relaxed">
+                                    {card.desc}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedSlideIndex(i);
+                                  handleCarouselClick(card.title, card.action);
+                                }}
+                                className="w-full mt-3 py-2 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-brand-charcoal font-mono font-black text-[9px] uppercase shadow-[2px_2px_0px_0px_#0f172a] hover:translate-y-[1px] transition cursor-pointer text-center"
+                              >
+                                👇 Comment: "{card.action}"
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2.5 justify-center items-center mt-3 pt-3 border-t border-brand-charcoal/10">
+                        <div className="flex gap-2">
+                          {CAROUSEL_CARDS.map((_, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setSelectedSlideIndex(i)}
+                              className={`w-3 h-3 rounded-full border border-brand-charcoal transition-all cursor-pointer ${
+                                selectedSlideIndex === i ? "bg-brand-coral w-7" : "bg-white"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Carousel DMs */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-brand-cream-dark shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="border-b border-brand-charcoal/10 pb-3 mb-4 flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full bg-brand-coral flex items-center justify-center font-mono text-xs font-bold text-white border-2 border-brand-charcoal shadow-[1px_1px_0px_0px_#111a08]">C</div>
+                          <div>
+                            <p className="text-xs font-bold text-brand-charcoal leading-none">Carousel Responder</p>
+                            <p className="text-[9px] text-brand-lime font-mono font-bold uppercase mt-0.5">📬 Custom Action Matcher</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 max-h-[220px] overflow-y-auto mb-4 pr-1">
+                          {carouselDMs.map((dm, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                            >
+                              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs font-semibold border-2 border-brand-charcoal shadow-[3px_3px_0px_0px_#111a08] ${
+                                dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                              }`}>
+                                {dm.text}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button 
+                        onClick={() => setCarouselDMs([
+                          { sender: "bot", text: "Swipe through our Carousel post to discover how you can scale your profile on complete auto-pilot!" }
+                        ])}
+                        className="w-full py-2.5 rounded-xl border-2 border-brand-charcoal bg-white font-mono text-xs font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        Clear Sandbox Thread
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* 4. ZERO-CLICK LEAD CAPTURE */}
+                {activeTab === "Zero-Click Lead Capture" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    {/* Interactive chat inputs */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-brand-cream-dark shadow-[4px_4px_0px_0px_#111a08] text-left">
+                      <div>
+                        <div className="border-b border-brand-charcoal/10 pb-3 mb-4 flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <Database className="w-4 h-4 text-brand-coral animate-pulse" />
+                            <span className="text-xs font-mono font-black uppercase text-brand-charcoal">Capture Dialogue Wizard</span>
+                          </div>
+                          <span className="text-[10px] font-mono font-bold text-brand-charcoal/50">Progress Step {leadStep}/5</span>
+                        </div>
+
+                        {/* Dialogue progress chat container */}
+                        <div className="flex-1 overflow-y-auto max-h-[200px] space-y-3 mb-4 p-1">
+                          {leadChat.map((msg, i) => (
+                            <div key={i} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs font-semibold border-2 border-brand-charcoal shadow-[3px_3px_0px_0px_#111a08] ${
+                                msg.sender === "user" ? "bg-brand-lime text-brand-charcoal" : "bg-white text-brand-charcoal"
+                              }`}>
+                                {msg.text}
+                              </div>
+                            </div>
+                          ))}
+                          {leadTyping && (
+                            <div className="text-[10px] font-mono text-brand-charcoal/40 animate-pulse">
+                              Lead grab engine is structuring profile data...
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Control Panel Inputs to advances */}
+                      <div className="space-y-3 bg-white p-4 rounded-xl border-2 border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08]">
+                        <p className="text-[10px] font-bold text-brand-charcoal/50 uppercase font-mono leading-none mb-1">Simulate sending inputs:</p>
+                        
+                        {leadStep === 1 && (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => advanceLeadCapture("Annie Rohatgi ✍️", "name")}
+                              className="bg-brand-charcoal text-white hover:bg-neutral-800 text-xs font-mono font-black px-4 py-2.5 rounded-xl border-2 border-brand-charcoal cursor-pointer flex-1 text-center shadow-[2px_2px_0px_0px_#111a08]"
+                            >
+                              Send: "Annie Rohatgi"
+                            </button>
+                          </div>
+                        )}
+
+                        {leadStep === 2 && (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => advanceLeadCapture("annierohatgi13@gmail.com 📧", "email")}
+                              className="bg-brand-charcoal text-white hover:bg-neutral-800 text-xs font-mono font-black px-4 py-2.5 rounded-xl border-2 border-brand-charcoal cursor-pointer flex-1 text-center shadow-[2px_2px_0px_0px_#111a08]"
+                            >
+                              Send: "annierohatgi13@gmail.com"
+                            </button>
+                          </div>
+                        )}
+
+                        {leadStep === 3 && (
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => advanceLeadCapture("+91 98765 43210 📱", "phone")}
+                              className="bg-brand-charcoal text-white hover:bg-neutral-800 text-xs font-mono font-black px-4 py-2.5 rounded-xl border-2 border-brand-charcoal cursor-pointer flex-1 text-center shadow-[2px_2px_0px_0px_#111a08]"
+                            >
+                              Send: "+91 98765 43210"
+                            </button>
+                          </div>
+                        )}
+
+                        {leadStep === 4 && (
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => advanceLeadCapture("Yes, send coupon! 😍", "interested")}
+                              className="bg-brand-lime text-brand-charcoal hover:bg-brand-lime-dark text-xs font-mono font-black px-4 py-2.5 rounded-xl border-2 border-brand-charcoal cursor-pointer flex-1 shadow-[3px_3px_0px_0px_#111a08] text-center"
+                            >
+                              Yes, send coupon! 😍
+                            </button>
+                            <button
+                              onClick={() => advanceLeadCapture("No, thanks.", "interested")}
+                              className="bg-neutral-200 text-brand-charcoal hover:bg-neutral-300 text-xs font-mono font-black px-4 py-2.5 rounded-xl border-2 border-neutral-300 cursor-pointer flex-1 text-center"
+                            >
+                              No, thanks.
+                            </button>
+                          </div>
+                        )}
+
+                        {leadStep === 5 && (
+                          <button
+                            onClick={resetLeadCapture}
+                            className="w-full bg-brand-coral text-white font-mono font-black text-xs py-2.5 rounded-xl uppercase shadow-[3px_3px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer flex items-center justify-center gap-1.5"
+                          >
+                            <RotateCcw className="w-4 h-4" /> Reset Lead Simulation
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Live CRM Lead Dashboard Sync */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-white shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="flex items-center gap-3 border-b border-brand-charcoal/10 pb-3 mb-4">
+                          <div className="w-6 h-6 rounded-full bg-brand-charcoal flex items-center justify-center font-mono text-[10px] text-white font-black">✔</div>
+                          <p className="text-xs font-mono font-black uppercase text-brand-charcoal tracking-wider">Synchronized CRM Dashboard</p>
+                        </div>
+
+                        <div className="space-y-4 text-xs font-semibold text-left">
+                          <div className="grid grid-cols-3 gap-3 border-b border-neutral-100 pb-2.5">
+                            <span className="font-mono text-brand-charcoal/40 font-bold">PROSPECT:</span>
+                            <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.name || <span className="text-neutral-300 italic font-medium">Awaiting Name...</span>}</span>
+                          </div>
+                          <div className="grid grid-cols-3 gap-3 border-b border-neutral-100 pb-2.5">
+                            <span className="font-mono text-brand-charcoal/40 font-bold">EMAIL ADDR:</span>
+                            <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.email || <span className="text-neutral-300 italic font-medium">Awaiting Email...</span>}</span>
+                          </div>
+                          <div className="grid grid-cols-3 gap-3 border-b border-neutral-100 pb-2.5">
+                            <span className="font-mono text-brand-charcoal/40 font-bold">TELEPHONE:</span>
+                            <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.phone || <span className="text-neutral-300 italic font-medium">Awaiting Phone...</span>}</span>
+                          </div>
+                          <div className="grid grid-cols-3 gap-3 border-b border-neutral-100 pb-2.5">
+                            <span className="font-mono text-brand-charcoal/40 font-bold">COUPON REQ:</span>
+                            <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.interested || <span className="text-neutral-300 italic font-medium">Awaiting Answer...</span>}</span>
+                          </div>
+                        </div>
+
+                        {leadStep === 5 && (
+                          <div className="mt-6 p-4 bg-brand-lime/15 border-2 border-brand-lime rounded-2xl text-left flex items-start gap-3 shadow-[2px_2px_0px_0px_#111a08]">
+                            <Check className="w-5 h-5 text-brand-lime shrink-0 stroke-[3] mt-0.5" />
+                            <div>
+                              <p className="text-xs font-black text-brand-charcoal uppercase">Webhook Event Fired!</p>
+                              <p className="text-[10px] text-brand-charcoal/60 leading-relaxed font-semibold">
+                                Dispatching JSON payload to integrated CRM dashboard successfully. QuickRevert leads database synced.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="text-[10px] font-mono font-bold text-brand-charcoal/40 text-center">
+                        Securely Exportable to Google Sheets, Notion & Zapier
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 5. STORY INTERACTION HACK */}
+                {activeTab === "Story Interaction Hack" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    {/* Story View screen */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-neutral-900 text-white shadow-[4px_4px_0px_0px_#111a08] relative min-h-[300px]">
+                      
+                      {/* Story Top Progress Bars */}
+                      <div className="flex gap-1 mb-4 absolute top-4 inset-x-4 z-10">
+                        <div className="flex-1 h-1 bg-white/20 rounded overflow-hidden">
+                          <div className="h-full bg-white transition-all duration-100" style={{ width: `${storyProgress}%` }} />
+                        </div>
+                        <div className="flex-1 h-1 bg-white/20 rounded" />
+                      </div>
+
+                      <div className="space-y-4 mt-4 text-left z-10">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-brand-coral border-2 border-white flex items-center justify-center font-mono text-xs font-bold text-white shadow-md">Q</div>
+                          <div>
+                            <p className="text-xs font-bold leading-none text-white">quickrevert_ai</p>
+                            <p className="text-[8px] text-neutral-300 mt-0.5 font-bold">1h ago • Active Story</p>
+                          </div>
+                        </div>
+
+                        <div className="p-4 bg-white/10 border border-white/20 rounded-2xl backdrop-blur-md">
+                          <p className="text-sm font-extrabold uppercase text-brand-lime mb-1 tracking-tight flex items-center gap-1.5">
+                            <Flame className="w-5 h-5 text-brand-coral fill-brand-coral animate-bounce" /> Story Flash Class!
+                          </p>
+                          <p className="text-xs text-white/90 leading-relaxed font-semibold">
+                            React with your favorite emoji to this story right now, and our system will instantly slide the VIP invitation straight to your DMs! 🎁👇
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Emoji fast reaction triggers */}
+                      <div className="space-y-3 z-10 mt-6">
+                        <p className="text-[9px] font-mono text-white/50 uppercase font-black tracking-wide text-left">Click quick reaction emoji:</p>
+                        <div className="flex justify-between gap-2.5">
+                          {["🔥", "😍", "🙌", "💯", "🚀", "❤️"].map((emoji) => (
+                            <button
+                              key={emoji}
+                              onClick={() => handleStoryReaction(emoji)}
+                              className="flex-1 text-2xl py-2 rounded-xl bg-white/10 hover:bg-white/25 border-2 border-white/10 hover:border-white hover:scale-110 active:scale-95 transition-all cursor-pointer text-center"
+                            >
+                              {emoji}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {storyNotification && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -15 }}
+                            className="absolute inset-x-5 top-1/2 -translate-y-1/2 bg-brand-lime border-2 border-brand-charcoal p-4 rounded-xl text-brand-charcoal shadow-xl z-20"
+                          >
+                            <div className="flex flex-col items-center justify-center gap-1.5 text-center">
+                              <Zap className="w-5 h-5 text-brand-charcoal fill-brand-charcoal animate-bounce" />
+                              <p className="text-xs font-black uppercase">Meta Event Captured!</p>
+                              <p className="text-[10px] text-brand-charcoal/75 font-semibold">Intercepting reaction... Automating DM delivery! 🚀</p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Story DM inbox */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-brand-cream-dark shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="border-b border-brand-charcoal/10 pb-3 mb-4 flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full bg-brand-coral flex items-center justify-center font-mono text-xs font-bold text-white border-2 border-brand-charcoal shadow-[1px_1px_0px_0px_#111a08]">S</div>
+                          <div>
+                            <p className="text-xs font-bold text-brand-charcoal leading-none">Story Automation Thread</p>
+                            <p className="text-[9px] text-brand-lime font-mono font-bold uppercase mt-0.5">📥 Auto-Reply Responder</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 max-h-[220px] overflow-y-auto mb-4 pr-1">
+                          {storyDMs.length === 0 ? (
+                            <div className="text-center py-12 text-xs text-brand-charcoal/40 font-bold border-2 border-dashed border-brand-charcoal/20 rounded-xl bg-white/50">
+                              Waiting for story reaction click...
+                            </div>
+                          ) : (
+                            storyDMs.map((dm, idx) => (
+                              <div 
+                                key={idx} 
+                                className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                              >
+                                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs font-semibold border-2 border-brand-charcoal shadow-[3px_3px_0px_0px_#111a08] ${
+                                  dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                                }`}>
+                                  {dm.text}
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+
+                      <button 
+                        onClick={() => setStoryDMs([])}
+                        className="w-full py-2.5 rounded-xl border-2 border-brand-charcoal bg-white font-mono text-xs font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                        Clear Simulation
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* 6. DM RESPONDER */}
+                {activeTab === "DM Responder" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                    {/* Options Selection Screen */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-neutral-50 shadow-[4px_4px_0px_0px_#111a08] text-left">
+                      <div>
+                        <span className="text-[10px] font-mono font-black text-brand-coral bg-white border-2 border-brand-charcoal px-2.5 py-0.5 rounded shadow-[1px_1px_0px_0px_#111a08] uppercase inline-block mb-3">
+                          Decision Flow Builder
+                        </span>
+                        <p className="text-xs font-bold text-brand-charcoal mb-3">Simulate clicking interactive options inside DM chat:</p>
+                        
+                        <div className="space-y-3">
+                          <button
+                            onClick={() => handleResponderClick("📅 Book Free Growth Audit", "Awesome choice! Select your free 15-minute diagnostic slot on our calendar: calendly.com/quickrevert 📅")}
+                            className="w-full text-left p-3 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-xs font-bold shadow-[3px_3px_0px_0px_#111a08] active:translate-y-[1px] transition cursor-pointer"
+                          >
+                            Pathway A: 📅 Book Free Growth Audit
+                          </button>
+                          <button
+                            onClick={() => handleResponderClick("🎁 Instant Access to Freebies", "Direct dispatch! Download our full high-converting resource library here: drive.google.com/quickrevert-freebies 🎁")}
+                            className="w-full text-left p-3 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-xs font-bold shadow-[3px_3px_0px_0px_#111a08] active:translate-y-[1px] transition cursor-pointer"
+                          >
+                            Pathway B: 🎁 Instant Access to Freebies
+                          </button>
+                          <button
+                            onClick={() => handleResponderClick("💬 Connect to Support Agent", "Understood. Bypassing automated flows... routing you straight to an active human support manager now! standby... 💬")}
+                            className="w-full text-left p-3 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-xs font-bold shadow-[3px_3px_0px_0px_#111a08] active:translate-y-[1px] transition cursor-pointer"
+                          >
+                            Pathway C: 💬 Connect to Support Agent
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setResponderDMs([
+                          { sender: "bot", text: "Welcome to QuickRevert! Choose one of the active pathways below to guide your automation flow:" }
+                        ])}
+                        className="w-full py-2.5 rounded-xl border-2 border-brand-charcoal bg-white font-mono text-xs font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5 mt-5"
+                      >
+                        <RotateCcw className="w-4 h-4" /> Reset Decision Tree
+                      </button>
+                    </div>
+
+                    {/* Chat log */}
+                    <div className="border-2 border-brand-charcoal rounded-2xl p-5 flex flex-col justify-between bg-brand-cream-dark shadow-[4px_4px_0px_0px_#111a08]">
+                      <div>
+                        <div className="border-b border-brand-charcoal/10 pb-3 mb-4 flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-full bg-brand-charcoal flex items-center justify-center font-mono text-xs text-white font-black border-2 border-brand-charcoal shadow-[1px_1px_0px_0px_#111a08]">R</div>
+                          <div>
+                            <p className="text-xs font-bold text-brand-charcoal leading-none">DM Responder Bot</p>
+                            <p className="text-[9px] text-brand-lime font-mono font-bold uppercase mt-0.5">🤖 Interactive Responder Active</p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 max-h-[220px] overflow-y-auto mb-4 pr-1">
+                          {responderDMs.map((dm, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                            >
+                              <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs font-semibold border-2 border-brand-charcoal shadow-[3px_3px_0px_0px_#111a08] ${
+                                dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                              }`}>
+                                {dm.text}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="text-[10px] font-mono font-bold text-brand-charcoal/40 text-center">
+                        Configure customized menu replies inside your creator dashboard
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 7 & 8. LIVE STREAM HEAT & BRAIN ROT-FREE AI (MEME CHANNELS) */}
+                {(activeTab === "Live Stream Heat" || activeTab === "Brain rot-free AI") && (
+                  <div className="flex flex-col items-center justify-center text-center p-6 space-y-5 h-full relative bg-brand-cream-dark border-4 border-brand-charcoal rounded-3xl overflow-hidden min-h-[350px] shadow-[4px_4px_0px_0px_#111a08]">
+                    
+                    {/* Meme Container */}
+                    <div className="relative w-full max-w-[400px] rounded-2xl border-4 border-brand-charcoal overflow-hidden shadow-[6px_6px_0px_0px_#111a08] bg-black">
+                      <img
+                        src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZidWtzOHM0MGV2MTgyZjVqN2V3Yzd3ZWpvaGFpdnMybTZleGRhZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/o0eOCNkn7cLYc/giphy.gif"
+                        alt="Jack Sparrow running frantic funny meme"
+                        referrerPolicy="no-referrer"
+                        className="w-full h-[220px] object-cover"
+                      />
+                      
+                      {/* On the way heading */}
+                      <div className="absolute inset-x-0 bottom-0 bg-brand-coral border-t-4 border-brand-charcoal py-2 px-4 flex items-center justify-center">
+                        <span className="font-mono font-black text-white text-base uppercase tracking-widest animate-pulse">
+                          on the wayyyyyyyy 🏃‍♂️💨
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="max-w-md space-y-2">
+                      <h5 className="text-xl font-display font-black text-brand-charcoal uppercase tracking-tight flex items-center justify-center gap-1.5">
+                        <Sparkle className="w-5 h-5 text-brand-coral animate-spin" />
+                        ARRESTING SYSTEM PROGRESS
+                      </h5>
+                      <p className="text-xs lg:text-sm text-brand-charcoal/70 font-semibold leading-relaxed">
+                        {activeTab === "Live Stream Heat" 
+                          ? "We are actively debugging high-volume RTMP pipelines to auto-dispatch gated discount links inside comment streams while you're broadcasting!" 
+                          : "Say goodbye to sterile ChatGPT greetings. Our custom NLP engines are tuned to mirror your authentic personality and exact linguistic quirks."}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+
+              {/* FOOTER IN WORKSPACE */}
+              <div className="mt-8 pt-4 border-t-2 border-neutral-100 flex flex-col sm:flex-row items-center justify-between text-xs font-semibold text-brand-charcoal/60 gap-3">
+                <span className="flex items-center gap-1">💡 Click another item in the left sidebar to switch simulations instantly.</span>
+                <span className="font-mono text-[10px] text-brand-coral font-bold bg-white border-2 border-brand-charcoal px-2.5 py-1 rounded shadow-[2px_2px_0px_0px_#111a08]">
+                  Verified API Compliant
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+      {/* FOOTER */}
+      <footer className="border-t-2 border-brand-charcoal bg-brand-charcoal text-white py-8 px-4 lg:px-8 mt-12 text-left">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-neutral-400 font-semibold max-w-xl">
+            © 2026 QuickRevert. Powered by Meta Graph API. All rights reserved.
+          </p>
+          <div className="flex gap-4">
+            <span className="text-[10px] font-mono font-black bg-brand-coral text-white px-2.5 py-1 rounded border border-brand-charcoal">
+              🛡️ Meta Verified Client
+            </span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function renderSlideImage(id: number) {
+  switch (id) {
+    case 1:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          {/* Background Grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex justify-around items-end w-full h-14 relative z-10 px-2">
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[7px] font-mono font-black text-neutral-400">Dead Reach 📉</span>
+              <div className="w-6 bg-neutral-300 border border-brand-charcoal h-3 rounded-t-sm" />
+            </div>
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[7px] font-mono font-black text-brand-coral">QuickRevert 🚀</span>
+              <div className="w-10 bg-gradient-to-t from-brand-coral to-brand-lime border border-brand-charcoal h-10 rounded-t-sm relative">
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    case 2:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex gap-2 items-center z-10 bg-white border-2 border-brand-charcoal p-1.5 rounded-lg shadow-[1.5px_1.5px_0px_0px_#0f172a]">
+            <div className="w-7 h-11 bg-brand-charcoal rounded flex items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-coral/30 to-brand-lime/30 animate-pulse" />
+              <div className="w-3 h-3 rounded-full bg-white/20 flex items-center justify-center">
+                <div className="w-0 h-0 border-t-[2px] border-t-transparent border-l-[4px] border-l-white border-b-[2px] border-b-transparent ml-0.5" />
+              </div>
+            </div>
+            <div className="space-y-0.5 text-left">
+              <div className="text-[8px] font-black text-brand-charcoal flex items-center gap-0.5">
+                <span className="text-brand-coral">❤️</span> 12.4k Likes
+              </div>
+              <div className="text-[8px] font-black text-brand-charcoal flex items-center gap-0.5">
+                <span className="text-brand-lime">💬</span> +2.8k Replies
+              </div>
+              <div className="text-[6px] font-mono text-brand-charcoal/50">Score: 99.8%</div>
+            </div>
+          </div>
+        </div>
+      );
+    case 3:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex items-center gap-1.5 z-10 w-full justify-center px-1">
+            <div className="flex flex-col items-center">
+              <div className="w-6 h-6 rounded-md bg-white border border-brand-charcoal flex items-center justify-center shadow-[1px_1px_0px_0px_#0f172a] text-[10px]">💬</div>
+              <span className="text-[6px] font-bold mt-0.5">Comment</span>
+            </div>
+            <div className="h-0.5 w-3 bg-brand-charcoal border-dashed border-t" />
+            <div className="flex flex-col items-center">
+              <div className="w-6 h-6 rounded-md bg-brand-coral border border-brand-charcoal flex items-center justify-center shadow-[1px_1px_0px_0px_#0f172a] text-[10px] text-white">⚙️</div>
+              <span className="text-[6px] font-bold mt-0.5">Trigger</span>
+            </div>
+            <div className="h-0.5 w-3 bg-brand-charcoal border-dashed border-t" />
+            <div className="flex flex-col items-center">
+              <div className="w-6 h-6 rounded-md bg-brand-lime border border-brand-charcoal flex items-center justify-center shadow-[1px_1px_0px_0px_#0f172a] text-[10px]">📥</div>
+              <span className="text-[6px] font-bold mt-0.5">DM Send</span>
+            </div>
+          </div>
+        </div>
+      );
+    case 4:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="bg-white border-2 border-brand-charcoal rounded-lg p-1 shadow-[1.5px_1.5px_0px_0px_#0f172a] z-10 w-28">
+            <div className="text-[6px] font-mono font-bold text-neutral-400 border-b pb-0.5 mb-1 text-center flex justify-between px-1">
+              <span>📅 Calendar Slot</span>
+              <span className="text-brand-lime font-black">CONFIRMED</span>
+            </div>
+            <div className="grid grid-cols-4 gap-0.5">
+              <div className="border border-brand-charcoal bg-neutral-100 rounded text-[5px] text-center py-0.5 font-bold">10:00</div>
+              <div className="border border-brand-charcoal bg-neutral-100 rounded text-[5px] text-center py-0.5 font-bold">11:30</div>
+              <div className="border border-brand-charcoal bg-brand-coral text-white rounded text-[5px] text-center py-0.5 font-black">14:00</div>
+              <div className="border border-brand-charcoal bg-neutral-100 rounded text-[5px] text-center py-0.5 font-bold">15:30</div>
+            </div>
+          </div>
+        </div>
+      );
+    case 5:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex items-center gap-1.5 z-10 bg-white border-2 border-brand-charcoal px-2 py-1 rounded-md shadow-[1.5px_1.5px_0px_0px_#0f172a]">
+            <span className="text-lg animate-bounce">💸</span>
+            <div className="text-left">
+              <div className="text-[6px] font-mono text-neutral-400 font-bold uppercase">Automated Sales</div>
+              <div className="text-[9px] font-black text-brand-charcoal">$142,580.00</div>
+            </div>
+          </div>
+        </div>
+      );
+    case 6:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex flex-col items-center justify-center z-10">
+            <span className="text-2xl animate-pulse">🚀</span>
+            <span className="text-[7px] font-mono font-black text-brand-coral uppercase tracking-widest mt-0.5">LAUNCH AUTOMATION</span>
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
+
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { 
+  X, MessageSquare, UserPlus, Sliders, Database, 
+  Tv, Send, Flame, Sparkles, Check, Play, RotateCcw, 
+  User, Mail, Phone, ArrowRight, Sparkle, AlertCircle, Heart 
+} from "lucide-react";
+
+interface FeatureVisualizerProps {
+  featureTitle: string;
+  onClose: () => void;
+}
+
+export default function FeatureVisualizer({ featureTitle, onClose }: FeatureVisualizerProps) {
+  const [activeTab, setActiveTab] = useState<string>(featureTitle);
+
+  // 1. Comment Multiplier states
+  const [commentText, setCommentText] = useState("");
+  const [multiplierComments, setMultiplierComments] = useState<Array<{ sender: string; text: string; time: string; isUser?: boolean }>>([
+    { sender: "natalie_codes", text: "Need this so bad! 🔥", time: "2m" },
+    { sender: "growth_hacker", text: "Is this safe?", time: "1m" },
+  ]);
+  const [multiplierDMs, setMultiplierDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([]);
+  const [isTypingReply, setIsTypingReply] = useState(false);
+
+  // 2. The Follower Gate states
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followCheckStep, setFollowCheckStep] = useState<"initial" | "checking" | "failed" | "following" | "verifying" | "success">("initial");
+  const [gateDMs, setGateDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([]);
+
+  // 3. Carousel Targeting states
+  const [carouselDMs, setCarouselDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Swipe through our Carousel post to discover how you can scale your profile on complete auto-pilot!" }
+  ]);
+  const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+
+  // 4. Zero-Click Lead Capture states
+  const [leadStep, setLeadStep] = useState(1);
+  const [leadForm, setLeadForm] = useState({ name: "", email: "", phone: "", interested: "" });
+  const [leadTyping, setLeadTyping] = useState(false);
+  const [leadChat, setLeadChat] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Hey! Let's get you set up with our Exclusive Creator Pack. To get started, what is your full name? ✍️" }
+  ]);
+
+  // 6. DM Responder states
+  const [responderDMs, setResponderDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Welcome to QuickRevert! Choose one of the active pathways below to guide your automation flow:" }
+  ]);
+
+  // 7. Story Interaction Hack states
+  const [storyProgress, setStoryProgress] = useState(0);
+  const [storyDMs, setStoryDMs] = useState<Array<{ sender: "bot" | "user"; text: string }>>([]);
+  const [storyNotification, setStoryNotification] = useState<string | null>(null);
+
+  // Carousel 6 Cards Data
+  const CAROUSEL_CARDS = [
+    { id: 1, title: "1. Mindset Shift", desc: "Why traditional Instagram organic reach is dead.", action: "Get PDF Guide", bg: "bg-brand-coral/10" },
+    { id: 2, title: "2. The Strategy", desc: "How to reverse-engineer viral Reel algorithms.", action: "Strategy Checklist", bg: "bg-brand-lime/10" },
+    { id: 3, title: "3. Auto-Pilot", desc: "Setting up your first high-converting funnel.", action: "Automation Map", bg: "bg-brand-cream-dark" },
+    { id: 4, title: "4. High Ticket", desc: "Frictionless appointments booking inside DMs.", action: "Booking Blueprints", bg: "bg-brand-coral/5" },
+    { id: 5, title: "5. Case Study", desc: "How Annie reached 100k views in 14 days flat.", action: "Case Study Access", bg: "bg-brand-lime/5" },
+    { id: 6, title: "6. Master Tool", desc: "Unlock 30% off Creator Elite plans today.", action: "Claim 30% Off", bg: "bg-amber-50" },
+  ];
+
+  // Story Progress effect
+  useEffect(() => {
+    if (activeTab === "Story Interaction Hack") {
+      setStoryProgress(0);
+      const interval = setInterval(() => {
+        setStoryProgress((prev) => {
+          if (prev >= 100) return 0;
+          return prev + 1.5;
+        });
+      }, 100);
+      return () => clearInterval(interval);
+    }
+  }, [activeTab]);
+
+  // Handle Comment Trigger
+  const handleAddComment = (text: string) => {
+    if (!text.trim()) return;
+    const userComment = text.trim();
+    setMultiplierComments((prev) => [...prev, { sender: "your_awesome_follower", text: userComment, time: "Just now", isUser: true }]);
+    setCommentText("");
+    setIsTypingReply(true);
+
+    setTimeout(() => {
+      setMultiplierComments((prev) => [
+        ...prev,
+        {
+          sender: "quickrevert_ai",
+          text: `@your_awesome_follower Check your requests! I just dropped the link inside! 📥`,
+          time: "Just now",
+        },
+      ]);
+      setIsTypingReply(false);
+
+      // Slide in DM
+      setMultiplierDMs([
+        { sender: "user", text: `Commented "${userComment}" on your Reel` },
+        { sender: "bot", text: "Yo! Thanks for dropping a comment on my Reel. Here is your exclusive pass to bypass manual effort and scale your business: app.quickrevert.tech 🚀 Let's level up!" }
+      ]);
+    }, 1500);
+  };
+
+  // Follower Gate Flow
+  const startFollowCheck = () => {
+    setFollowCheckStep("checking");
+    setTimeout(() => {
+      setFollowCheckStep("failed");
+      setGateDMs([
+        { sender: "bot", text: "Hey! I noticed you don't follow the page yet. Follow @quickrevert_ai first, then tap Verify below to unlock your automated reward! 👇" }
+      ]);
+    }, 1500);
+  };
+
+  const handleFollowUser = () => {
+    setIsFollowing(true);
+    setFollowCheckStep("following");
+  };
+
+  const handleVerifyFollow = () => {
+    setFollowCheckStep("verifying");
+    setTimeout(() => {
+      setFollowCheckStep("success");
+      setGateDMs((prev) => [
+        ...prev,
+        { sender: "bot", text: "Awesome, thank you for the support! Verification check complete... and YES, you follow the page! Here is your private 20% discount code: VIRAL20. Keep crushing it! 🔥" }
+      ]);
+    }, 1500);
+  };
+
+  const resetFollowGate = () => {
+    setIsFollowing(false);
+    setFollowCheckStep("initial");
+    setGateDMs([]);
+  };
+
+  // Carousel click handler
+  const handleCarouselClick = (cardTitle: string, actionText: string) => {
+    setCarouselDMs((prev) => [
+      ...prev,
+      { sender: "user", text: `Requested: [${actionText}] from slide: "${cardTitle}"` },
+      { sender: "bot", text: `Direct delivery! Here is your requested resource for "${cardTitle}": app.quickrevert.tech/resources/dl-pdf. Click to download and get started! 📥` }
+    ]);
+  };
+
+  // Zero click lead capture progression
+  const advanceLeadCapture = (inputVal: string, optionKey?: keyof typeof leadForm) => {
+    if (leadTyping) return;
+
+    const currentForm = { ...leadForm };
+    if (optionKey) {
+      currentForm[optionKey] = inputVal;
+      setLeadForm(currentForm);
+    }
+
+    setLeadChat((prev) => [...prev, { sender: "user", text: inputVal }]);
+    setLeadTyping(true);
+
+    setTimeout(() => {
+      setLeadTyping(false);
+      if (leadStep === 1) {
+        setLeadStep(2);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: `Incredible, ${inputVal}! Next up, what is your primary email address so we can register your files? 📧` }]);
+      } else if (leadStep === 2) {
+        setLeadStep(3);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: "Perfect. And what is your best WhatsApp or Phone number for priority lead alerts? 📱" }]);
+      } else if (leadStep === 3) {
+        setLeadStep(4);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: "Got it! Lastly, are you interested in receiving an exclusive 20% discount coupon code too? 🎁" }]);
+      } else if (leadStep === 4) {
+        setLeadStep(5);
+        setLeadChat((prev) => [...prev, { sender: "bot", text: "Boom! Your lead profile has been securely synchronized directly with your QuickRevert dashboard! 🚀 Coupon and files have been sent." }]);
+      }
+    }, 1200);
+  };
+
+  const resetLeadCapture = () => {
+    setLeadStep(1);
+    setLeadForm({ name: "", email: "", phone: "", interested: "" });
+    setLeadChat([
+      { sender: "bot", text: "Hey! Let's get you set up with our Exclusive Creator Pack. To get started, what is your full name? ✍️" }
+    ]);
+  };
+
+  // DM Responder action clicks
+  const handleResponderClick = (option: string, reply: string) => {
+    setResponderDMs((prev) => [
+      ...prev,
+      { sender: "user", text: option },
+      { sender: "bot", text: reply }
+    ]);
+  };
+
+  // Story Interaction emoji trigger
+  const handleStoryReaction = (emoji: string) => {
+    setStoryNotification("Story Reaction Captured!");
+    setTimeout(() => setStoryNotification(null), 3000);
+
+    setStoryDMs([
+      { sender: "user", text: `Reacted ${emoji} to your Story` },
+      { sender: "bot", text: `OMG, thank you so much for the love on our Story! 💖 We appreciate you! Here is your exclusive masterclass fast-pass: app.quickrevert.tech/gift. Let's grow together! 🚀` }
+    ]);
+  };
+
+  const ALL_TABS = [
+    { title: "Comment Multiplier", icon: MessageSquare, soon: false },
+    { title: "The Follower Gate", icon: UserPlus, soon: false },
+    { title: "Carousel Targeting", icon: Sliders, soon: false },
+    { title: "Zero-Click Lead Capture", icon: Database, soon: false },
+    { title: "Story Interaction Hack", icon: Flame, soon: false },
+    { title: "DM Responder", icon: Send, soon: false },
+    { title: "Live Stream Heat", icon: Tv, soon: true },
+    { title: "Brain rot-free AI", icon: Sparkles, soon: true },
+  ];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-charcoal/40 backdrop-blur-sm">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="relative w-full max-w-5xl bg-white rounded-3xl border-4 border-brand-charcoal overflow-hidden shadow-[12px_12px_0px_0px_#111a08] flex flex-col lg:flex-row h-[90vh] lg:h-[80vh]"
+      >
+        {/* Left column / sidebar for switching tabs */}
+        <div className="w-full lg:w-72 bg-brand-cream border-b-4 lg:border-b-0 lg:border-r-4 border-brand-charcoal flex flex-col justify-between shrink-0">
+          <div className="p-4 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-mono font-black uppercase text-brand-coral bg-white border-2 border-brand-charcoal px-2.5 py-1 rounded shadow-[2px_2px_0px_0px_#111a08]">
+                Interactive Sandbox
+              </span>
+              <button 
+                onClick={onClose}
+                className="lg:hidden p-1.5 rounded-full border-2 border-brand-charcoal bg-white hover:bg-brand-coral hover:text-white transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <h3 className="text-xl font-display font-bold text-brand-charcoal">Feature Demos</h3>
+            <p className="text-xs text-brand-charcoal/60 font-semibold leading-snug">
+              Click any automation channel below to view a fully interactive visual execution simulation.
+            </p>
+
+            <nav className="space-y-1.5 max-h-[35vh] lg:max-h-none overflow-y-auto pr-1">
+              {ALL_TABS.map((tab) => {
+                const TabIcon = tab.icon;
+                const isSelected = activeTab === tab.title;
+                return (
+                  <button
+                    key={tab.title}
+                    onClick={() => setActiveTab(tab.title)}
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl border-2 text-left text-xs font-bold transition-all duration-150 cursor-pointer ${
+                      isSelected 
+                        ? "bg-brand-lime border-brand-charcoal text-brand-charcoal shadow-[2px_2px_0px_0px_#111a08]" 
+                        : "bg-white border-brand-charcoal/10 hover:border-brand-charcoal text-brand-charcoal/80"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <TabIcon className="w-4 h-4 text-brand-charcoal" />
+                      <span>{tab.title}</span>
+                    </div>
+                    {tab.soon && (
+                      <span className="text-[8px] font-mono font-extrabold bg-brand-coral text-white px-1.5 py-0.5 rounded border border-brand-charcoal uppercase scale-90">
+                        SOON
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          <div className="p-4 border-t-2 border-brand-charcoal/10 hidden lg:block">
+            <button 
+              onClick={onClose}
+              className="w-full py-2.5 rounded-xl border-2 border-brand-charcoal bg-brand-coral hover:bg-brand-coral-dark text-white font-mono font-black uppercase text-xs shadow-[3px_3px_0px_0px_#111a08] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_#111a08] transition cursor-pointer"
+            >
+              Close Sandbox
+            </button>
+          </div>
+        </div>
+
+        {/* Right column for active simulation visual workspace */}
+        <div className="flex-1 bg-brand-cream-dark p-6 overflow-y-auto flex flex-col justify-between relative">
+          
+          {/* Close button for desktop */}
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 hidden lg:flex items-center justify-center p-2 rounded-full border-2 border-brand-charcoal bg-white hover:bg-brand-coral hover:text-white transition cursor-pointer z-20 shadow-[2px_2px_0px_0px_#111a08]"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          {/* MAIN SIMULATION DISPLAY */}
+          <div className="flex-1 flex flex-col h-full justify-between">
+            <div className="mb-4">
+              <h4 className="text-2xl font-display font-extrabold text-brand-charcoal flex items-center gap-2.5">
+                {activeTab}
+                {ALL_TABS.find((t) => t.title === activeTab)?.soon && (
+                  <span className="text-xs font-mono font-black bg-brand-coral text-white px-2 py-0.5 rounded border border-brand-charcoal shadow-[1px_1px_0px_0px_#111a08]">
+                    COMING SOON
+                  </span>
+                )}
+              </h4>
+              <p className="text-sm font-medium text-brand-charcoal/70 mt-1 max-w-xl">
+                {activeTab === "Comment Multiplier" && "Simulates comments on a Reel automatically triggering deep conversion threads in direct messages."}
+                {activeTab === "The Follower Gate" && "Interactive follower check checking if a reader follows you before dispensing high-value cheat sheets."}
+                {activeTab === "Carousel Targeting" && "A vertical carousel mock of 6 customized swipeable informational cards with dynamic trigger replies."}
+                {activeTab === "Zero-Click Lead Capture" && "An automated, fully responsive step-by-step CRM lead collection sequence inside chat."}
+                {activeTab === "Story Interaction Hack" && "A story screen where replying with a fast reaction instantly triggers an automated DM gift."}
+                {activeTab === "DM Responder" && "A clean visual automated pathway guide prompting users to click distinct resources."}
+                {activeTab === "Live Stream Heat" && "Trigger DM automation loops directly to active live participants in real-time."}
+                {activeTab === "Brain rot-free AI" && "AI automation flows that adapt completely to your voice - absolutely zero fluff."}
+              </p>
+            </div>
+
+            {/* INTERACTIVE COMPONENT WORKSPACE */}
+            <div className="flex-1 bg-white border-2 border-brand-charcoal rounded-2xl p-4 lg:p-6 shadow-[4px_4px_0px_0px_#111a08] overflow-hidden flex flex-col min-h-[380px] justify-between">
+              
+              {/* TAB 1: COMMENT MULTIPLIER */}
+              {activeTab === "Comment Multiplier" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-stretch">
+                  {/* Post View */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-neutral-50">
+                    <div>
+                      <div className="flex items-center gap-2 border-b border-brand-charcoal/10 pb-2 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-brand-coral border border-brand-charcoal flex items-center justify-center font-mono text-xs font-bold text-white">Q</div>
+                        <div>
+                          <p className="text-xs font-bold text-brand-charcoal">quickrevert_ai</p>
+                          <p className="text-[10px] text-brand-charcoal/50 font-medium">Sponsored • Instagram Reel</p>
+                        </div>
+                      </div>
+
+                      <div className="p-3 bg-brand-cream border border-brand-charcoal/10 rounded-lg text-xs font-medium text-brand-charcoal mb-4">
+                        <p className="font-bold mb-1">🔥 FREE INSTAGRAM ACCELERATOR GUIDE!</p>
+                        <p className="text-brand-charcoal/70">Comment the word <span className="font-mono font-black bg-brand-lime px-1.5 py-0.5 rounded border border-brand-charcoal/20">EASY</span> below and our system will instantly slide the download link straight to your inbox!</p>
+                      </div>
+
+                      <div className="space-y-2 max-h-[160px] overflow-y-auto mb-4 pr-1">
+                        {multiplierComments.map((c, i) => (
+                          <div key={i} className="text-[11px] leading-relaxed border-b border-neutral-100 pb-1">
+                            <span className="font-bold text-brand-charcoal mr-1.5">@{c.sender}</span>
+                            <span className="text-brand-charcoal/80 font-medium">{c.text}</span>
+                            <span className="text-[8px] text-brand-charcoal/30 ml-2">{c.time}</span>
+                          </div>
+                        ))}
+                        {isTypingReply && (
+                          <div className="text-[10px] text-brand-charcoal/40 font-mono animate-pulse">
+                            quickrevert_ai is replying...
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleAddComment("EASY")}
+                        className="bg-brand-lime border-2 border-brand-charcoal text-brand-charcoal font-mono font-black text-xs px-3 py-1.5 rounded-lg uppercase shadow-[2px_2px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer"
+                      >
+                        Type "EASY"
+                      </button>
+                      <div className="flex-1 flex gap-1.5 border-2 border-brand-charcoal rounded-lg overflow-hidden bg-white px-2 items-center">
+                        <input
+                          type="text"
+                          value={commentText}
+                          onChange={(e) => setCommentText(e.target.value)}
+                          placeholder="Type comment..."
+                          className="w-full text-xs bg-transparent border-0 outline-none font-medium h-7"
+                          onKeyDown={(e) => e.key === "Enter" && handleAddComment(commentText)}
+                        />
+                        <button 
+                          onClick={() => handleAddComment(commentText)}
+                          className="text-xs font-bold text-brand-coral cursor-pointer hover:underline"
+                        >
+                          Post
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Simulated Mobile DM Inbox */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-brand-cream-dark">
+                    <div className="border-b border-brand-charcoal/10 pb-2 mb-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-brand-coral flex items-center justify-center font-mono text-[10px] font-bold text-white">Q</div>
+                      <div>
+                        <p className="text-[11px] font-bold text-brand-charcoal">quickrevert_ai</p>
+                        <p className="text-[8px] text-brand-lime font-mono font-bold uppercase">● Active Automation</p>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-end space-y-3 max-h-[200px] overflow-y-auto mb-3">
+                      {multiplierDMs.length === 0 ? (
+                        <div className="text-center py-8 text-xs text-brand-charcoal/40 font-bold border border-dashed border-brand-charcoal/20 rounded-xl bg-white/50">
+                          Waiting for comment trigger word to fire DM sequence...
+                        </div>
+                      ) : (
+                        multiplierDMs.map((dm, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                            <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs font-semibold border-2 border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08] ${
+                              dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                            }`}>
+                              {dm.text}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {multiplierDMs.length > 0 && (
+                      <button 
+                        onClick={() => {
+                          setMultiplierComments([
+                            { sender: "natalie_codes", text: "Need this so bad! 🔥", time: "2m" },
+                            { sender: "growth_hacker", text: "Is this safe?", time: "1m" },
+                          ]);
+                          setMultiplierDMs([]);
+                        }}
+                        className="w-full py-1.5 rounded-lg border border-brand-charcoal bg-white font-mono text-[10px] font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        Reset Simulation
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: THE FOLLOWER GATE */}
+              {activeTab === "The Follower Gate" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-stretch">
+                  {/* Gate State & Action Screen */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-neutral-50 text-left">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between border-b border-brand-charcoal/10 pb-3">
+                        <span className="text-[10px] font-mono font-black text-brand-charcoal/40 uppercase">Follower State Check</span>
+                        <div className="flex items-center gap-1.5">
+                          <div className={`w-2.5 h-2.5 rounded-full ${isFollowing ? "bg-brand-lime" : "bg-brand-coral"}`} />
+                          <span className="text-xs font-mono font-bold">
+                            {isFollowing ? "FOLLOWING" : "NOT FOLLOWING"}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 text-xs">
+                        <p className="font-bold text-brand-charcoal">Verification Step Checklist:</p>
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold border ${
+                              followCheckStep !== "initial" ? "bg-brand-lime text-brand-charcoal border-brand-charcoal" : "bg-neutral-200 text-neutral-400 border-neutral-300"
+                            }`}>1</span>
+                            <span className="font-medium text-brand-charcoal/70">Comment trigger word 'GROWTH'</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold border ${
+                              followCheckStep === "failed" || followCheckStep === "following" || followCheckStep === "verifying" || followCheckStep === "success" ? "bg-brand-lime text-brand-charcoal border-brand-charcoal" : "bg-neutral-200 text-neutral-400 border-neutral-300"
+                            }`}>2</span>
+                            <span className="font-medium text-brand-charcoal/70">Scan Profile Database</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-mono font-bold border ${
+                              followCheckStep === "success" ? "bg-brand-lime text-brand-charcoal border-brand-charcoal" : "bg-neutral-200 text-neutral-400 border-neutral-300"
+                            }`}>3</span>
+                            <span className="font-medium text-brand-charcoal/70">Deliver Premium Reward</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Display active state */}
+                      <div className="p-3 bg-brand-cream border-2 border-brand-charcoal rounded-xl text-xs font-semibold">
+                        {followCheckStep === "initial" && (
+                          <p className="text-brand-charcoal/80">👉 Tap the button below to simulate comment trigger <span className="font-bold text-brand-coral">"GROWTH"</span> without following yet.</p>
+                        )}
+                        {followCheckStep === "checking" && (
+                          <div className="flex items-center gap-2 text-brand-charcoal">
+                            <div className="w-4 h-4 border-2 border-brand-coral border-t-transparent rounded-full animate-spin" />
+                            <span>Verifying follow state on Instagram Graph API...</span>
+                          </div>
+                        )}
+                        {followCheckStep === "failed" && (
+                          <div className="space-y-2">
+                            <p className="text-brand-coral font-bold flex items-center gap-1">
+                              <AlertCircle className="w-4 h-4 shrink-0" /> Follow Verification Failed!
+                            </p>
+                            <p className="text-brand-charcoal/70 text-[11px]">The follower gate successfully intercepted the request. User must follow your account to unlock.</p>
+                            <button
+                              onClick={handleFollowUser}
+                              className="bg-brand-charcoal text-white hover:bg-neutral-800 text-[11px] font-mono font-bold uppercase px-3 py-1 rounded border border-brand-charcoal cursor-pointer"
+                            >
+                              Click to Follow @quickrevert_ai
+                            </button>
+                          </div>
+                        )}
+                        {followCheckStep === "following" && (
+                          <div className="space-y-2">
+                            <p className="text-brand-lime font-black bg-brand-charcoal/10 px-2 py-0.5 rounded inline-block">✅ Follow Verified on Client</p>
+                            <p className="text-brand-charcoal/70 text-[11px]">Now tap the automated Verification Button inside the DM inbox to update the gate.</p>
+                          </div>
+                        )}
+                        {followCheckStep === "verifying" && (
+                          <div className="flex items-center gap-2 text-brand-charcoal">
+                            <div className="w-4 h-4 border-2 border-brand-lime border-t-transparent rounded-full animate-spin" />
+                            <span>Double-checking Live Meta Server Database...</span>
+                          </div>
+                        )}
+                        {followCheckStep === "success" && (
+                          <div className="space-y-1 text-brand-charcoal">
+                            <p className="font-bold text-brand-lime uppercase tracking-wider flex items-center gap-1 bg-brand-charcoal text-white px-2 py-1 rounded text-[11px]">
+                              <Check className="w-4 h-4 text-brand-lime" /> Follower Verified & Gated Reward Sent!
+                            </p>
+                            <p className="text-[10px] text-brand-charcoal/60">Algorithm score boosted. High viral loop locked.</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2">
+                      {followCheckStep === "initial" && (
+                        <button
+                          onClick={startFollowCheck}
+                          className="w-full bg-brand-lime border-2 border-brand-charcoal text-brand-charcoal font-mono font-black text-xs py-2 rounded-lg uppercase shadow-[3px_3px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer"
+                        >
+                          Simulate comment: "GROWTH"
+                        </button>
+                      )}
+                      {followCheckStep !== "initial" && (
+                        <button
+                          onClick={resetFollowGate}
+                          className="w-full bg-white border-2 border-brand-charcoal text-brand-charcoal font-mono font-black text-xs py-2 rounded-lg uppercase shadow-[3px_3px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer flex items-center justify-center gap-1.5"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" /> Restart Loop
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Simulated Mobile Gate DMs */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-brand-cream-dark">
+                    <div className="border-b border-brand-charcoal/10 pb-2 mb-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-brand-lime flex items-center justify-center font-mono text-[10px] font-bold text-brand-charcoal border border-brand-charcoal">G</div>
+                      <div>
+                        <p className="text-[11px] font-bold text-brand-charcoal">The Follower Gate</p>
+                        <p className="text-[8px] text-brand-coral font-mono font-bold uppercase">🔐 Verification Channel</p>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-end space-y-3 max-h-[190px] overflow-y-auto mb-3">
+                      {gateDMs.length === 0 ? (
+                        <div className="text-center py-8 text-xs text-brand-charcoal/40 font-bold border border-dashed border-brand-charcoal/20 rounded-xl bg-white/50">
+                          Waiting for follower-gate trigger to fire...
+                        </div>
+                      ) : (
+                        gateDMs.map((dm, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                            <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs font-semibold border-2 border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08] ${
+                              dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                            }`}>
+                              {dm.text}
+                            </div>
+                          </div>
+                        ))
+                      )}
+
+                      {followCheckStep === "following" && (
+                        <div className="flex justify-start">
+                          <button
+                            onClick={handleVerifyFollow}
+                            className="bg-brand-lime hover:bg-brand-lime-dark text-brand-charcoal text-[11px] font-mono font-black border-2 border-brand-charcoal px-3 py-1.5 rounded-xl shadow-[2px_2px_0px_0px_#111a08] cursor-pointer hover:translate-y-[1px]"
+                          >
+                            ⚡ TAP HERE TO VERIFY FOLLOW
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="text-[9px] font-mono font-bold text-brand-charcoal/40 text-center">
+                      Meta API Safe • 100% Account Compliant
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: CAROUSEL TARGETING */}
+              {activeTab === "Carousel Targeting" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-stretch animate-fade-in">
+                  {/* Swipeable deck of 6 cards */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-neutral-50 text-left relative overflow-hidden">
+                    <div>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-[10px] font-mono font-black text-brand-coral bg-white border border-brand-charcoal px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#111a08]">
+                          Swipeable Carousel (6 slides)
+                        </span>
+                        <span className="text-[11px] font-bold text-brand-charcoal/60">
+                          Active: Slide {selectedSlideIndex + 1}
+                        </span>
+                      </div>
+
+                      {/* Horizontal scrollable track with 1/4 of next side visible */}
+                      <div className="text-[9px] font-mono font-black text-brand-charcoal/45 mb-2 flex items-center justify-between">
+                        <span>👈 SWIPE / DRAG HORIZONTALLY TO CHOOSE 👉</span>
+                        <span className="animate-pulse">🟢 LIVE SIMULATOR DIRECT ACTION</span>
+                      </div>
+
+                      <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-none scroll-smooth">
+                        {CAROUSEL_CARDS.map((card, i) => (
+                          <div
+                            key={card.id}
+                            onClick={() => setSelectedSlideIndex(i)}
+                            className={`snap-center shrink-0 w-[78%] md:w-[72%] rounded-2xl border-2 border-brand-charcoal p-3 flex flex-col justify-between shadow-[4px_4px_0px_0px_#0f172a] transition-all cursor-pointer ${
+                              selectedSlideIndex === i 
+                                ? `${card.bg} border-brand-coral ring-2 ring-brand-coral/40 scale-[1.01]` 
+                                : "bg-white opacity-85 hover:opacity-100"
+                            }`}
+                          >
+                            <div className="space-y-3">
+                              {/* Slide Graphic */}
+                              {renderSlideImage(card.id)}
+
+                              <div className="space-y-1">
+                                <h5 className="text-xs font-display font-black text-brand-charcoal uppercase tracking-tight flex items-center justify-between">
+                                  <span>{card.title}</span>
+                                  {selectedSlideIndex === i && (
+                                    <span className="text-[8px] font-mono font-black text-white bg-brand-coral px-1.5 py-0.5 rounded uppercase">Active</span>
+                                  )}
+                                </h5>
+                                <p className="text-[10px] text-brand-charcoal/70 font-semibold leading-relaxed">
+                                  {card.desc}
+                                </p>
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedSlideIndex(i);
+                                handleCarouselClick(card.title, card.action);
+                              }}
+                              className="w-full mt-3 py-1.5 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-brand-charcoal font-mono font-black text-[9px] uppercase shadow-[2px_2px_0px_0px_#0f172a] hover:translate-y-[1px] transition cursor-pointer"
+                            >
+                              👇 Comment: "{card.action}"
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 justify-center items-center mt-2 pt-2 border-t border-brand-charcoal/10">
+                      <div className="flex gap-1.5">
+                        {CAROUSEL_CARDS.map((_, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setSelectedSlideIndex(i)}
+                            className={`w-2.5 h-2.5 rounded-full border border-brand-charcoal transition-all ${
+                              selectedSlideIndex === i ? "bg-brand-coral w-6" : "bg-white"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Carousel DMs */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-brand-cream-dark">
+                    <div className="border-b border-brand-charcoal/10 pb-2 mb-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-brand-coral flex items-center justify-center font-mono text-[10px] font-bold text-white border border-brand-charcoal">C</div>
+                      <div>
+                        <p className="text-[11px] font-bold text-brand-charcoal">Carousel Automation</p>
+                        <p className="text-[8px] text-brand-lime font-mono font-bold uppercase">📬 Target Responder Active</p>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-end space-y-3 max-h-[190px] overflow-y-auto mb-3">
+                      {carouselDMs.map((dm, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                        >
+                          <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs font-semibold border-2 border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08] ${
+                            dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                          }`}>
+                            {dm.text}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={() => setCarouselDMs([
+                        { sender: "bot", text: "Swipe through our Carousel post to discover how you can scale your profile on complete auto-pilot!" }
+                      ])}
+                      className="w-full py-1.5 rounded-lg border border-brand-charcoal bg-white font-mono text-[10px] font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Clear Chat History
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 4: ZERO-CLICK LEAD CAPTURE */}
+              {activeTab === "Zero-Click Lead Capture" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-stretch">
+                  {/* Lead Capture Interaction panel */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-brand-cream-dark text-left">
+                    <div className="border-b border-brand-charcoal/10 pb-2 mb-2 flex justify-between items-center">
+                      <div className="flex items-center gap-1.5">
+                        <Database className="w-4 h-4 text-brand-coral" />
+                        <span className="text-[11px] font-mono font-black uppercase text-brand-charcoal">Lead Grab Funnel</span>
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-brand-charcoal/50">Progress Step {leadStep}/5</span>
+                    </div>
+
+                    {/* Chat Flow */}
+                    <div className="flex-1 overflow-y-auto max-h-[190px] space-y-2 mb-3 p-1">
+                      {leadChat.map((msg, i) => (
+                        <div key={i} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                          <div className={`max-w-[85%] rounded-xl px-3 py-1.5 text-[11px] font-semibold border border-brand-charcoal shadow-[1px_1px_0px_0px_#111a08] ${
+                            msg.sender === "user" ? "bg-brand-lime text-brand-charcoal" : "bg-white text-brand-charcoal"
+                          }`}>
+                            {msg.text}
+                          </div>
+                        </div>
+                      ))}
+                      {leadTyping && (
+                        <div className="text-[9px] font-mono text-brand-charcoal/40 animate-pulse">
+                          Lead Bot is processing profile info...
+                        </div>
+                      )}
+                    </div>
+
+                    {/* User inputs step-by-step pre-sets to advance */}
+                    <div className="space-y-2 bg-white p-3 rounded-xl border border-brand-charcoal/10">
+                      <p className="text-[10px] font-bold text-brand-charcoal/50 uppercase font-mono mb-1">Click reply to simulate form input:</p>
+                      
+                      {leadStep === 1 && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => advanceLeadCapture("Annie Rohatgi ✍️", "name")}
+                            className="bg-brand-charcoal text-white hover:bg-neutral-800 text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-brand-charcoal cursor-pointer flex-1"
+                          >
+                            Send: "Annie Rohatgi"
+                          </button>
+                        </div>
+                      )}
+
+                      {leadStep === 2 && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => advanceLeadCapture("annierohatgi13@gmail.com 📧", "email")}
+                            className="bg-brand-charcoal text-white hover:bg-neutral-800 text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-brand-charcoal cursor-pointer flex-1"
+                          >
+                            Send: "annierohatgi13@gmail.com"
+                          </button>
+                        </div>
+                      )}
+
+                      {leadStep === 3 && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => advanceLeadCapture("+91 98765 43210 📱", "phone")}
+                            className="bg-brand-charcoal text-white hover:bg-neutral-800 text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-brand-charcoal cursor-pointer flex-1"
+                          >
+                            Send: "+91 98765 43210"
+                          </button>
+                        </div>
+                      )}
+
+                      {leadStep === 4 && (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => advanceLeadCapture("Yes, send coupon! 😍", "interested")}
+                            className="bg-brand-lime text-brand-charcoal hover:bg-brand-lime-dark text-[11px] font-mono font-black px-3 py-1.5 rounded-lg border border-brand-charcoal cursor-pointer flex-1 shadow-[2px_2px_0px_0px_#111a08]"
+                          >
+                            Yes, send coupon! 😍
+                          </button>
+                          <button
+                            onClick={() => advanceLeadCapture("No, thanks.", "interested")}
+                            className="bg-neutral-200 text-brand-charcoal hover:bg-neutral-300 text-[11px] font-mono font-bold px-3 py-1.5 rounded-lg border border-neutral-300 cursor-pointer flex-1"
+                          >
+                            No, thanks.
+                          </button>
+                        </div>
+                      )}
+
+                      {leadStep === 5 && (
+                        <button
+                          onClick={resetLeadCapture}
+                          className="w-full bg-brand-coral text-white font-mono font-black text-xs py-2 rounded-lg uppercase shadow-[2px_2px_0px_0px_#111a08] hover:translate-y-[1px] transition cursor-pointer flex items-center justify-center gap-1.5"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" /> Restart Lead Simulation
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Simulated CRM Leads Sync Success Card */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-white">
+                    <div>
+                      <div className="flex items-center gap-2 border-b border-brand-charcoal/10 pb-2 mb-3">
+                        <div className="w-5 h-5 rounded-full bg-brand-charcoal flex items-center justify-center font-mono text-[10px] text-white font-black">✔</div>
+                        <p className="text-[11px] font-mono font-black uppercase text-brand-charcoal tracking-wider">Synchronized Database Dashboard</p>
+                      </div>
+
+                      <div className="space-y-2 text-xs">
+                        <div className="grid grid-cols-3 gap-2 border-b border-neutral-100 pb-1.5">
+                          <span className="font-mono text-brand-charcoal/40 font-bold">NAME:</span>
+                          <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.name || <span className="text-neutral-300 italic font-medium">Awaiting...</span>}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 border-b border-neutral-100 pb-1.5">
+                          <span className="font-mono text-brand-charcoal/40 font-bold">EMAIL:</span>
+                          <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.email || <span className="text-neutral-300 italic font-medium">Awaiting...</span>}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 border-b border-neutral-100 pb-1.5">
+                          <span className="font-mono text-brand-charcoal/40 font-bold">PHONE:</span>
+                          <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.phone || <span className="text-neutral-300 italic font-medium">Awaiting...</span>}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 border-b border-neutral-100 pb-1.5">
+                          <span className="font-mono text-brand-charcoal/40 font-bold">COUPON:</span>
+                          <span className="col-span-2 font-bold text-brand-charcoal">{leadForm.interested || <span className="text-neutral-300 italic font-medium">Awaiting...</span>}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-brand-lime/10 border border-brand-lime rounded-xl text-center">
+                      <span className="text-[10px] font-mono font-bold text-brand-charcoal/70">
+                        {leadStep < 5 ? "📥 Awaiting data submissions to sync..." : "🎉 CRM Integration successfully logged profile!"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 5: STORY INTERACTION HACK */}
+              {activeTab === "Story Interaction Hack" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-stretch">
+                  {/* Mock Story view */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-neutral-950 text-left relative overflow-hidden h-[300px]">
+                    
+                    {/* Story status bar */}
+                    <div className="absolute top-2 left-4 right-4 z-10">
+                      <div className="w-full h-1 bg-neutral-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-white rounded-full transition-all duration-100" style={{ width: `${storyProgress}%` }} />
+                      </div>
+                      <div className="flex justify-between items-center mt-1.5">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-5 h-5 rounded-full bg-brand-coral flex items-center justify-center font-mono text-[10px] font-bold text-white border border-white/20">Q</div>
+                          <span className="text-[10px] font-bold text-white">quickrevert_ai</span>
+                          <span className="text-[8px] text-white/50 font-medium">3h</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Background Visual mockup */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-brand-charcoal via-brand-coral/40 to-brand-lime/40 opacity-70 flex flex-col items-center justify-center text-center p-6">
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ repeat: Infinity, duration: 3 }}
+                        className="p-4 bg-black/40 border border-white/10 rounded-2xl backdrop-blur-md space-y-1.5 max-w-[200px]"
+                      >
+                        <h6 className="text-xs font-black text-brand-lime tracking-wider uppercase">NEW MASTERCLASS</h6>
+                        <p className="text-[9px] text-white/90 font-medium leading-relaxed">Tap a quick reaction below to instantly unlock the private masterclass link! 👇</p>
+                      </motion.div>
+                    </div>
+
+                    {/* Reactions footer */}
+                    <div className="absolute bottom-4 left-4 right-4 z-10 space-y-3">
+                      <div className="flex justify-between gap-1 bg-black/40 border border-white/10 rounded-xl p-2 backdrop-blur-md">
+                        {["🔥", "💯", "❤️", "🙌", "😍", "⭐"].map((emoji) => (
+                          <button
+                            key={emoji}
+                            onClick={() => handleStoryReaction(emoji)}
+                            className="text-base hover:scale-130 active:scale-90 transition cursor-pointer"
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="text-[8px] font-mono text-center text-white/40">
+                        Tap any reaction emoji above to trigger the hack
+                      </div>
+                    </div>
+
+                    {/* Story push notification feedback */}
+                    <AnimatePresence>
+                      {storyNotification && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -50 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -50 }}
+                          className="absolute top-12 left-4 right-4 z-30 bg-white border-2 border-brand-charcoal p-2 rounded-xl flex items-center gap-2 shadow-[2px_2px_0px_0px_#111a08]"
+                        >
+                          <Flame className="w-4 h-4 text-brand-coral animate-bounce" />
+                          <div className="text-[10px] font-bold text-brand-charcoal">
+                            <p>QuickRevert Story Tracker</p>
+                            <p className="text-brand-charcoal/60 font-semibold">Intercepting reaction... Automating DM delivery! 🚀</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Story DM inbox */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-brand-cream-dark">
+                    <div className="border-b border-brand-charcoal/10 pb-2 mb-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-brand-coral flex items-center justify-center font-mono text-[10px] font-bold text-white border border-brand-charcoal">S</div>
+                      <div>
+                        <p className="text-[11px] font-bold text-brand-charcoal">Story Automation Thread</p>
+                        <p className="text-[8px] text-brand-lime font-mono font-bold uppercase">📥 Auto-Reply Active</p>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-end space-y-3 max-h-[190px] overflow-y-auto mb-3">
+                      {storyDMs.length === 0 ? (
+                        <div className="text-center py-8 text-xs text-brand-charcoal/40 font-bold border border-dashed border-brand-charcoal/20 rounded-xl bg-white/50">
+                          Waiting for story reaction click...
+                        </div>
+                      ) : (
+                        storyDMs.map((dm, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                            <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs font-semibold border-2 border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08] ${
+                              dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                            }`}>
+                              {dm.text}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <button 
+                      onClick={() => setStoryDMs([])}
+                      className="w-full py-1.5 rounded-lg border border-brand-charcoal bg-white font-mono text-[10px] font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Clear Simulation
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 6: DM RESPONDER */}
+              {activeTab === "DM Responder" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full items-stretch">
+                  {/* Option Clicker Screen */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-neutral-50 text-left">
+                    <div>
+                      <span className="text-[10px] font-mono font-black text-brand-coral bg-white border border-brand-charcoal px-2.5 py-0.5 rounded shadow-[1px_1px_0px_0px_#111a08] uppercase">
+                        Guided Flow Tree Builder
+                      </span>
+                      <p className="text-xs font-bold text-brand-charcoal mt-3 mb-2">Simulate tapping options below:</p>
+                      
+                      <div className="space-y-2.5">
+                        <button
+                          onClick={() => handleResponderClick("📅 Book Free Growth Audit", "Awesome pathway! Select your free 15-minute diagnostic slot on our calendar: calendly.com/quickrevert 📅")}
+                          className="w-full text-left p-2.5 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-xs font-bold shadow-[2px_2px_0px_0px_#111a08] active:translate-y-[1px] transition cursor-pointer"
+                        >
+                          Option A: 📅 Book Free Growth Audit
+                        </button>
+                        <button
+                          onClick={() => handleResponderClick("🎁 Instant Access to Freebies", "Direct dispatch! Download our full resource library here: drive.google.com/quickrevert-freebies 🎁")}
+                          className="w-full text-left p-2.5 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-xs font-bold shadow-[2px_2px_0px_0px_#111a08] active:translate-y-[1px] transition cursor-pointer"
+                        >
+                          Option B: 🎁 Instant Access to Freebies
+                        </button>
+                        <button
+                          onClick={() => handleResponderClick("💬 Connect to Support Agent", "Understood. Bypassing bot flows... routing you straight to a live human support manager now! standby... 💬")}
+                          className="w-full text-left p-2.5 rounded-xl border-2 border-brand-charcoal bg-white hover:bg-brand-lime text-xs font-bold shadow-[2px_2px_0px_0px_#111a08] active:translate-y-[1px] transition cursor-pointer"
+                        >
+                          Option C: 💬 Connect to Support Agent
+                        </button>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setResponderDMs([
+                        { sender: "bot", text: "Welcome to QuickRevert! Choose one of the active pathways below to guide your automation flow:" }
+                      ])}
+                      className="w-full py-1.5 rounded-lg border border-brand-charcoal bg-white font-mono text-[10px] font-bold uppercase text-brand-charcoal cursor-pointer hover:bg-neutral-50 flex items-center justify-center gap-1.5 mt-3"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" /> Reset Decision Tree
+                    </button>
+                  </div>
+
+                  {/* Automated responders messages */}
+                  <div className="border-2 border-brand-charcoal/10 rounded-xl p-4 flex flex-col justify-between bg-brand-cream-dark">
+                    <div className="border-b border-brand-charcoal/10 pb-2 mb-3 flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-brand-charcoal flex items-center justify-center font-mono text-[10px] text-white font-black border border-brand-charcoal">R</div>
+                      <div>
+                        <p className="text-[11px] font-bold text-brand-charcoal">DM Responder Bot</p>
+                        <p className="text-[8px] text-brand-lime font-mono font-bold uppercase">🤖 Menu Guide Active</p>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-end space-y-3 max-h-[190px] overflow-y-auto mb-3">
+                      {responderDMs.map((dm, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}
+                        >
+                          <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs font-semibold border-2 border-brand-charcoal shadow-[2px_2px_0px_0px_#111a08] ${
+                            dm.sender === "user" ? "bg-brand-charcoal text-white" : "bg-white text-brand-charcoal"
+                          }`}>
+                            {dm.text}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="text-[9px] font-mono font-bold text-brand-charcoal/40 text-center">
+                      Configure dynamic responder cards in 1-click
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 7 & 8: SOON CHANNELS (LIVE STREAM HEAT & BRAIN ROT-FREE AI) */}
+              {(activeTab === "Live Stream Heat" || activeTab === "Brain rot-free AI") && (
+                <div className="flex flex-col items-center justify-center text-center p-6 space-y-4 h-full relative bg-brand-cream-dark border border-brand-charcoal/10 rounded-xl overflow-hidden min-h-[300px]">
+                  
+                  {/* Meme Visual container */}
+                  <div className="relative w-full max-w-[400px] rounded-2xl border-2 border-brand-charcoal overflow-hidden shadow-[4px_4px_0px_0px_#111a08] bg-black">
+                    <img
+                      src="https://media.tenor.com/71_n_s4r6B0AAAAC/jack-sparrow-run.gif"
+                      alt="Jack Sparrow running frantic funny meme"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-[180px] object-cover"
+                    />
+                    
+                    {/* Retro Comic "ON THE WAYYYYYYY" Heading overlay */}
+                    <div className="absolute inset-x-0 bottom-0 bg-brand-coral border-t-2 border-brand-charcoal py-1 px-4 flex items-center justify-center">
+                      <span className="font-mono font-black text-white text-sm uppercase tracking-widest animate-pulse">
+                        on the wayyyyyyyy 🏃‍♂️💨
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="max-w-md space-y-2">
+                    <h5 className="text-lg font-display font-black text-brand-charcoal uppercase tracking-tight flex items-center justify-center gap-1.5">
+                      <Sparkle className="w-5 h-5 text-brand-coral animate-spin" />
+                      Arriving Soon
+                    </h5>
+                    <p className="text-xs text-brand-charcoal/70 font-semibold leading-relaxed">
+                      {activeTab === "Live Stream Heat" 
+                        ? "We are fine-tuning our live RTMP sockets to automatically dispatch gated links inside comments while you're broadcast streaming on your profile!" 
+                        : "No more corporate robotic fluff! Our highly personalized local weights ensure the AI auto-replies read exactly like you talk."}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
+
+          {/* FOOTER */}
+          <div className="mt-4 pt-3 border-t border-brand-charcoal/10 flex flex-col sm:flex-row items-center justify-between text-xs font-semibold text-brand-charcoal/60 gap-2">
+            <span>💡 Click another tab on the left sidebar to swap between features instantly.</span>
+            <span className="font-mono text-[10px] text-brand-coral font-bold bg-white border border-brand-charcoal/20 px-2 py-0.5 rounded shadow-[1px_1px_0px_0px_#111a08]">
+              Verified API Compliant
+            </span>
+          </div>
+
+        </div>
+
+      </motion.div>
+    </div>
+  );
+}
+
+function renderSlideImage(id: number) {
+  switch (id) {
+    case 1:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          {/* Background Grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex justify-around items-end w-full h-14 relative z-10 px-2">
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[7px] font-mono font-black text-neutral-400">Dead Reach 📉</span>
+              <div className="w-6 bg-neutral-300 border border-brand-charcoal h-3 rounded-t-sm" />
+            </div>
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-[7px] font-mono font-black text-brand-coral">QuickRevert 🚀</span>
+              <div className="w-10 bg-gradient-to-t from-brand-coral to-brand-lime border border-brand-charcoal h-10 rounded-t-sm relative">
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    case 2:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex gap-2 items-center z-10 bg-white border-2 border-brand-charcoal p-1.5 rounded-lg shadow-[1.5px_1.5px_0px_0px_#0f172a]">
+            <div className="w-7 h-11 bg-brand-charcoal rounded flex items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-coral/30 to-brand-lime/30 animate-pulse" />
+              <div className="w-3 h-3 rounded-full bg-white/20 flex items-center justify-center">
+                <div className="w-0 h-0 border-t-[2px] border-t-transparent border-l-[4px] border-l-white border-b-[2px] border-b-transparent ml-0.5" />
+              </div>
+            </div>
+            <div className="space-y-0.5 text-left">
+              <div className="text-[8px] font-black text-brand-charcoal flex items-center gap-0.5">
+                <span className="text-brand-coral">❤️</span> 12.4k Likes
+              </div>
+              <div className="text-[8px] font-black text-brand-charcoal flex items-center gap-0.5">
+                <span className="text-brand-lime">💬</span> +2.8k Replies
+              </div>
+              <div className="text-[6px] font-mono text-brand-charcoal/50">Score: 99.8%</div>
+            </div>
+          </div>
+        </div>
+      );
+    case 3:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex items-center gap-1.5 z-10 w-full justify-center px-1">
+            <div className="flex flex-col items-center">
+              <div className="w-6 h-6 rounded-md bg-white border border-brand-charcoal flex items-center justify-center shadow-[1px_1px_0px_0px_#0f172a] text-[10px]">💬</div>
+              <span className="text-[6px] font-bold mt-0.5">Comment</span>
+            </div>
+            <div className="h-0.5 w-3 bg-brand-charcoal border-dashed border-t" />
+            <div className="flex flex-col items-center">
+              <div className="w-6 h-6 rounded-md bg-brand-coral border border-brand-charcoal flex items-center justify-center shadow-[1px_1px_0px_0px_#0f172a] text-[10px] text-white">⚙️</div>
+              <span className="text-[6px] font-bold mt-0.5">Trigger</span>
+            </div>
+            <div className="h-0.5 w-3 bg-brand-charcoal border-dashed border-t" />
+            <div className="flex flex-col items-center">
+              <div className="w-6 h-6 rounded-md bg-brand-lime border border-brand-charcoal flex items-center justify-center shadow-[1px_1px_0px_0px_#0f172a] text-[10px]">📥</div>
+              <span className="text-[6px] font-bold mt-0.5">DM Send</span>
+            </div>
+          </div>
+        </div>
+      );
+    case 4:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="bg-white border-2 border-brand-charcoal rounded-lg p-1 shadow-[1.5px_1.5px_0px_0px_#0f172a] z-10 w-28">
+            <div className="text-[6px] font-mono font-bold text-neutral-400 border-b pb-0.5 mb-1 text-center flex justify-between px-1">
+              <span>📅 Calendar Slot</span>
+              <span className="text-brand-lime font-black">CONFIRMED</span>
+            </div>
+            <div className="grid grid-cols-4 gap-0.5">
+              <div className="border border-brand-charcoal bg-neutral-100 rounded text-[5px] text-center py-0.5 font-bold">10:00</div>
+              <div className="border border-brand-charcoal bg-neutral-100 rounded text-[5px] text-center py-0.5 font-bold">11:30</div>
+              <div className="border border-brand-charcoal bg-brand-coral text-white rounded text-[5px] text-center py-0.5 font-black">14:00</div>
+              <div className="border border-brand-charcoal bg-neutral-100 rounded text-[5px] text-center py-0.5 font-bold">15:30</div>
+            </div>
+          </div>
+        </div>
+      );
+    case 5:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex items-center gap-1.5 z-10 bg-white border-2 border-brand-charcoal px-2 py-1 rounded-md shadow-[1.5px_1.5px_0px_0px_#0f172a]">
+            <span className="text-lg animate-bounce">💸</span>
+            <div className="text-left">
+              <div className="text-[6px] font-mono text-neutral-400 font-bold uppercase">Automated Sales</div>
+              <div className="text-[9px] font-black text-brand-charcoal">$142,580.00</div>
+            </div>
+          </div>
+        </div>
+      );
+    case 6:
+      return (
+        <div className="w-full h-20 bg-brand-charcoal/5 rounded-xl border border-brand-charcoal/10 flex items-center justify-center relative overflow-hidden p-1 select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:8px_8px]" />
+          <div className="flex flex-col items-center justify-center z-10">
+            <span className="text-2xl animate-pulse">🚀</span>
+            <span className="text-[7px] font-mono font-black text-brand-coral uppercase tracking-widest mt-0.5">LAUNCH AUTOMATION</span>
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
+
+these pages but according to my website style 
