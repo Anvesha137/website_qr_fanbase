@@ -11,7 +11,15 @@ export default function FAQ() {
     },
     {
       q: 'How much does it cost?',
-      a: 'QuickRevert has two plans: a Free Plan to launch your first Instagram automations (including Comment to DMs, Auto replies, and a basic Follower CRM), and a Pro Plan for $20/month with unlimited DM campaigns, AI assisted replies, our complete AI Copilot, and conversation management.'
+      a: 'QuickRevert has four plans: a Free Plan, a Try Me Out plan, a Premium Plan, and a Professional Plan designed to scale with your growth stage.'
+    },
+    {
+      q: 'How does billing work?',
+      a: 'QuickRevert works on one-time payments — you pay once upfront for your chosen duration (monthly, quarterly, or annual), and that\'s it. There\'s no autopay or card-on-file setup, so you\'re never charged again without your knowledge.'
+    },
+    {
+      q: 'What is your cancellation policy?',
+      a: 'Since there\'s no auto-renewal, there\'s nothing to "cancel" — your plan simply runs for the duration you paid for (1, 3, or 12 months) and then expires. You decide if and when to pay again.'
     },
     {
       q: 'Is QuickRevert officially approved by Instagram?',
@@ -37,7 +45,7 @@ export default function FAQ() {
         
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1b1b1b] mb-4">
+          <h2 className="font-onest text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1b1b1b] mb-4">
             Frequently Asked <br /> Questions
           </h2>
         </div>
@@ -56,7 +64,7 @@ export default function FAQ() {
                   className="w-full flex items-center justify-between px-8 py-6 text-left focus:outline-none"
                   id={`faq-item-toggle-${idx}`}
                 >
-                  <span className="font-display text-lg sm:text-xl font-bold text-[#1b1b1b] pr-4 leading-snug">
+                  <span className="font-onest text-lg sm:text-xl font-bold text-[#1b1b1b] pr-4 leading-snug">
                     {faq.q}
                   </span>
                   

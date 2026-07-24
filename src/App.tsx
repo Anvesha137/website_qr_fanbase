@@ -15,15 +15,16 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   // Initial path mapping for direct page loading (no dashboard)
-  const getInitialView = (): 'landing' | 'link-in-bio' | 'features' | 'slots' => {
+  const getInitialView = (): 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' => {
     const path = window.location.pathname;
     if (path === '/features') return 'features';
     if (path === '/slots') return 'slots';
     if (path === '/link-in-bio') return 'link-in-bio';
+    if (path === '/pricing') return 'pricing';
     return 'landing';
   };
 
-  const [viewMode, setViewModeState] = useState<'landing' | 'link-in-bio' | 'features' | 'slots'>(getInitialView);
+  const [viewMode, setViewModeState] = useState<'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing'>(getInitialView);
   const [selectedFeature, setSelectedFeature] = useState<string | undefined>(undefined);
   const [checkoutNotification, setCheckoutNotification] = useState<{ plan: string; price: number } | null>(null);
 
@@ -34,6 +35,7 @@ export default function App() {
       if (path === '/features') setViewModeState('features');
       else if (path === '/slots') setViewModeState('slots');
       else if (path === '/link-in-bio') setViewModeState('link-in-bio');
+      else if (path === '/pricing') setViewModeState('pricing');
       else setViewModeState('landing');
     };
 
@@ -42,12 +44,13 @@ export default function App() {
   }, []);
 
   // Helper to change view and push browser history state
-  const setViewMode = (mode: 'landing' | 'link-in-bio' | 'features' | 'slots') => {
+  const setViewMode = (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing') => {
     setViewModeState(mode);
     let targetPath = '/';
     if (mode === 'features') targetPath = '/features';
     else if (mode === 'slots') targetPath = '/slots';
     else if (mode === 'link-in-bio') targetPath = '/link-in-bio';
+    else if (mode === 'pricing') targetPath = '/pricing';
 
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
@@ -111,9 +114,24 @@ export default function App() {
 
             <Playground />
             <Features />
-            <Pricing onSelectPlan={handleSelectPlan} />
             <StayForRest />
             <FAQ />
+          </motion.div>
+        ) : viewMode === 'pricing' ? (
+          <motion.div
+            key="pricing-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative pt-24 bg-[#FFF9F6]"
+          >
+            <Navbar
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              onSelectFeature={(featureId) => setSelectedFeature(featureId)}
+            />
+            <Pricing />
           </motion.div>
         ) : viewMode === 'link-in-bio' ? (
           <motion.div
@@ -154,7 +172,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Footer />
+      <Footer setViewMode={setViewMode} />
     </div>
   );
 }

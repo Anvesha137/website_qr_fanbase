@@ -75,9 +75,9 @@ export default function LinkInBio({ onBack }: LinkInBioProps) {
             <ArrowLeft className="h-3.5 w-3.5" />
             Back
           </button>
-          <div className="flex items-center gap-2 cursor-pointer" onClick={onBack}>
-            <img src="/Logo_optimized.png" className="h-6 w-6 object-contain" alt="QuickRevert" />
-            <span className="font-display font-[800] text-sm tracking-widest text-white uppercase">QUICKREVERT</span>
+          <div className="flex items-center gap-1 cursor-pointer" onClick={onBack}>
+            <img src="/Logo_optimized.png" className="h-10 w-10 object-contain" alt="QuickRevert" />
+            <span className="font-manrope font-bold text-lg tracking-tight text-white">QuickRevert</span>
           </div>
           <button onClick={onBack} className="text-xs font-semibold text-white/60 hover:text-white transition-colors">
             Log in →

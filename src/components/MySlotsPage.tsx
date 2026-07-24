@@ -117,9 +117,9 @@ export default function MySlotsPage({ onBack }: MySlotsPageProps) {
           <ArrowLeft className="h-3.5 w-3.5" />
           Back
         </button>
-        <div className="flex items-center gap-2 cursor-pointer" onClick={onBack}>
-          <img src="/Logo_optimized.png" className="h-6 w-6 object-contain" alt="QuickRevert" />
-          <span className="font-display font-[800] text-sm tracking-widest text-white uppercase">QUICKREVERT</span>
+        <div className="flex items-center gap-1 cursor-pointer" onClick={onBack}>
+          <img src="/Logo_optimized.png" className="h-10 w-10 object-contain" alt="QuickRevert" />
+          <span className="font-manrope font-bold text-lg tracking-tight text-white">QuickRevert</span>
         </div>
         <div className="w-16" />
       </header>

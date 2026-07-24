@@ -1,129 +1,119 @@
 import React from 'react';
-import { motion } from 'motion/react';
-import { Check } from 'lucide-react';
+import { Instagram, Youtube } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  setViewMode?: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing') => void;
+}
+
+export default function Footer({ setViewMode }: FooterProps) {
+  const handlePricingClick = (e: React.MouseEvent) => {
+    if (setViewMode) {
+      e.preventDefault();
+      setViewMode('pricing');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <footer className="w-full">
-      {/* ========================================================================= */}
-      {/* FOOTER CTA BANNER SECTION */}
-      {/* ========================================================================= */}
-      <div className="relative py-24 px-4 overflow-hidden text-center text-white bg-slate-950 flex flex-col items-center justify-center min-h-[440px]">
-        {/* Background Image of the CTA container */}
-        <div className="absolute inset-0 -z-10 bg-slate-950">
-          <img 
-            src="https://framerusercontent.com/images/ghm8KZVCys331Z5Fj8M7kUnamc.jpg" 
-            alt="CTA Background" 
-            className="w-full h-full object-cover object-center"
-            referrerPolicy="no-referrer"
-          />
-          {/* Overlay to ensure rich contrast */}
-          <div className="absolute inset-0 bg-[#695dd4]/25 mix-blend-multiply"></div>
+    <footer className="w-full bg-white border-t border-slate-100 pt-16 pb-72 md:pb-80 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 text-left relative z-10">
+        
+        {/* Left: Brand info & security badge */}
+        <div className="md:col-span-6 flex flex-col items-start">
+          <div className="flex items-center gap-1 mb-4 select-none">
+            <img src="/Logo_optimized.png" className="h-9 w-9 object-contain" alt="QuickRevert Logo" />
+            <span className="font-manrope font-bold tracking-tight text-[#1b1b1b] text-xl">QuickRevert</span>
+          </div>
+          <p className="text-slate-500 text-sm font-sans mb-6 max-w-sm leading-relaxed">
+            Automate your Instagram DMs and grow your business with 24/7 engagement.
+          </p>
+          
+          {/* Socials */}
+          <div className="flex items-center space-x-4 mb-6">
+            <a 
+              href="https://www.instagram.com/quickrevert.tech/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://www.youtube.com/@QuickReverttech" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <Youtube className="h-5 w-5" />
+            </a>
+          </div>
+          
+          {/* Copyright */}
+          <p className="text-slate-400 text-xs font-sans mb-6 select-none">
+            © 2026 QuickRevert. All rights reserved.
+          </p>
         </div>
 
-        {/* Ready when you are badge */}
-        <div className="relative inline-flex items-center space-x-1.5 rounded-full bg-white/20 border border-white/20 px-4 py-1.5 backdrop-blur-md shadow-md mb-6">
-          <span className="text-[11px] font-bold tracking-wider uppercase">Ready when you are</span>
-        </div>
-
-        {/* Title */}
-        <h2 className="font-display text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-8 max-w-2xl mx-auto leading-none">
-          Turn followers <br /> into customers
-        </h2>
-
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-xs sm:max-w-none px-4">
-          <a
-            href="https://copilot.quickrevert.gg/auth/login"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-xl bg-white px-8 py-3.5 text-center text-sm font-bold text-[#1b1b1b] shadow-xl hover:shadow-2xl transition-all duration-300 w-full sm:w-auto hover:scale-[1.03]"
+        {/* Company Column */}
+        <div className="md:col-span-3 flex flex-col space-y-3.5">
+          <span className="font-sans font-bold text-slate-800 text-sm select-none">Company</span>
+          <a 
+            href="/pricing"
+            onClick={handlePricingClick}
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           >
-            Get started
+            Pricing
           </a>
-          <a
-            href="https://copilot.quickrevert.gg/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-xl bg-transparent border-2 border-white/25 px-8 py-3 text-center text-sm font-bold text-white transition-all duration-300 w-full sm:w-auto hover:bg-white/10 hover:border-white/40"
+          <a 
+            href="https://copilot.quickrevert.gg/terms-of-services" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           >
-            Discover the app
+            Terms & Conditions
+          </a>
+          <a 
+            href="https://copilot.quickrevert.gg/privacy-policies" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            Privacy Policy
+          </a>
+          <a 
+            href="mailto:support@quickrevert.gg" 
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            Contact Us
+          </a>
+          <a 
+            href="https://copilot.quickrevert.gg/refund-policy" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            Refund Policy
           </a>
         </div>
+
+        {/* Compare Column */}
+        <div className="md:col-span-3 flex flex-col space-y-3.5">
+          <span className="font-sans font-bold text-slate-800 text-sm select-none">Compare</span>
+          <span className="font-sans text-xs sm:text-sm text-slate-400 select-none cursor-default">
+            Vs Manychat
+          </span>
+          <span className="font-sans text-xs sm:text-sm text-slate-400 select-none cursor-default">
+            Vs LinkDM
+          </span>
+        </div>
+
       </div>
 
-      {/* ========================================================================= */}
-      {/* BOTTOM COMPLIANCE & BRAND BAR */}
-      {/* ========================================================================= */}
-      <div className="bg-white border-t border-slate-100 py-10 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6">
-          
-          {/* Left: Copyright & Branding */}
-          <div className="flex items-center space-x-2 text-slate-500 text-xs sm:text-sm font-semibold select-none">
-            <span>©</span>
-            <div className="flex items-center space-x-1.5">
-              <img src="/Logo_optimized.png" className="h-5 w-5 object-contain" alt="QuickRevert Logo" />
-              <span className="font-display font-[800] tracking-wider text-[#1b1b1b] text-sm uppercase">QUICKREVERT</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 mt-4">
-          {/* Center: Connected Socials rounded capsules */}
-          <div className="flex items-center space-x-3.5">
-            {/* X Twitter */}
-            <a 
-              href="https://x.com/QuickRevert" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="h-9 w-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[#1b1b1b] transition-all"
-              title="Follow us on X"
-            >
-              <span className="font-bold text-sm">𝕏</span>
-            </a>
-            {/* LinkedIn */}
-            <a 
-              href="https://www.linkedin.com/company/quickrevert/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="h-9 w-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[#1b1b1b] transition-all"
-              title="QuickRevert LinkedIn"
-            >
-              <span className="font-bold text-sm">in</span>
-            </a>
-            {/* Docs/Framer Symbol */}
-            <a 
-              href="https://copilot.quickrevert.gg/docs" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="h-9 w-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-[#1b1b1b] transition-all"
-              title="Documentation"
-            >
-              <span className="font-bold text-xs">📖</span>
-            </a>
-          </div>
-
-          {/* Right: Terms & Policies links */}
-          <div className="flex items-center space-x-6 text-xs sm:text-sm font-semibold text-slate-400">
-            <a 
-              href="https://copilot.quickrevert.gg/terms-of-services" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-slate-800 transition-colors"
-            >
-              Terms of Services
-            </a>
-            <a 
-              href="https://copilot.quickrevert.gg/privacy-policies" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-slate-800 transition-colors"
-            >
-              Privacy Policy
-            </a>
-          </div>
-
-        </div>
+      {/* Giant Watermark Text */}
+      <div className="absolute left-0 right-0 bottom-0 flex justify-center translate-y-[15%] pointer-events-none select-none z-0">
+        <span className="text-[14vw] font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-[#695dd4]/25 via-[#695dd4]/8 to-transparent leading-none font-onest">
+          QuickRevert
+        </span>
       </div>
     </footer>
   );

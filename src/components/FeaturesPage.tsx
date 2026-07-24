@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
-  MessageSquare, UserPlus, Sliders, Database, 
-  Tv, Send, Flame, Sparkles, Check, RotateCcw, 
+import {
+  MessageSquare, UserPlus, Sliders, Database,
+  Tv, Send, Flame, Sparkles, Check, RotateCcw,
   AlertCircle, Sparkle, Zap, ArrowLeft, Heart,
-  Bookmark, Smile, Camera, Mic, ChevronLeft, 
+  Bookmark, Smile, Camera, Mic, ChevronLeft,
   MoreHorizontal, Link2, Volume2, VolumeX, Instagram,
   ArrowRight, ShieldCheck, CheckCircle2, UserCheck,
   TrendingUp, Play, Layers, X, ChevronRight, Maximize2
@@ -21,10 +21,10 @@ interface FeaturesPageProps {
   setSoundType?: (type: string) => void;
 }
 
-export default function FeaturesPage({ 
-  initialFeatureId, 
+export default function FeaturesPage({
+  initialFeatureId,
   onBack,
-  initialActiveTab, 
+  initialActiveTab,
   soundEnabled,
   setSoundEnabled,
   soundType,
@@ -33,10 +33,10 @@ export default function FeaturesPage({
   // Sound configuration
   const [localSoundEnabled, setLocalSoundEnabled] = useState(soundEnabled !== undefined ? soundEnabled : false);
   const [localSoundType, setLocalSoundType] = useState(soundType !== undefined ? soundType : "cyber_synth");
-  
+
   const actualSoundEnabled = soundEnabled !== undefined ? soundEnabled : localSoundEnabled;
   const actualSetSoundEnabled = setSoundEnabled !== undefined ? setSoundEnabled : setLocalSoundEnabled;
-  
+
   const actualSoundType = soundType !== undefined ? soundType : localSoundType;
   const actualSetSoundType = setSoundType !== undefined ? setSoundType : setLocalSoundType;
 
@@ -59,47 +59,47 @@ export default function FeaturesPage({
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
         const filter = audioCtx.createBiquadFilter();
-        
+
         osc.type = "sine";
         osc.frequency.setValueAtTime(3200, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.012);
-        
+
         filter.type = "highpass";
         filter.frequency.setValueAtTime(1200, audioCtx.currentTime);
-        
+
         gainNode.gain.setValueAtTime(0.35, audioCtx.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.012);
-        
+
         osc.connect(filter);
         filter.connect(gainNode);
         gainNode.connect(audioCtx.destination);
-        
+
         osc.start();
         osc.stop(audioCtx.currentTime + 0.015);
-        
+
         const bufferSize = audioCtx.sampleRate * 0.01;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
           data[i] = Math.random() * 2 - 1;
         }
-        
+
         const noiseNode = audioCtx.createBufferSource();
         noiseNode.buffer = buffer;
-        
+
         const noiseFilter = audioCtx.createBiquadFilter();
         noiseFilter.type = "bandpass";
         noiseFilter.frequency.setValueAtTime(3500, audioCtx.currentTime);
         noiseFilter.Q.setValueAtTime(4, audioCtx.currentTime);
-        
+
         const noiseGain = audioCtx.createGain();
         noiseGain.gain.setValueAtTime(0.18, audioCtx.currentTime);
         noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.01);
-        
+
         noiseNode.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
         noiseGain.connect(audioCtx.destination);
-        
+
         noiseNode.start();
         return;
       }
@@ -107,7 +107,7 @@ export default function FeaturesPage({
       if (url) {
         const audio = new Audio(url);
         audio.volume = type === "retro" ? 0.35 : 0.6;
-        audio.play().catch(() => {});
+        audio.play().catch(() => { });
       }
     } catch (e) {
       console.warn(e);
@@ -115,11 +115,11 @@ export default function FeaturesPage({
   };
 
   const ALL_FEATURES = [
-    { 
-      id: "comment-to-dm", 
-      title: "Comment Multiplier", 
+    {
+      id: "comment-to-dm",
+      title: "Comment Multiplier",
       tabName: "Comment Multiplier",
-      icon: MessageSquare, 
+      icon: MessageSquare,
       tag: "Popular",
       badge: "Keyword Auto-Reply",
       stat: "98.4% Conversion",
@@ -127,11 +127,11 @@ export default function FeaturesPage({
       bg: "from-purple-500/10 via-indigo-500/5 to-pink-500/10",
       iconBg: "bg-[#695dd4] text-white"
     },
-    { 
-      id: "ask-to-follow", 
-      title: "The Follower Gate", 
+    {
+      id: "ask-to-follow",
+      title: "The Follower Gate",
       tabName: "The Follower Gate",
-      icon: UserPlus, 
+      icon: UserPlus,
       tag: "Viral Loop",
       badge: "Graph API Guard",
       stat: "3.2x Follower Boost",
@@ -139,11 +139,11 @@ export default function FeaturesPage({
       bg: "from-blue-500/10 via-indigo-500/5 to-cyan-500/10",
       iconBg: "bg-blue-600 text-white"
     },
-    { 
-      id: "carousel-cards", 
-      title: "Carousel Targeting", 
+    {
+      id: "carousel-cards",
+      title: "Carousel Targeting",
       tabName: "Carousel Targeting",
-      icon: Sliders, 
+      icon: Sliders,
       tag: "High Engagement",
       badge: "Multi-Slide Engine",
       stat: "+140% Slide Score",
@@ -151,11 +151,11 @@ export default function FeaturesPage({
       bg: "from-pink-500/10 via-[#695dd4]/5 to-orange-500/10",
       iconBg: "bg-pink-600 text-white"
     },
-    { 
-      id: "lead-manager", 
-      title: "Zero-Click Lead Capture", 
+    {
+      id: "lead-manager",
+      title: "Zero-Click Lead Capture",
       tabName: "Zero-Click Lead Capture",
-      icon: Database, 
+      icon: Database,
       tag: "CRM Integration",
       badge: "Zero Form Friction",
       stat: "100% Valid Leads",
@@ -163,11 +163,11 @@ export default function FeaturesPage({
       bg: "from-[#695dd4]/10 via-emerald-500/5 to-indigo-500/10",
       iconBg: "bg-emerald-600 text-white"
     },
-    { 
-      id: "story-interactions", 
-      title: "Story Interaction Hack", 
+    {
+      id: "story-interactions",
+      title: "Story Interaction Hack",
       tabName: "Story Interaction Hack",
-      icon: Flame, 
+      icon: Flame,
       tag: "Instant DM",
       badge: "Emoji & Tag Intercept",
       stat: "Instant Dispatch",
@@ -175,11 +175,11 @@ export default function FeaturesPage({
       bg: "from-orange-500/10 via-amber-500/5 to-[#695dd4]/10",
       iconBg: "bg-orange-500 text-white"
     },
-    { 
-      id: "menu-flow", 
-      title: "DM Responder", 
+    {
+      id: "menu-flow",
+      title: "DM Responder",
       tabName: "DM Responder",
-      icon: Send, 
+      icon: Send,
       tag: "Decision Tree",
       badge: "1-Click Options Menu",
       stat: "24/7 Auto-Guide",
@@ -187,11 +187,11 @@ export default function FeaturesPage({
       bg: "from-indigo-500/10 via-[#695dd4]/5 to-purple-500/10",
       iconBg: "bg-indigo-600 text-white"
     },
-    { 
-      id: "live-stream", 
-      title: "Live Stream Heat", 
+    {
+      id: "live-stream",
+      title: "Live Stream Heat",
       tabName: "Live Stream Heat",
-      icon: Tv, 
+      icon: Tv,
       tag: "Coming Soon",
       badge: "Broadcast Listener",
       stat: "RTMP Hook",
@@ -199,11 +199,11 @@ export default function FeaturesPage({
       bg: "from-red-500/10 via-rose-500/5 to-purple-500/10",
       iconBg: "bg-red-500 text-white"
     },
-    { 
-      id: "brainrot-ai", 
-      title: "Brain rot-free AI", 
+    {
+      id: "brainrot-ai",
+      title: "Brain rot-free AI",
       tabName: "Brain rot-free AI",
-      icon: Sparkles, 
+      icon: Sparkles,
       tag: "Coming Soon",
       badge: "Personal Voice Model",
       stat: "Zero Fluff NLP",
@@ -264,7 +264,7 @@ export default function FeaturesPage({
   const resetToTabDefaults = (featureId: string) => {
     const feat = ALL_FEATURES.find(f => f.id === featureId || f.tabName === featureId);
     const tabName = feat ? feat.tabName : "Comment Multiplier";
-    
+
     if (tabName === "Comment Multiplier") {
       setPhoneScreen('feed');
       setCommentsOpen(true);
@@ -468,17 +468,16 @@ export default function FeaturesPage({
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </button>
-          <div className="flex items-center gap-2.5">
-            <img src="/Logo_optimized.png" className="h-6 w-6 object-contain" alt="QuickRevert" />
-            <span className="font-display font-[800] text-sm tracking-widest text-[#1b1b1b] uppercase">QUICKREVERT</span>
+          <div className="flex items-center gap-1">
+            <img src="/Logo_optimized.png" className="h-10 w-10 object-contain" alt="QuickRevert" />
+            <span className="font-manrope font-bold text-lg tracking-tight text-[#1b1b1b]">QuickRevert</span>
           </div>
           {/* Sound Controls */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => actualSetSoundEnabled(!actualSoundEnabled)}
-              className={`p-2 rounded-xl border transition-colors shadow-xs cursor-pointer flex items-center justify-center ${
-                actualSoundEnabled ? "bg-[#695dd4] text-white border-[#695dd4]" : "bg-white text-slate-500 border-slate-200 hover:text-slate-800"
-              }`}
+              className={`p-2 rounded-xl border transition-colors shadow-xs cursor-pointer flex items-center justify-center ${actualSoundEnabled ? "bg-[#695dd4] text-white border-[#695dd4]" : "bg-white text-slate-500 border-slate-200 hover:text-slate-800"
+                }`}
               title={actualSoundEnabled ? "Mute sounds" : "Enable sounds"}
             >
               {actualSoundEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
@@ -499,7 +498,7 @@ export default function FeaturesPage({
 
       {/* HERO HERO BANNER */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col gap-10">
-        
+
         <div className="text-center space-y-4 max-w-3xl mx-auto pt-4">
           <div className="inline-flex items-center gap-2 bg-[#695dd4]/10 border border-[#695dd4]/20 text-[#695dd4] font-mono text-[10px] font-bold uppercase px-3.5 py-1.5 rounded-full shadow-xs">
             <Sparkle className="w-3.5 h-3.5 text-[#695dd4] animate-spin" />
@@ -527,7 +526,7 @@ export default function FeaturesPage({
               >
                 {/* Background subtle gradient glow */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${feat.bg} opacity-50 group-hover:opacity-100 transition-opacity`} />
-                
+
                 <div className="relative z-10 space-y-4">
                   {/* Top Badge Row */}
                   <div className="flex items-center justify-between">
@@ -599,9 +598,8 @@ export default function FeaturesPage({
                       <button
                         key={f.id}
                         onClick={() => openSimulationModal(f.id)}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${
-                          currentFeature.id === f.id ? "bg-[#695dd4] text-white" : "hover:bg-slate-100 text-slate-600"
-                        }`}
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition cursor-pointer ${currentFeature.id === f.id ? "bg-[#695dd4] text-white" : "hover:bg-slate-100 text-slate-600"
+                          }`}
                       >
                         {f.title.split(" ")[0]}
                       </button>
@@ -620,10 +618,10 @@ export default function FeaturesPage({
 
               {/* MODAL WORKSPACE BODY (SPACIOUS 2-COLUMN SANDBOX) */}
               <div className="flex-1 overflow-y-auto p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
+
                 {/* LEFT PANE: FEATURE CONTROLS & WORKFLOW DIAGRAM (7 Cols) */}
                 <div className="lg:col-span-7 space-y-6">
-                  
+
                   {/* Feature Description Card */}
                   <div className="p-4 bg-indigo-50/50 border border-indigo-100 rounded-2xl space-y-1">
                     <span className="text-[10px] font-mono font-bold text-[#695dd4] uppercase tracking-wider">CHANNELS OVERVIEW</span>
@@ -640,7 +638,7 @@ export default function FeaturesPage({
                           <span className="text-xs font-mono font-bold text-slate-500 uppercase">Trigger Keyword Configuration</span>
                           <span className="text-[10px] font-mono font-bold text-[#695dd4] bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 rounded-full">ACTIVE</span>
                         </div>
-                        
+
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-slate-700">Target Keyword Trigger:</label>
                           <div className="flex gap-2">
@@ -723,11 +721,10 @@ export default function FeaturesPage({
                                 setIsFollowing(!isFollowing);
                                 playSoundSample(actualSoundType);
                               }}
-                              className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition cursor-pointer flex items-center justify-center gap-2 ${
-                                isFollowing 
-                                  ? "bg-slate-200 border-slate-300 text-slate-700" 
+                              className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition cursor-pointer flex items-center justify-center gap-2 ${isFollowing
+                                  ? "bg-slate-200 border-slate-300 text-slate-700"
                                   : "bg-[#0095f6] border-[#0095f6] text-white shadow-sm hover:bg-[#0081d6]"
-                              }`}
+                                }`}
                             >
                               <UserCheck className="w-4 h-4" />
                               {isFollowing ? "Simulate Unfollowing" : "Simulate Following @quickrevert_ai"}
@@ -787,11 +784,10 @@ export default function FeaturesPage({
                                 setSelectedSlideIndex(index);
                                 playSoundSample(actualSoundType);
                               }}
-                              className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
-                                selectedSlideIndex === index 
-                                  ? "border-[#695dd4] bg-white ring-2 ring-indigo-500/10 shadow-md" 
+                              className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-3 ${selectedSlideIndex === index
+                                  ? "border-[#695dd4] bg-white ring-2 ring-indigo-500/10 shadow-md"
                                   : "border-slate-200/80 bg-white hover:border-slate-300 opacity-90 hover:opacity-100"
-                              }`}
+                                }`}
                             >
                               <div className="space-y-1">
                                 <span className="text-[10px] font-mono font-bold text-slate-400">SLIDE {slide.id}</span>
@@ -856,7 +852,7 @@ export default function FeaturesPage({
                           <span className="text-xs font-mono font-bold text-slate-700 uppercase">Story Emoji Quick Reactions</span>
                           <span className="text-[10px] font-mono font-bold text-[#695dd4] bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-full">LIVE LISTENER</span>
                         </div>
-                        
+
                         <p className="text-xs text-slate-600 font-medium">
                           Click any emoji below to simulate a fan reacting to your Instagram Story screen:
                         </p>
@@ -886,7 +882,7 @@ export default function FeaturesPage({
                         <p className="text-xs text-slate-600 font-medium">
                           Click option buttons below to test multi-branched customer service paths:
                         </p>
-                        
+
                         <div className="space-y-2.5 text-xs">
                           <button
                             onClick={() => handleResponderSelect("📅 Book Free Growth Audit", "Perfect choice! Find open slots on our calendar: calendly.com/quickrevert 📅")}
@@ -919,7 +915,7 @@ export default function FeaturesPage({
 
                 {/* RIGHT PANE: HIGH-DENSITY IPHONE SMARTPHONE SIMULATOR (5 Cols) */}
                 <div className="lg:col-span-5 flex flex-col items-center">
-                  
+
                   {/* View Screen selector */}
                   <div className="w-full max-w-[310px] flex items-center justify-between mb-3 text-[10px] font-bold text-slate-500 bg-slate-100 p-1.5 rounded-2xl border border-slate-200/80">
                     <span className="ml-2 font-mono uppercase text-slate-400">View Screen:</span>
@@ -965,7 +961,7 @@ export default function FeaturesPage({
 
                   {/* iPhone Shell */}
                   <div className="border-[10px] border-slate-900 rounded-[42px] shadow-2xl relative overflow-hidden bg-black aspect-[9/18.5] w-full max-w-[310px] flex flex-col select-none">
-                    
+
                     {/* Notch */}
                     <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-24 h-5.5 bg-black rounded-full z-30" />
 
@@ -982,7 +978,7 @@ export default function FeaturesPage({
 
                     {/* Inner Instagram Screen */}
                     <div className="flex-1 bg-white relative flex flex-col overflow-hidden text-left text-black">
-                      
+
                       {/* Push Notification */}
                       <AnimatePresence>
                         {notification && (
@@ -1032,7 +1028,7 @@ export default function FeaturesPage({
                             {currentFeature.tabName === "Carousel Targeting" ? (
                               <div className="relative bg-slate-950 aspect-square w-full flex flex-col justify-between overflow-hidden">
                                 <div className={`absolute inset-0 bg-gradient-to-br ${CAROUSEL_CARDS[selectedSlideIndex].bg} opacity-90`} />
-                                
+
                                 <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-5 text-center text-white">
                                   <span className="text-[7px] font-mono font-bold tracking-widest text-pink-300 uppercase">SLIDE {selectedSlideIndex + 1}/4</span>
                                   <h4 className="text-xs font-display font-black uppercase mt-1 tracking-tight leading-tight">{CAROUSEL_CARDS[selectedSlideIndex].title}</h4>
@@ -1128,7 +1124,7 @@ export default function FeaturesPage({
                               <button onClick={() => setPhoneScreen('feed')}>
                                 <ChevronLeft className="w-4 h-4 text-slate-850" />
                               </button>
-                              <div 
+                              <div
                                 onClick={() => setPhoneScreen('profile')}
                                 className="w-6 h-6 rounded-full bg-[#695dd4] flex items-center justify-center font-mono text-[9px] font-bold text-white shadow-xs cursor-pointer shrink-0"
                               >
@@ -1151,11 +1147,10 @@ export default function FeaturesPage({
                               ) : (
                                 multiplierDMs.map((dm, idx) => (
                                   <div key={idx} className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}>
-                                    <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${
-                                      dm.sender === "user" 
-                                        ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent" 
+                                    <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${dm.sender === "user"
+                                        ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent"
                                         : "bg-[#efefef] text-slate-800 border-slate-100"
-                                    }`}>
+                                      }`}>
                                       {dm.text}
                                     </div>
                                   </div>
@@ -1166,11 +1161,10 @@ export default function FeaturesPage({
                             {currentFeature.tabName === "The Follower Gate" && (
                               gateDMs.map((dm, idx) => (
                                 <div key={idx} className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}>
-                                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${
-                                    dm.sender === "user" 
-                                      ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent" 
+                                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${dm.sender === "user"
+                                      ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent"
                                       : "bg-[#efefef] text-slate-800 border-slate-100"
-                                  }`}>
+                                    }`}>
                                     {dm.text}
                                   </div>
                                 </div>
@@ -1185,11 +1179,10 @@ export default function FeaturesPage({
                               ) : (
                                 carouselDMs.map((dm, idx) => (
                                   <div key={idx} className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}>
-                                    <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${
-                                      dm.sender === "user" 
-                                        ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent" 
+                                    <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${dm.sender === "user"
+                                        ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent"
                                         : "bg-[#efefef] text-slate-800 border-slate-100"
-                                    }`}>
+                                      }`}>
                                       {dm.text}
                                     </div>
                                   </div>
@@ -1200,11 +1193,10 @@ export default function FeaturesPage({
                             {currentFeature.tabName === "Zero-Click Lead Capture" && (
                               leadChat.map((dm, idx) => (
                                 <div key={idx} className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}>
-                                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${
-                                    dm.sender === "user" 
-                                      ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent" 
+                                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${dm.sender === "user"
+                                      ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent"
                                       : "bg-[#efefef] text-slate-800 border-slate-100"
-                                  }`}>
+                                    }`}>
                                     {dm.text}
                                   </div>
                                 </div>
@@ -1219,11 +1211,10 @@ export default function FeaturesPage({
                               ) : (
                                 storyDMs.map((dm, idx) => (
                                   <div key={idx} className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}>
-                                    <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${
-                                      dm.sender === "user" 
-                                        ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent" 
+                                    <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${dm.sender === "user"
+                                        ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent"
                                         : "bg-[#efefef] text-slate-800 border-slate-100"
-                                    }`}>
+                                      }`}>
                                       {dm.text}
                                     </div>
                                   </div>
@@ -1234,11 +1225,10 @@ export default function FeaturesPage({
                             {currentFeature.tabName === "DM Responder" && (
                               responderDMs.map((dm, idx) => (
                                 <div key={idx} className={`flex ${dm.sender === "user" ? "justify-end" : "justify-start"}`}>
-                                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${
-                                    dm.sender === "user" 
-                                      ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent" 
+                                  <div className={`max-w-[80%] rounded-xl px-3 py-1.5 text-[9px] font-semibold border shadow-xs leading-normal ${dm.sender === "user"
+                                      ? "bg-gradient-to-r from-[#6366f1] via-[#a855f7] to-[#ec4899] text-white border-transparent"
                                       : "bg-[#efefef] text-slate-800 border-slate-100"
-                                  }`}>
+                                    }`}>
                                     {dm.text}
                                   </div>
                                 </div>
@@ -1374,11 +1364,10 @@ export default function FeaturesPage({
                                 setIsFollowing(!isFollowing);
                                 playSoundSample(actualSoundType);
                               }}
-                              className={`flex-1 py-1.5 rounded-lg text-[9px] font-bold text-center border cursor-pointer transition ${
-                                isFollowing 
-                                  ? "bg-slate-100 border-slate-200 text-slate-700" 
+                              className={`flex-1 py-1.5 rounded-lg text-[9px] font-bold text-center border cursor-pointer transition ${isFollowing
+                                  ? "bg-slate-100 border-slate-200 text-slate-700"
                                   : "bg-[#0095f6] border-[#0095f6] text-white shadow-xs"
-                              }`}
+                                }`}
                             >
                               {isFollowing ? "Following" : "Follow"}
                             </button>

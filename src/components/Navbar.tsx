@@ -6,8 +6,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
-  viewMode: 'landing' | 'link-in-bio' | 'features' | 'slots';
-  setViewMode: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots') => void;
+  viewMode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing';
+  setViewMode: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing') => void;
   onSelectFeature?: (featureId: string) => void;
 }
 
@@ -97,6 +97,9 @@ const dropdownVariants = {
 export default function Navbar({ viewMode, setViewMode, onSelectFeature }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<'features' | 'resources' | null>(null);
+  const [showAffiliateModal, setShowAffiliateModal] = useState(false);
+  const [affiliateForm, setAffiliateForm] = useState({ name: '', email: '', promoPlan: '' });
+  const [affiliateSubmitted, setAffiliateSubmitted] = useState(false);
 
   const featuresTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resourcesTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -128,7 +131,7 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
   };
 
   return (
-    <nav className="absolute top-4 left-0 right-0 z-50 px-4 sm:px-6">
+    <nav className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6">
       <div className="mx-auto max-w-7xl rounded-2xl border border-white/25 bg-white/95 shadow-lg backdrop-blur-md transition-all duration-300">
         <div className="px-6 py-3">
           <div className="flex items-center justify-between">
@@ -136,17 +139,25 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
             {/* Logo */}
             <div
               onClick={() => setViewMode('landing')}
-              className="flex cursor-pointer items-center space-x-2"
+              className="flex cursor-pointer items-center space-x-1"
               id="navbar-logo"
             >
-              <img src="/Logo_optimized.png" className="h-6 w-6 object-contain" alt="QuickRevert Logo" />
-              <span className="font-display font-[800] text-lg tracking-wider text-[#1b1b1b] uppercase">
-                QUICKREVERT
+              <img src="/Logo_optimized.png" className="h-11 w-11 object-contain" alt="QuickRevert Logo" />
+              <span className="font-manrope font-bold text-2xl tracking-tight text-[#1b1b1b]">
+                QuickRevert
               </span>
             </div>
 
             {/* Center Nav */}
             <div className="hidden md:flex items-center space-x-8">
+
+              {/* Pricing */}
+              <button
+                onClick={() => setViewMode('pricing')}
+                className="text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors"
+              >
+                Pricing
+              </button>
 
               {/* Features */}
               <div
@@ -154,9 +165,9 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
                 onMouseEnter={() => handleEnter('features')}
                 onMouseLeave={() => handleLeave('features')}
               >
-                <button className="flex items-center space-x-1 text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors">
+                <button className="flex items-center space-x-1 text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors">
                   <span>Features</span>
-                  <ChevronDown className={`h-3.5 w-3.5 opacity-60 transition-transform duration-200 ${activeDropdown === 'features' ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-4 w-4 opacity-60 transition-transform duration-200 ${activeDropdown === 'features' ? 'rotate-180' : ''}`} />
                 </button>
 
                 <AnimatePresence>
@@ -272,78 +283,35 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
                 </AnimatePresence>
               </div>
 
-              {/* Resources */}
-              <div
-                className="relative"
-                onMouseEnter={() => handleEnter('resources')}
-                onMouseLeave={() => handleLeave('resources')}
-              >
-                <button className="flex items-center space-x-1 text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors">
-                  <span>Resources</span>
-                  <ChevronDown className={`h-3.5 w-3.5 opacity-60 transition-transform duration-200 ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} />
-                </button>
-
-                <AnimatePresence>
-                  {activeDropdown === 'resources' && (
-                    <motion.div
-                      key="resources-dropdown"
-                      variants={dropdownVariants}
-                      initial="hidden"
-                      animate="visible"
-                      exit="exit"
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[280px] bg-white rounded-2xl shadow-2xl border border-slate-100 p-4 z-50"
-                      onMouseEnter={() => handleEnter('resources')}
-                      onMouseLeave={() => handleLeave('resources')}
-                    >
-                      <div className="space-y-1">
-                        {resourcesItems.map((item) => (
-                          <button
-                            key={item.title}
-                            onClick={() => scrollToSection('stay-for-rest')}
-                            className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors text-left group"
-                          >
-                            <div className="h-9 w-9 rounded-xl bg-[#f0edfc] flex items-center justify-center shrink-0 mt-0.5">
-                              <item.icon className="h-4.5 w-4.5 text-[#695dd4]" />
-                            </div>
-                            <div>
-                              <p className="text-sm font-semibold text-[#1b1b1b] group-hover:text-[#695dd4] transition-colors mb-0.5">
-                                {item.title}
-                              </p>
-                              <p className="text-xs text-slate-500 leading-snug">{item.desc}</p>
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Pricing */}
+              {/* Affiliate */}
               <button
-                onClick={() => scrollToSection('pricing')}
-                className="text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors"
+                onClick={() => {
+                  setAffiliateSubmitted(false);
+                  setAffiliateForm({ name: '', email: '', promoPlan: '' });
+                  setShowAffiliateModal(true);
+                }}
+                className="text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors"
               >
-                Pricing
+                Affiliate
               </button>
 
-              {/* FAQ */}
+              {/* Help */}
               <button
                 onClick={() => scrollToSection('faq')}
-                className="text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors"
+                className="text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors"
               >
-                FAQ
+                Help
               </button>
             </div>
 
-            {/* Right: Sandbox Button */}
+            {/* Right: Get Started Button */}
             <div className="hidden md:flex items-center">
               <button
                 onClick={() => setViewMode(viewMode === 'features' ? 'landing' : 'features')}
                 className="rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:shadow-lg transition-all duration-300 active:scale-95"
-                id="nav-login-btn"
+                id="nav-get-started-btn"
               >
-                {viewMode === 'features' ? 'Exit Sandbox' : 'Sandbox Mode'}
+                {viewMode === 'features' ? 'Exit Sandbox' : 'Get Started'}
               </button>
             </div>
 
@@ -372,40 +340,42 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
               <div className="space-y-3">
                 <button
                   onClick={() => {
+                    setMobileMenuOpen(false);
+                    setViewMode('pricing');
+                  }}
+                  className="block w-full text-left text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
+                >
+                  Pricing
+                </button>
+                <button
+                  onClick={() => {
                     setViewMode('features');
                     setMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
+                  className="block w-full text-left text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
                 >
-                  Features Simulator
+                  Features
                 </button>
                 <button
                   onClick={() => {
-                    setViewMode('link-in-bio');
                     setMobileMenuOpen(false);
+                    setAffiliateSubmitted(false);
+                    setAffiliateForm({ name: '', email: '', promoPlan: '' });
+                    setShowAffiliateModal(true);
                   }}
-                  className="block w-full text-left text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
+                  className="block w-full text-left text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
                 >
-                  Link-in-Bio Store
+                  Affiliate
                 </button>
                 <button
                   onClick={() => {
-                    setViewMode('slots');
                     setMobileMenuOpen(false);
+                    scrollToSection('faq');
                   }}
-                  className="block w-full text-left text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
+                  className="block w-full text-left text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
                 >
-                  1:1 Appointments
+                  Help
                 </button>
-                {['Pricing', 'FAQ'].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => scrollToSection(item.toLowerCase())}
-                    className="block w-full text-left text-sm font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
-                  >
-                    {item}
-                  </button>
-                ))}
               </div>
               <div className="pt-4 border-t border-slate-100">
                 <button
@@ -415,7 +385,7 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
                   }}
                   className="w-full py-3 bg-[#695dd4] hover:bg-[#5a50c6] text-white rounded-xl font-bold text-sm shadow-md transition-all"
                 >
-                  {viewMode === 'features' ? 'Exit Sandbox' : 'Sandbox Mode'}
+                  {viewMode === 'features' ? 'Exit Sandbox' : 'Get Started'}
                 </button>
               </div>
             </motion.div>
@@ -423,6 +393,142 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
         </AnimatePresence>
 
       </div>
+
+      {/* Affiliate Modal */}
+      <AnimatePresence>
+        {showAffiliateModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25 }}
+              className="bg-white border border-slate-200 rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-8 text-left relative"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowAffiliateModal(false)}
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {!affiliateSubmitted ? (
+                <div>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#695dd4]/10 border border-[#695dd4]/20 text-[#695dd4] text-xs font-bold mb-4 select-none">
+                    <span>🤝 Partner Program</span>
+                  </div>
+                  <h3 className="font-display font-extrabold text-2xl text-slate-900 leading-tight">
+                    QuickRevert Affiliate Program
+                  </h3>
+                  <p className="text-slate-500 text-sm font-medium mt-2">
+                    Partner with us and earn <strong className="text-slate-900">30% recurring lifetime commission</strong> for every creator or brand you refer.
+                  </p>
+
+                  <div className="my-6 space-y-3.5 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <div className="flex items-start gap-2.5">
+                      <span className="text-lg leading-none mt-0.5">💰</span>
+                      <div>
+                        <p className="text-xs font-bold text-slate-800">30% Recurring Commission</p>
+                        <p className="text-[11px] text-slate-500 leading-normal">Earn monthly payouts for as long as your referred customers stay active.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2.5">
+                      <span className="text-lg leading-none mt-0.5">📈</span>
+                      <div>
+                        <p className="text-xs font-bold text-slate-800">Partner Dashboard</p>
+                        <p className="text-[11px] text-slate-500 leading-normal">Real-time stats on your link clicks, conversions, and upcoming payouts.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-2.5">
+                      <span className="text-lg leading-none mt-0.5">⚡</span>
+                      <div>
+                        <p className="text-xs font-bold text-slate-800">Dedicated Support</p>
+                        <p className="text-[11px] text-slate-500 leading-normal">Marketing assets, swipe copies, and direct access to our team to help you succeed.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      setAffiliateSubmitted(true);
+                    }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={affiliateForm.name}
+                        onChange={(e) => setAffiliateForm({ ...affiliateForm, name: e.target.value })}
+                        placeholder="John Doe"
+                        className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 text-sm font-semibold focus:outline-none focus:border-[#695dd4] transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={affiliateForm.email}
+                        onChange={(e) => setAffiliateForm({ ...affiliateForm, email: e.target.value })}
+                        placeholder="john@example.com"
+                        className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 text-sm font-semibold focus:outline-none focus:border-[#695dd4] transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                        How do you plan to promote QuickRevert?
+                      </label>
+                      <textarea
+                        required
+                        value={affiliateForm.promoPlan}
+                        onChange={(e) => setAffiliateForm({ ...affiliateForm, promoPlan: e.target.value })}
+                        placeholder="e.g. Social media channels, newsletter, blog reviews..."
+                        rows={3}
+                        className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 text-sm font-semibold focus:outline-none focus:border-[#695dd4] transition-colors resize-none"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full mt-2 py-3 rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] text-white text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
+                    >
+                      Submit Application
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <div className="text-center py-6">
+                  <div className="h-16 w-16 mx-auto rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-2xl mb-4 select-none">
+                    🎉
+                  </div>
+                  <h3 className="font-display font-extrabold text-2xl text-slate-900 leading-tight">
+                    Application Submitted!
+                  </h3>
+                  <p className="text-slate-500 text-sm font-medium mt-3 leading-relaxed">
+                    Thank you for applying, <strong className="text-slate-800">{affiliateForm.name}</strong>! We've received your request to join the program at <strong className="text-slate-800">{affiliateForm.email}</strong>.
+                  </p>
+                  <p className="text-slate-400 text-xs font-medium mt-2 leading-relaxed">
+                    Our partner manager will review your details and send you an email with your affiliate portal setup and custom referral link within 24-48 hours.
+                  </p>
+                  <button
+                    onClick={() => setShowAffiliateModal(false)}
+                    className="mt-8 px-6 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:text-slate-800 hover:bg-slate-50 text-sm font-bold transition-all cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
