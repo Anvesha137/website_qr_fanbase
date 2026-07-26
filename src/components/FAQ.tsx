@@ -10,24 +10,16 @@ import {
   XCircle, 
   X, 
   ChevronRight,
-  ArrowRight,
   ExternalLink
 } from 'lucide-react';
 
-// Sub-component: Step Badge
-const StepBadge = ({ num }: { num: number | string }) => (
-  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#695dd4]/10 text-xs font-bold text-[#695dd4]">
-    {num}
-  </span>
-);
-
 // Sub-component: Breadcrumbs / Flow UI
 const FlowPath = ({ steps }: { steps: string[] }) => (
-  <div className="flex flex-wrap items-center gap-1.5 my-2">
+  <div className="flex flex-wrap items-center gap-1.5 my-1.5 text-xs sm:text-sm">
     {steps.map((step, idx) => (
       <React.Fragment key={idx}>
-        {idx > 0 && <ChevronRight className="h-3.5 w-3.5 text-slate-400" />}
-        <span className="rounded-lg bg-slate-100 border border-slate-200/60 px-2.5 py-1 text-xs font-bold text-slate-800 font-mono">
+        {idx > 0 && <ChevronRight className="h-3.5 w-3.5 text-slate-400 shrink-0" />}
+        <span className="font-bold text-slate-700 font-mono">
           {step}
         </span>
       </React.Fragment>
@@ -37,11 +29,13 @@ const FlowPath = ({ steps }: { steps: string[] }) => (
 
 // Sub-component: Step Guide
 const StepGuide = ({ steps }: { steps: React.ReactNode[] }) => (
-  <ol className="space-y-3.5 mt-3 pl-1">
+  <ol className="space-y-4 mt-3 pl-1">
     {steps.map((step, idx) => (
-      <li key={idx} className="flex items-start gap-3">
-        <StepBadge num={idx + 1} />
-        <div className="text-slate-600 font-medium text-sm sm:text-base mt-0.5 leading-relaxed">{step}</div>
+      <li key={idx} className="flex items-start gap-2.5">
+        <span className="font-mono font-bold text-[#695dd4] text-sm sm:text-base mt-0.5 shrink-0 select-none">
+          {idx + 1}.
+        </span>
+        <div className="text-slate-600 font-medium text-sm sm:text-base leading-relaxed">{step}</div>
       </li>
     ))}
   </ol>
@@ -49,40 +43,40 @@ const StepGuide = ({ steps }: { steps: React.ReactNode[] }) => (
 
 // Sub-component: Warning Box
 const WarningBox = ({ children }: { children: React.ReactNode }) => (
-  <div className="mb-4 flex items-start gap-3 rounded-xl border border-rose-100 bg-rose-50/70 p-4 text-rose-900 text-sm">
-    <AlertTriangle className="h-5 w-5 shrink-0 text-rose-500 mt-0.5" />
+  <div className="mb-4 flex items-start gap-2.5 border-l-2 border-rose-500 pl-3 py-0.5 text-rose-800 text-sm">
+    <AlertTriangle className="h-4.5 w-4.5 shrink-0 text-rose-500 mt-0.5" />
     <div className="font-semibold leading-relaxed">{children}</div>
   </div>
 );
 
 // Sub-component: Instagram Professional Account Check Guide
 const SwitchAccountGuide = () => (
-  <div className="mt-4 border border-slate-200/80 rounded-2xl p-5 bg-white/60 space-y-4 shadow-sm">
+  <div className="mt-4 border-t border-slate-100 pt-4 space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="border border-green-100 bg-green-50/40 rounded-xl p-4">
-        <h4 className="font-bold text-green-800 text-sm sm:text-base mb-2.5 flex items-center gap-2">
-          <CheckCircle2 className="h-4.5 w-4.5 text-green-600" />
+      <div className="space-y-1.5">
+        <h4 className="font-bold text-green-700 text-sm sm:text-base flex items-center gap-1.5">
+          <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
           Supported Accounts
         </h4>
-        <ul className="text-xs sm:text-sm text-slate-600 space-y-2 list-disc pl-4 font-medium">
+        <ul className="text-xs sm:text-sm text-slate-500 space-y-1.5 list-disc pl-4 font-medium">
           <li><strong>Business Account</strong> (Highly recommended)</li>
           <li><strong>Creator Account</strong></li>
         </ul>
       </div>
-      <div className="border border-red-100 bg-red-50/40 rounded-xl p-4">
-        <h4 className="font-bold text-red-800 text-sm sm:text-base mb-2.5 flex items-center gap-2">
-          <XCircle className="h-4.5 w-4.5 text-red-600" />
+      <div className="space-y-1.5">
+        <h4 className="font-bold text-rose-700 text-sm sm:text-base flex items-center gap-1.5">
+          <XCircle className="h-4 w-4 text-rose-600 shrink-0" />
           Unsupported Accounts
         </h4>
-        <ul className="text-xs sm:text-sm text-slate-600 space-y-2 list-disc pl-4 font-medium">
-          <li><strong>Personal Instagram accounts</strong> (restricted by Meta)</li>
+        <ul className="text-xs sm:text-sm text-slate-500 space-y-1.5 list-disc pl-4 font-medium">
+          <li><strong>Personal Instagram Accounts</strong></li>
         </ul>
       </div>
     </div>
-    <div className="pt-3.5 border-t border-slate-200/60 text-xs sm:text-sm text-slate-500 font-medium">
-      <span className="font-bold text-slate-800">To switch account type:</span>
-      <div className="mt-2">
-        <FlowPath steps={["Instagram App", "Settings", "Account (or Creator tools)", "Switch to Professional Account"]} />
+    <div className="pt-2 text-xs sm:text-sm text-slate-500 font-medium">
+      <span className="font-bold text-slate-700">To switch account type:</span>
+      <div className="mt-1.5">
+        <FlowPath steps={["Instagram App", "Settings", "Account", "Switch to Professional Account"]} />
       </div>
     </div>
   </div>
@@ -90,136 +84,106 @@ const SwitchAccountGuide = () => (
 
 // Sub-component: Troubleshooting Guide for Automations
 const TroubleshootGuide = () => (
-  <div className="space-y-4 mt-4">
-    <div className="border border-slate-200/80 rounded-2xl p-5 bg-white/60 space-y-3.5 shadow-sm">
-      <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2.5">
-        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-50 text-xs font-extrabold text-[#695dd4]">1</span>
-        Reason 1: Automation is Turned Off
+  <div className="space-y-6 mt-4">
+    <div className="space-y-2">
+      <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+        1. Reason: Automation is Turned Off
       </h4>
-      <p className="text-xs sm:text-sm text-slate-600 pl-8.5 font-medium">
+      <p className="text-xs sm:text-sm text-slate-500 font-medium">
         Ensure your automation is enabled inside the dashboard:
       </p>
-      <div className="pl-8.5">
-        <FlowPath steps={["Menu", "Automations", "Click on specific automation", "Activate Automation"]} />
-      </div>
+      <FlowPath steps={["Menu", "Automations", "Click specific automation", "Activate Automation"]} />
     </div>
 
-    <div className="border border-slate-200/80 rounded-2xl p-5 bg-white/60 space-y-3.5 shadow-sm">
-      <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2.5">
-        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-50 text-xs font-extrabold text-[#695dd4]">2</span>
-        Reason 2: Instagram is Disconnected
+    <div className="space-y-2 border-t border-slate-100 pt-4">
+      <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+        2. Reason: Instagram is Disconnected
       </h4>
-      <p className="text-xs sm:text-sm text-slate-600 pl-8.5 font-medium">
+      <p className="text-xs sm:text-sm text-slate-500 font-medium">
         Check the connection status and refresh your authentication token:
       </p>
-      <div className="pl-8.5">
-        <FlowPath steps={["Menu button", "My Account", "Under Connected Accounts", "Click Connect (or Refresh Token)"]} />
-      </div>
+      <FlowPath steps={["Menu button", "My Account", "Connected Accounts", "Connect (or Refresh Token)"]} />
     </div>
 
-    <div className="border border-slate-200/80 rounded-2xl p-5 bg-white/60 space-y-3.5 shadow-sm">
-      <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2.5">
-        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-indigo-50 text-xs font-extrabold text-[#695dd4]">3</span>
-        Reason 3: Monthly Contact Limit Reached
+    <div className="space-y-2 border-t border-slate-100 pt-4">
+      <h4 className="font-bold text-slate-900 text-sm sm:text-base">
+        3. Reason: Monthly Contact Limit Reached
       </h4>
-      <p className="text-xs sm:text-sm text-slate-600 pl-8.5 font-medium">
+      <p className="text-xs sm:text-sm text-slate-500 font-medium">
         If you exceed your plan's monthly contact limit, automations pause automatically:
       </p>
-      <div className="pl-8.5 space-y-2.5">
-        <FlowPath steps={["Dashboard", "Usage section", "Check current limits"]} />
-        <p className="text-xs sm:text-sm text-slate-500 font-medium italic">
-          💡 If you have exceeded limits, upgrade to Premium or Professional to resume automations and get unlimited DMs.
-        </p>
-      </div>
+      <FlowPath steps={["Dashboard", "Usage section", "Check current limits"]} />
+      <p className="text-xs sm:text-sm text-slate-400 font-medium italic mt-1">
+        💡 If you have exceeded limits, upgrade to Premium or Professional to resume automations.
+      </p>
     </div>
   </div>
 );
 
 // Sub-component: Auto DM creation guide
 const AutoDMGuide = () => (
-  <div className="space-y-4 mt-3">
+  <div className="space-y-5 mt-3">
     <p className="text-slate-600 text-sm sm:text-base font-semibold">
       Auto DM automatically replies to users when they send you a direct message on Instagram:
     </p>
     
-    <div className="relative pl-6 border-l-2 border-slate-200/80 space-y-6">
-      <div className="relative">
-        <div className="absolute -left-[37px] top-0 bg-white p-1">
-          <StepBadge num={1} />
-        </div>
-        <h5 className="font-bold text-slate-900 text-sm sm:text-base">Open Automations</h5>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+    <div className="space-y-5 border-l-2 border-slate-100 pl-4 py-1">
+      <div className="space-y-1">
+        <h5 className="font-bold text-slate-900 text-sm sm:text-base">1. Open Automations</h5>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
           Go to your QuickRevert dashboard and click <span className="font-bold text-slate-700">Automations</span> from the main menu.
         </p>
       </div>
 
-      <div className="relative">
-        <div className="absolute -left-[37px] top-0 bg-white p-1">
-          <StepBadge num={2} />
-        </div>
-        <h5 className="font-bold text-slate-900 text-sm sm:text-base">Create a New Automation</h5>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+      <div className="space-y-1">
+        <h5 className="font-bold text-slate-900 text-sm sm:text-base">2. Create a New Automation</h5>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
           Click the <span className="font-bold text-slate-700">Create Automation</span> button.
         </p>
       </div>
 
-      <div className="relative">
-        <div className="absolute -left-[37px] top-0 bg-white p-1">
-          <StepBadge num={3} />
-        </div>
-        <h5 className="font-bold text-slate-900 text-sm sm:text-base">Name Your Automation</h5>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+      <div className="space-y-1">
+        <h5 className="font-bold text-slate-900 text-sm sm:text-base">3. Name Your Automation</h5>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
           Enter a reference name (e.g. <em className="text-slate-700 font-medium">Test Automation</em>) for your internal reference only, then click <span className="font-bold text-slate-700">Continue</span>.
         </p>
       </div>
 
-      <div className="relative">
-        <div className="absolute -left-[37px] top-0 bg-white p-1">
-          <StepBadge num={4} />
-        </div>
-        <h5 className="font-bold text-slate-900 text-sm sm:text-base">Select Trigger</h5>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+      <div className="space-y-1">
+        <h5 className="font-bold text-slate-900 text-sm sm:text-base">4. Select Trigger</h5>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
           Choose the <span className="font-bold text-[#695dd4]">Someone sends me a DM</span> option, then click <span className="font-bold text-slate-700">Continue</span>.
         </p>
       </div>
 
-      <div className="relative">
-        <div className="absolute -left-[37px] top-0 bg-white p-1">
-          <StepBadge num={5} />
-        </div>
-        <h5 className="font-bold text-slate-900 text-sm sm:text-base">Configure Trigger</h5>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+      <div className="space-y-1">
+        <h5 className="font-bold text-slate-900 text-sm sm:text-base">5. Configure Trigger</h5>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
           Choose how the automation should trigger:
         </p>
-        <ul className="text-xs sm:text-sm text-slate-500 mt-2 list-disc pl-5 space-y-1.5 font-medium">
+        <ul className="text-xs sm:text-sm text-slate-400 mt-1.5 list-disc pl-5 space-y-1.5 font-medium">
           <li><strong>All Messages:</strong> triggers for every incoming DM.</li>
-          <li><strong>Specific Keywords:</strong> triggers only if the DM contains keywords like <code className="bg-slate-100 text-rose-600 px-1 py-0.5 rounded text-xs font-mono font-bold">price</code>, <code className="bg-slate-100 text-rose-600 px-1 py-0.5 rounded text-xs font-mono font-bold">link</code>, or <code className="bg-slate-100 text-rose-600 px-1 py-0.5 rounded text-xs font-mono font-bold">details</code>.</li>
+          <li><strong>Specific Keywords:</strong> triggers only if the DM contains keywords like <code className="bg-slate-50 text-rose-600 px-1 py-0.5 rounded text-xs font-mono font-bold border border-slate-100">price</code>, <code className="bg-slate-50 text-rose-600 px-1 py-0.5 rounded text-xs font-mono font-bold border border-slate-100">link</code>, or <code className="bg-slate-50 text-rose-600 px-1 py-0.5 rounded text-xs font-mono font-bold border border-slate-100">details</code>.</li>
         </ul>
       </div>
 
-      <div className="relative">
-        <div className="absolute -left-[37px] top-0 bg-white p-1">
-          <StepBadge num={6} />
-        </div>
-        <h5 className="font-bold text-slate-900 text-sm sm:text-base">Set Up Your Response</h5>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+      <div className="space-y-1">
+        <h5 className="font-bold text-slate-900 text-sm sm:text-base">6. Set Up Your Response</h5>
+        <p className="text-xs sm:text-sm text-slate-500 font-medium">
           Configure the reply message options:
         </p>
-        <ul className="text-xs sm:text-sm text-slate-500 mt-2 list-disc pl-5 space-y-1.5 font-medium">
+        <ul className="text-xs sm:text-sm text-slate-400 mt-1.5 list-disc pl-5 space-y-1.5 font-medium">
           <li><strong>Message:</strong> Write a short, clear message (3–4 lines max).</li>
           <li><strong>Image (optional):</strong> Paste a public image URL.</li>
-          <li><strong>Button (optional):</strong> Add a button name and link (e.g. name: <code className="bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded text-xs font-bold">Access Now</code> pointing to your URL).</li>
+          <li><strong>Button (optional):</strong> Add a button name and link (e.g. name: <span className="underline text-slate-700">Access Now</span> pointing to your URL).</li>
         </ul>
       </div>
     </div>
 
-    <div className="pt-3 flex items-center gap-2">
-      <span className="text-slate-600 text-xs sm:text-sm font-medium">
-        When you are done, click
-      </span>
-      <span className="inline-flex items-center gap-1 bg-[#695dd4] text-white px-3 py-1 rounded-xl text-xs font-bold shadow-sm">
-        Launch Automation <ArrowRight className="h-3 w-3" />
-      </span>
+    <div className="pt-2">
+      <p className="text-xs sm:text-sm text-slate-500 font-medium">
+        When done, click <span className="font-bold text-[#695dd4]">Launch Automation</span> to activate! 🚀
+      </p>
     </div>
   </div>
 );
@@ -239,9 +203,24 @@ export default function FAQ() {
   const [openQuestion, setOpenQuestion] = useState<string | null>(null);
 
   const faqCategories = [
-    { id: 'general', name: 'General Questions', icon: HelpCircle },
-    { id: 'howto', name: 'How-To Guides', icon: BookOpen },
-    { id: 'troubleshoot', name: 'Troubleshooting', icon: Wrench },
+    { 
+      id: 'general', 
+      name: 'General Questions', 
+      icon: HelpCircle,
+      count: 7
+    },
+    { 
+      id: 'howto', 
+      name: 'How-To Guides', 
+      icon: BookOpen,
+      count: 7
+    },
+    { 
+      id: 'troubleshoot', 
+      name: 'Troubleshooting', 
+      icon: Wrench,
+      count: 2
+    },
   ] as const;
 
   const faqs: FAQItem[] = [
@@ -434,7 +413,7 @@ export default function FAQ() {
     return faq.category === selectedCategory && matchesSearch;
   });
 
-  // Set default open item on category switch
+  // Set default open item on category switch or search
   useEffect(() => {
     if (searchQuery.trim() === '') {
       const firstInCat = faqs.find(f => f.category === selectedCategory);
@@ -449,157 +428,222 @@ export default function FAQ() {
   };
 
   return (
-    <section className="py-24 bg-white" id="faq">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <section className="py-12 bg-white" id="faq">
+      <div className="mx-auto max-w-[1300px] px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="font-onest text-4xl sm:text-5xl font-extrabold tracking-tight text-[#1b1b1b] mb-4">
-            Help Center & FAQ
-          </h2>
-          <p className="text-slate-500 font-medium text-base sm:text-lg max-w-lg mx-auto">
-            Find answers to commonly asked questions, step-by-step setup guides, and troubleshooting steps.
-          </p>
+        {/* Header Hero Area */}
+        <div className="relative rounded-2xl overflow-hidden mb-8 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 py-8 px-6 sm:px-12 text-center border border-white/5 shadow-sm">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,#695dd4,transparent_45%)] opacity-25"></div>
+          <div className="relative z-10 max-w-3xl mx-auto space-y-1">
+            <h1 className="font-onest text-2xl sm:text-3xl font-extrabold tracking-tight text-white animate-fade-in">
+              How can we help you?
+            </h1>
+            <p className="text-slate-300 font-medium text-xs sm:text-sm leading-normal">
+              Search our guides, configure your account, and troubleshoot automations.
+            </p>
+          </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative max-w-md mx-auto mb-10">
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-slate-400" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search help articles & FAQs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="block w-full pl-12 pr-10 py-3.5 border border-slate-200 rounded-2xl bg-slate-50 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#695dd4] focus:border-transparent transition-all font-medium shadow-sm"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          )}
-        </div>
+        {/* Main Dashboard Layout Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-4">
+          
+          {/* Left Column: Sidebar Widgets */}
+          <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-28">
+            
+            {/* Categories */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 select-none">
+                Categories
+              </h3>
+              <div className="flex flex-col space-y-1">
+                {faqCategories.map((cat) => {
+                  const isActive = selectedCategory === cat.id && !searchQuery;
+                  return (
+                    <div key={cat.id} className="space-y-1">
+                      <button
+                        onClick={() => {
+                          setSelectedCategory(cat.id);
+                          setSearchQuery('');
+                        }}
+                        className={`w-full text-left py-2 px-3 font-semibold text-sm sm:text-base cursor-pointer flex items-center justify-between transition-all border-l-2 ${
+                          isActive 
+                            ? 'text-[#695dd4] font-bold border-[#695dd4] pl-4' 
+                            : 'text-slate-400 border-transparent hover:text-slate-800 hover:translate-x-0.5 pl-3'
+                        }`}
+                      >
+                        <span>{cat.name}</span>
+                        <span className="text-[10px] text-slate-400 font-medium">({cat.count})</span>
+                      </button>
 
-        {/* Category Selector Tabs (Hidden when search query is active) */}
-        {!searchQuery && (
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12">
-            {faqCategories.map((cat) => {
-              const Icon = cat.icon;
-              const isActive = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 active:scale-95 cursor-pointer ${
-                    isActive
-                      ? 'bg-[#695dd4] text-white shadow-lg shadow-[#695dd4]/25'
-                      : 'bg-[#f2f2f4] text-[#1b1b1b]/70 hover:bg-[#e6e6e8] hover:text-[#1b1b1b]'
-                  }`}
-                >
-                  <Icon className="h-4.5 w-4.5" />
-                  <span>{cat.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Dynamic header for search results */}
-        {searchQuery && (
-          <div className="flex justify-between items-center mb-6 px-1">
-            <h3 className="font-onest text-lg font-bold text-slate-800">
-              Found {filteredFaqs.length} result{filteredFaqs.length !== 1 ? 's' : ''} for "{searchQuery}"
-            </h3>
-            <button
-              onClick={() => setSearchQuery('')}
-              className="text-[#695dd4] hover:text-[#5a50c6] font-bold text-sm cursor-pointer"
-            >
-              Clear search
-            </button>
-          </div>
-        )}
-
-        {/* FAQ list */}
-        <div className="space-y-4">
-          <AnimatePresence mode="popLayout">
-            {filteredFaqs.length > 0 ? (
-              filteredFaqs.map((faq) => {
-                const isOpen = openQuestion === faq.q;
-                
-                // Find matching category name for search badges
-                const categoryObj = faqCategories.find(c => c.id === faq.category);
-                
-                return (
-                  <motion.div
-                    key={faq.q}
-                    layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="rounded-2xl bg-[#f2f2f4] overflow-hidden transition-all duration-300"
-                  >
-                    <button
-                      onClick={() => handleToggle(faq.q)}
-                      className="w-full flex items-start justify-between px-6 sm:px-8 py-5 sm:py-6 text-left focus:outline-none cursor-pointer"
-                    >
-                      <div className="flex-1 pr-4">
-                        {/* Search Category Badge */}
-                        {searchQuery && categoryObj && (
-                          <span className="inline-block text-[10px] uppercase tracking-wider font-extrabold bg-[#695dd4]/10 text-[#695dd4] px-2 py-0.5 rounded-md mb-2">
-                            {categoryObj.name}
-                          </span>
+                      {/* Nested Question Titles */}
+                      <AnimatePresence initial={false}>
+                        {isActive && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.18 }}
+                            className="pl-3.5 space-y-1 border-l border-slate-200 ml-4 py-1"
+                          >
+                            {faqs
+                              .filter((faq) => faq.category === cat.id)
+                              .map((faq) => {
+                                const isFaqOpen = openQuestion === faq.q;
+                                return (
+                                  <button
+                                    key={faq.q}
+                                    onClick={() => {
+                                      setOpenQuestion(faq.q);
+                                      // Smooth scroll to element on the right
+                                      const element = document.getElementById(faq.q);
+                                      if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                      }
+                                    }}
+                                    className={`w-full text-left text-xs sm:text-sm font-medium py-1.5 transition-all cursor-pointer block select-none truncate border-l ${
+                                      isFaqOpen
+                                        ? 'text-[#695dd4] font-semibold border-[#695dd4] pl-3'
+                                        : 'text-slate-400 hover:text-slate-700 hover:translate-x-0.5 border-slate-100 hover:border-slate-300 pl-3'
+                                    }`}
+                                  >
+                                    {faq.q}
+                                  </button>
+                                );
+                              })}
+                          </motion.div>
                         )}
-                        <span className="block font-onest text-lg sm:text-xl font-bold text-[#1b1b1b] leading-snug">
-                          {faq.q}
-                        </span>
-                      </div>
-                      
-                      {/* Plus/Minus Toggle Symbol */}
-                      <div className="h-6 w-6 flex items-center justify-center shrink-0 relative mt-1">
-                        <div className="h-0.5 w-4 bg-[#695dd4] rounded-full"></div>
-                        <div className={`absolute h-4 w-0.5 bg-[#695dd4] rounded-full transition-transform duration-300 ${isOpen ? 'rotate-90 scale-y-0' : ''}`}></div>
-                      </div>
-                    </button>
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.25 }}
-                        >
-                          <div className="px-6 sm:px-8 pb-6 sm:pb-8 pt-1 text-slate-500 font-sans font-medium text-sm sm:text-base leading-relaxed border-t border-slate-200/40">
-                            {faq.a}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })
-            ) : (
-              <motion.div
-                key="no-results"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-12 bg-[#f2f2f4] rounded-2xl p-6"
-              >
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-200 text-slate-400 mb-4">
-                  <Search className="h-6 w-6" />
-                </div>
-                <h4 className="font-onest text-lg font-bold text-[#1b1b1b] mb-1">No FAQ entries found</h4>
-                <p className="text-slate-500 text-sm max-w-sm mx-auto font-medium">
-                  We couldn't find anything matching "{searchQuery}". Try using keywords like "token", "switch", "delete", or "connect".
-                </p>
-              </motion.div>
+            {/* Support CTA Link */}
+            <div className="pt-6 border-t border-slate-200/80">
+              <p className="text-xs text-slate-400 font-semibold leading-relaxed">
+                Still need help? Email our support team available 24/7 at{' '}
+                <a
+                  href="mailto:support@quickrevert.gg"
+                  className="font-bold text-[#695dd4] hover:underline transition-colors"
+                >
+                  support@quickrevert.gg
+                </a>
+              </p>
+            </div>
+
+          </div>
+
+          {/* Right Column: Dynamic Search & Content List */}
+          <div className="lg:col-span-8 space-y-6">
+            
+            {/* Search Bar Widget */}
+            <div className="relative border-b border-slate-200 pb-4">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4.5 w-4.5 text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search articles, guides, keywords..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full pl-10 pr-10 py-2.5 bg-transparent border-0 text-slate-900 placeholder-slate-400 focus:outline-none transition-all font-semibold text-sm sm:text-base"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                >
+                  <X className="h-4.5 w-4.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Dynamic Results Header */}
+            {searchQuery && (
+              <div className="flex justify-between items-center px-1">
+                <h3 className="font-onest text-base font-bold text-slate-800">
+                  Showing {filteredFaqs.length} match{filteredFaqs.length !== 1 ? 'es' : ''} for "{searchQuery}"
+                </h3>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="text-[#695dd4] hover:text-[#5a50c6] font-bold text-xs cursor-pointer"
+                >
+                  Clear Search
+                </button>
+              </div>
             )}
-          </AnimatePresence>
+
+            {/* Accordion Container */}
+            <div className="divide-y divide-slate-100 border-t border-slate-100">
+              <AnimatePresence mode="popLayout">
+                {filteredFaqs.length > 0 ? (
+                  filteredFaqs.map((faq) => {
+                    const isOpen = openQuestion === faq.q;
+                    
+                    return (
+                      <motion.div
+                        key={faq.q}
+                        id={faq.q}
+                        layout
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="scroll-mt-24 py-1"
+                      >
+                        <button
+                          onClick={() => handleToggle(faq.q)}
+                          className="w-full flex items-start justify-between py-5 text-left focus:outline-none cursor-pointer group"
+                        >
+                          <span className="block font-onest text-lg sm:text-xl font-bold text-slate-900 leading-snug group-hover:text-[#695dd4] transition-colors">
+                            {faq.q}
+                          </span>
+                          
+                          {/* Chevron Indicator */}
+                          <div className="h-6 w-6 flex items-center justify-center shrink-0 relative mt-1 text-slate-400 group-hover:text-[#695dd4] transition-colors">
+                            <ChevronRight className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-90 text-[#695dd4]' : ''}`} />
+                          </div>
+                        </button>
+
+                        <AnimatePresence initial={false}>
+                          {isOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.22 }}
+                            >
+                              <div className="pb-6 pt-1 text-slate-500 font-sans font-medium text-sm sm:text-base leading-relaxed">
+                                {faq.a}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    );
+                  })
+                ) : (
+                  <motion.div
+                    key="no-results"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-16"
+                  >
+                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-400 mb-3 border border-slate-100">
+                      <Search className="h-5 w-5" />
+                    </div>
+                    <h4 className="font-onest text-base font-bold text-slate-800 mb-1.5">No articles found</h4>
+                    <p className="text-slate-500 text-xs sm:text-sm max-w-sm mx-auto font-medium leading-relaxed">
+                      We couldn't find anything matching "{searchQuery}". Check your spelling or select a category to clear filters.
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+          </div>
+
         </div>
 
       </div>
