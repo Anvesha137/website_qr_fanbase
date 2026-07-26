@@ -134,7 +134,7 @@ export default function Hero({ onGetStarted }: HeroProps) {
                       className="h-6 w-6 rounded-full object-cover shrink-0 mt-0.5"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="bg-[#1e1e1e]/95 border border-white/5 text-white text-[10px] px-3.5 py-2.5 rounded-2xl rounded-tl-none font-medium leading-normal shadow-xl">
+                    <div className="bg-[#1b272c]/95 border border-white/5 text-white text-[10px] px-3.5 py-2.5 rounded-2xl rounded-tl-none font-medium leading-normal shadow-xl">
                       <div className="flex items-baseline gap-1 mb-0.5">
                         <span className="font-bold text-white/90">charlie_design</span>
                         <span className="text-[7.5px] text-white/40">2d</span>
@@ -163,7 +163,7 @@ export default function Hero({ onGetStarted }: HeroProps) {
                             referrerPolicy="no-referrer"
                           />
                         </div>
-                        <div className="bg-[#1e1e1e]/95 border border-white/5 text-white text-[10px] px-3.5 py-2.5 rounded-2xl rounded-tl-none font-medium leading-normal shadow-xl">
+                        <div className="bg-[#1b272c]/95 border border-white/5 text-white text-[10px] px-3.5 py-2.5 rounded-2xl rounded-tl-none font-medium leading-normal shadow-xl">
                           <div className="flex items-baseline gap-1 flex-wrap mb-0.5">
                             <span className="font-bold text-white/90">quickrevert</span>
                             <span className="bg-white/15 px-1 rounded-[2px] text-[7px] font-extrabold text-white/90 leading-none">Author</span>
