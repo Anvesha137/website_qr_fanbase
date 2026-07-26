@@ -194,7 +194,7 @@ export default function Hero({ onGetStarted }: HeroProps) {
                   {/* Purple Bubble (Creator Message) */}
                   <div className="bg-[#05010D] text-white rounded-2xl rounded-br-none p-3.5 w-full max-w-[230px] flex flex-col shadow-xl self-end">
                     <p className="text-[10px] font-semibold text-white leading-normal">
-                      Hey! Thanks so much for your comment ✉️❤️ Everything's been sent your way ✨
+                      Hey! Thanks so much for your comment ❤️ Everything's been sent your way ✨
                     </p>
                     {/* Lighter Purple Button inside the bubble */}
                     <button className="mt-2.5 w-full py-2 bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white text-[9.5px] font-bold rounded-lg transition-all cursor-pointer text-center">
