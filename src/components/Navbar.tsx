@@ -6,8 +6,8 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
-  viewMode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing';
-  setViewMode: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing') => void;
+  viewMode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help';
+  setViewMode: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help') => void;
   onSelectFeature?: (featureId: string) => void;
 }
 
@@ -297,8 +297,13 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
 
               {/* Help */}
               <button
-                onClick={() => scrollToSection('faq')}
-                className="text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] transition-colors"
+                onClick={() => {
+                  setViewMode('help');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`text-base font-semibold transition-colors cursor-pointer ${
+                  viewMode === 'help' ? 'text-[#695dd4]' : 'text-[#1b1b1b]/70 hover:text-[#1b1b1b]'
+                }`}
               >
                 Help
               </button>
@@ -370,9 +375,12 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    scrollToSection('faq');
+                    setViewMode('help');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="block w-full text-left text-base font-semibold text-[#1b1b1b]/70 hover:text-[#1b1b1b] py-1"
+                  className={`block w-full text-left text-base font-semibold py-1 cursor-pointer ${
+                    viewMode === 'help' ? 'text-[#695dd4]' : 'text-[#1b1b1b]/70 hover:text-[#1b1b1b]'
+                  }`}
                 >
                   Help
                 </button>

@@ -15,16 +15,17 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   // Initial path mapping for direct page loading (no dashboard)
-  const getInitialView = (): 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' => {
+  const getInitialView = (): 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help' => {
     const path = window.location.pathname;
     if (path === '/features') return 'features';
     if (path === '/slots') return 'slots';
     if (path === '/link-in-bio') return 'link-in-bio';
     if (path === '/pricing') return 'pricing';
+    if (path === '/help') return 'help';
     return 'landing';
   };
 
-  const [viewMode, setViewModeState] = useState<'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing'>(getInitialView);
+  const [viewMode, setViewModeState] = useState<'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help'>(getInitialView);
   const [selectedFeature, setSelectedFeature] = useState<string | undefined>(undefined);
   const [checkoutNotification, setCheckoutNotification] = useState<{ plan: string; price: number } | null>(null);
 
@@ -36,6 +37,7 @@ export default function App() {
       else if (path === '/slots') setViewModeState('slots');
       else if (path === '/link-in-bio') setViewModeState('link-in-bio');
       else if (path === '/pricing') setViewModeState('pricing');
+      else if (path === '/help') setViewModeState('help');
       else setViewModeState('landing');
     };
 
@@ -44,13 +46,14 @@ export default function App() {
   }, []);
 
   // Helper to change view and push browser history state
-  const setViewMode = (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing') => {
+  const setViewMode = (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help') => {
     setViewModeState(mode);
     let targetPath = '/';
     if (mode === 'features') targetPath = '/features';
     else if (mode === 'slots') targetPath = '/slots';
     else if (mode === 'link-in-bio') targetPath = '/link-in-bio';
     else if (mode === 'pricing') targetPath = '/pricing';
+    else if (mode === 'help') targetPath = '/help';
 
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
@@ -115,7 +118,6 @@ export default function App() {
             <Playground />
             <Features />
             <StayForRest />
-            <FAQ />
           </motion.div>
         ) : viewMode === 'pricing' ? (
           <motion.div
@@ -159,7 +161,7 @@ export default function App() {
               }}
             />
           </motion.div>
-        ) : (
+        ) : viewMode === 'slots' ? (
           <motion.div
             key="slots-view"
             initial={{ opacity: 0 }}
@@ -168,6 +170,22 @@ export default function App() {
             transition={{ duration: 0.3 }}
           >
             <MySlotsPage onBack={() => setViewMode('landing')} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="help-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative pt-24 bg-white"
+          >
+            <Navbar
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              onSelectFeature={(featureId) => setSelectedFeature(featureId)}
+            />
+            <FAQ />
           </motion.div>
         )}
       </AnimatePresence>

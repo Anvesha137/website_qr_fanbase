@@ -2,7 +2,7 @@ import React from 'react';
 import { Instagram, Youtube } from 'lucide-react';
 
 interface FooterProps {
-  setViewMode?: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing') => void;
+  setViewMode?: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help') => void;
 }
 
 export default function Footer({ setViewMode }: FooterProps) {
@@ -63,6 +63,19 @@ export default function Footer({ setViewMode }: FooterProps) {
             className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           >
             Pricing
+          </a>
+          <a 
+            href="/help"
+            onClick={(e) => {
+              if (setViewMode) {
+                e.preventDefault();
+                setViewMode('help');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            Help Center
           </a>
           <a 
             href="https://copilot.quickrevert.gg/terms-of-services" 
