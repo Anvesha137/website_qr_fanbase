@@ -7,15 +7,15 @@ interface HeroProps {
 }
 
 export default function Hero({ onGetStarted }: HeroProps) {
-  // 5-step cycle: 0=reset/blank, 1=question, 2=+trigger, 3=+hello, 4=+product card
-  const [step, setStep] = useState(1);
+  // 4-step cycle: 0=reset/blank, 1=comment, 2=creator reply, 3=DM received
+  const [step, setStep] = useState(0);
   const [typedText, setTypedText] = useState("");
   const [isTypingDone, setIsTypingDone] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setStep((prev) => (prev >= 4 ? 0 : prev + 1));
-    }, 2000);
+      setStep((prev) => (prev >= 3 ? 0 : prev + 1));
+    }, 2800);
     return () => clearInterval(timer);
   }, []);
 
@@ -104,93 +104,103 @@ export default function Hero({ onGetStarted }: HeroProps) {
                   Trusted Meta Tech Providers
                 </span>
               </div>
-              
+
               {/* Official APIs Caption */}
               <p className="text-xs text-white/70 font-medium select-none pl-2 tracking-tight">
-                *we use 100% official meta apis
+                *We use 100% official Meta APIs
               </p>
             </motion.div>
           </div>
 
-          {/* ── Right Column: Chat bubbles ── */}
+          {/* ── Right Column: Instagram Comment & DM Mockups ── */}
           <div className="hidden lg:block relative h-[500px]">
 
-            {/* Bubble 1: "Do you have a shop?" — step 1+ */}
+            {/* Comments Mockup (Floating bubbles, no sheet wrapper) */}
             <AnimatePresence>
-              {step >= 1 && (
+              {(step === 1 || step === 2) && (
                 <motion.div
-                  key="bubble-question"
-                  initial={{ opacity: 0, y: -12, scale: 0.92 }}
+                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -12, scale: 0.92 }}
-                  transition={{ type: 'spring', stiffness: 220, damping: 24 }}
-                  className="absolute flex items-center gap-2.5 bg-[#1b1b1b] text-white px-3.5 py-2.5 rounded-2xl shadow-2xl border border-white/10 backdrop-blur-sm"
-                  style={{ top: '8%', right: '8%' }}
+                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 22 }}
+                  className="absolute w-[260px] flex flex-col gap-3 select-none"
+                  style={{ top: '22%', right: '38%' }}
                 >
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
-                    alt="User"
-                    className="h-7 w-7 rounded-full border-2 border-[#695dd4] object-cover shrink-0"
-                    referrerPolicy="no-referrer"
-                  />
-                  <p className="text-xs font-bold whitespace-nowrap">Do you have a shop?</p>
+                  {/* Comment 1: User asking for link */}
+                  <div className="flex items-start gap-2">
+                    <img
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150"
+                      alt="Follower"
+                      className="h-6 w-6 rounded-full object-cover shrink-0 mt-0.5"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="bg-[#1e1e1e]/95 border border-white/5 text-white text-[10px] px-3.5 py-2.5 rounded-2xl rounded-tl-none font-medium leading-normal shadow-xl">
+                      <div className="flex items-baseline gap-1 mb-0.5">
+                        <span className="font-bold text-white/90">charlie_design</span>
+                        <span className="text-[7.5px] text-white/40">2d</span>
+                      </div>
+                      <p className="text-white/90">Link please</p>
+                    </div>
+                  </div>
+
+                  {/* Comment 2: Creator auto-reply */}
+                  <AnimatePresence>
+                    {step === 2 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.25 }}
+                        className="flex items-start gap-2 pl-6 mt-1"
+                      >
+                        {/* Creator Avatar with gradient border */}
+                        <div className="relative shrink-0 mt-0.5">
+                          <div className="absolute inset-0 -m-[1.5px] rounded-full bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600" style={{ animation: 'spin 12s linear infinite' }} />
+                          <img
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150"
+                            alt="Creator"
+                            className="relative h-6 w-6 rounded-full border border-[#121212] object-cover"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                        <div className="bg-[#1e1e1e]/95 border border-white/5 text-white text-[10px] px-3.5 py-2.5 rounded-2xl rounded-tl-none font-medium leading-normal shadow-xl">
+                          <div className="flex items-baseline gap-1 flex-wrap mb-0.5">
+                            <span className="font-bold text-white/90">quickrevert</span>
+                            <span className="bg-white/15 px-1 rounded-[2px] text-[7px] font-extrabold text-white/90 leading-none">Author</span>
+                            <span className="text-[7.5px] text-white/40">2d</span>
+                          </div>
+                          <p className="text-white/90">
+                            <span className="text-sky-400">@charlie_design</span> heyy check your dms 👀✨
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Trigger Pill — step 2+ */}
+            {/* DM Chat Bubbles Mockup (No back box, completely transparent floating chat) */}
             <AnimatePresence>
-              {step >= 2 && (
+              {step === 3 && (
                 <motion.div
-                  key="trigger-pill"
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.85 }}
-                  transition={{ duration: 0.25 }}
-                  className="absolute flex items-center gap-1.5 text-white/85 text-[11px] font-medium"
-                  style={{ top: '24%', right: '8%' }}
-                >
-                  <span className="text-yellow-300 text-xs">✦</span>
-                  <span>Shopping flow automation triggered</span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Bubble 2: "Hello 👋" — step 3+ */}
-            <AnimatePresence>
-              {step >= 3 && (
-                <motion.div
-                  key="bubble-hello"
-                  initial={{ opacity: 0, x: 25, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: 25, scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 180, damping: 20 }}
-                  className="absolute bg-white text-[#1b1b1b] px-4 py-2.5 rounded-full shadow-xl"
-                  style={{ top: '34%', right: '14%' }}
-                >
-                  <p className="text-xs font-semibold whitespace-nowrap">Hello 👋 Here we go!</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Bubble 3: Product card — step 4+ */}
-            <AnimatePresence>
-              {step >= 4 && (
-                <motion.div
-                  key="bubble-product"
                   initial={{ opacity: 0, y: 20, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 160, damping: 18 }}
-                  className="absolute bg-white p-3.5 rounded-2xl shadow-2xl w-[200px] border border-slate-100 flex flex-col gap-2.5"
-                  style={{ top: '48%', right: '14%' }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 22 }}
+                  className="absolute w-[260px] flex flex-col select-none"
+                  style={{ top: '22%', right: '38%' }}
                 >
-                  <p className="text-xs text-[#1b1b1b] font-semibold leading-snug">
-                    Check out all available products of our shop
-                  </p>
-                  <button className="w-full py-2 bg-[#695dd4] text-white text-xs font-bold rounded-lg hover:bg-[#5b51c1] transition-all">
-                    Click here!
-                  </button>
+                  {/* Purple Bubble (Creator Message) */}
+                  <div className="bg-[#05010D] text-white rounded-2xl rounded-br-none p-3.5 w-full max-w-[230px] flex flex-col shadow-xl self-end">
+                    <p className="text-[10px] font-semibold text-white leading-normal">
+                      Hey! Thanks so much for your comment ✉️❤️ Everything's been sent your way ✨
+                    </p>
+                    {/* Lighter Purple Button inside the bubble */}
+                    <button className="mt-2.5 w-full py-2 bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white text-[9.5px] font-bold rounded-lg transition-all cursor-pointer text-center">
+                      Link
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
