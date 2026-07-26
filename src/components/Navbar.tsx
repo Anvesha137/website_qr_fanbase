@@ -132,7 +132,7 @@ export default function Navbar({ viewMode, setViewMode, onSelectFeature }: Navba
 
   return (
     <nav className="fixed top-4 left-0 right-0 z-50 px-4 sm:px-6">
-      <div className="mx-auto max-w-7xl rounded-2xl border border-white/25 bg-white/95 shadow-lg backdrop-blur-md transition-all duration-300">
+      <div className="mx-auto max-w-[1440px] rounded-2xl border border-white/25 bg-white/95 shadow-lg backdrop-blur-md transition-all duration-300">
         <div className="px-6 py-3">
           <div className="flex items-center justify-between">
 

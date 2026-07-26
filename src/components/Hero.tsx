@@ -56,7 +56,7 @@ export default function Hero({ onGetStarted }: HeroProps) {
       <div className="absolute inset-0 bg-gradient-to-r from-black/25 via-black/10 to-transparent pointer-events-none" />
 
       {/* Content */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full pt-44 pb-16">
+      <div className="relative mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 w-full pt-32 lg:pt-36 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-start">
 
           {/* ── Left Column ── */}
@@ -84,7 +84,7 @@ export default function Hero({ onGetStarted }: HeroProps) {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg sm:text-xl text-white/90 font-medium leading-relaxed max-w-lg mb-12"
+              className="text-lg sm:text-xl text-white/90 font-medium leading-relaxed max-w-lg mb-6"
               id="hero-subtitle"
             >
               Reply to <span className="font-instagram text-[1.35em] leading-none inline-block align-middle px-1 pb-1.5 font-normal text-white select-none italic">Instagram</span> comments instantly with DMs, keeping followers engaged and the algorithm on your side.
