@@ -46,7 +46,7 @@ export default function Pricing() {
       description: 'Test the core experience quickly.',
       btn: 'Try Now',
       badge: '1 month only',
-      oneTimePrice: 199,
+      oneTimePrice: 249,
       features: [
         { text: '1 Instagram Account', included: true },
         { text: '10 Automations', included: true },
@@ -62,8 +62,6 @@ export default function Pricing() {
       name: 'PREMIUM',
       description: 'For creators ready to scale.',
       btn: 'Start Premium',
-      popular: true,
-      dark: true,
       quarterlyMonthlyEffective: 399,
       annuallyMonthlyEffective: 349,
       features: [
@@ -81,8 +79,10 @@ export default function Pricing() {
       name: 'PROFESSIONAL',
       description: 'Advanced tools for high-growth accounts.',
       btn: 'Go Professional',
-      quarterlyMonthlyEffective: 599,
-      annuallyMonthlyEffective: 499,
+      popular: true,
+      dark: true,
+      quarterlyMonthlyEffective: 699,
+      annuallyMonthlyEffective: 599,
       features: [
         { text: 'Unlimited automations', included: true },
         { text: 'Unlimited DMs', included: true },
@@ -253,8 +253,8 @@ export default function Pricing() {
                 className={`w-full py-3 rounded-xl font-semibold text-xs text-center transition-all mb-6 cursor-pointer font-sans ${plan.name === 'FREE' || plan.name === 'TRY ME OUT'
                   ? 'border border-slate-300 text-slate-600 hover:border-[#695dd4] hover:text-[#695dd4]'
                   : plan.dark
-                    ? 'bg-white text-slate-900 hover:bg-slate-100'
-                    : 'bg-[#695dd4] text-white hover:bg-[#5a50c6] shadow-lg shadow-[#695dd4]/20'
+                    ? 'bg-[#695dd4] text-white hover:bg-[#5a50c6] shadow-lg shadow-[#695dd4]/30'
+                    : 'border border-slate-300 text-slate-600 hover:border-[#695dd4] hover:text-[#695dd4]'
                   }`}
               >
                 {plan.btn}
