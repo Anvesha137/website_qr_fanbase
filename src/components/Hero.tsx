@@ -191,13 +191,13 @@ export default function Hero({ onGetStarted }: HeroProps) {
                   className="absolute w-[260px] flex flex-col select-none"
                   style={{ top: '22%', right: '38%' }}
                 >
-                  {/* Purple Bubble (Creator Message) */}
-                  <div className="bg-[#05010D] text-white rounded-2xl rounded-br-none p-3.5 w-full max-w-[230px] flex flex-col shadow-xl self-end">
-                    <p className="text-[10px] font-semibold text-white leading-normal">
+                  {/* Light Grey Bubble (Creator Message) */}
+                  <div className="bg-slate-100 text-slate-900 rounded-2xl rounded-br-none p-3.5 w-full max-w-[230px] flex flex-col shadow-xl self-end border border-slate-200/50">
+                    <p className="text-[10px] font-semibold text-slate-900 leading-normal">
                       Hey! Thanks so much for your comment ❤️ Everything's been sent your way ✨
                     </p>
-                    {/* Lighter Purple Button inside the bubble */}
-                    <button className="mt-2.5 w-full py-2 bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white text-[9.5px] font-bold rounded-lg transition-all cursor-pointer text-center">
+                    {/* Button inside the bubble */}
+                    <button className="mt-2.5 w-full py-2 bg-white hover:bg-slate-50 border border-slate-200/80 active:scale-[0.98] text-slate-800 text-[9.5px] font-bold rounded-lg transition-all cursor-pointer text-center shadow-xs">
                       Link
                     </button>
                   </div>
