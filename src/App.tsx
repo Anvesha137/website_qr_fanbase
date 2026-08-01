@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from './components/Navbar';
+import Navbar, { ViewMode } from './components/Navbar';
 import Hero from './components/Hero';
 import Playground from './components/Playground';
 import Features from './components/Features';
@@ -9,23 +9,31 @@ import FAQ from './components/FAQ';
 import LinkInBio from './components/LinkInBio';
 import FeaturesPage from './components/FeaturesPage';
 import MySlotsPage from './components/MySlotsPage';
+import AffiliatePage from './components/AffiliatePage';
+import TermsPage from './components/TermsPage';
+import PrivacyPage from './components/PrivacyPage';
+import RefundPage from './components/RefundPage';
 import Footer from './components/Footer';
 import { Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function App() {
   // Initial path mapping for direct page loading (no dashboard)
-  const getInitialView = (): 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help' => {
+  const getInitialView = (): ViewMode => {
     const path = window.location.pathname;
     if (path === '/features') return 'features';
     if (path === '/slots') return 'slots';
     if (path === '/link-in-bio') return 'link-in-bio';
     if (path === '/pricing') return 'pricing';
     if (path === '/help') return 'help';
+    if (path === '/affiliate') return 'affiliate';
+    if (path === '/terms') return 'terms';
+    if (path === '/privacy') return 'privacy';
+    if (path === '/refund') return 'refund';
     return 'landing';
   };
 
-  const [viewMode, setViewModeState] = useState<'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help'>(getInitialView);
+  const [viewMode, setViewModeState] = useState<ViewMode>(getInitialView);
   const [selectedFeature, setSelectedFeature] = useState<string | undefined>(undefined);
   const [checkoutNotification, setCheckoutNotification] = useState<{ plan: string; price: number } | null>(null);
 
@@ -38,6 +46,10 @@ export default function App() {
       else if (path === '/link-in-bio') setViewModeState('link-in-bio');
       else if (path === '/pricing') setViewModeState('pricing');
       else if (path === '/help') setViewModeState('help');
+      else if (path === '/affiliate') setViewModeState('affiliate');
+      else if (path === '/terms') setViewModeState('terms');
+      else if (path === '/privacy') setViewModeState('privacy');
+      else if (path === '/refund') setViewModeState('refund');
       else setViewModeState('landing');
     };
 
@@ -46,7 +58,7 @@ export default function App() {
   }, []);
 
   // Helper to change view and push browser history state
-  const setViewMode = (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help') => {
+  const setViewMode = (mode: ViewMode) => {
     setViewModeState(mode);
     let targetPath = '/';
     if (mode === 'features') targetPath = '/features';
@@ -54,6 +66,10 @@ export default function App() {
     else if (mode === 'link-in-bio') targetPath = '/link-in-bio';
     else if (mode === 'pricing') targetPath = '/pricing';
     else if (mode === 'help') targetPath = '/help';
+    else if (mode === 'affiliate') targetPath = '/affiliate';
+    else if (mode === 'terms') targetPath = '/terms';
+    else if (mode === 'privacy') targetPath = '/privacy';
+    else if (mode === 'refund') targetPath = '/refund';
 
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
@@ -72,6 +88,12 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white text-slate-800 selection:bg-brand-primary selection:text-white font-sans antialiased">
 
+      {/* Global Navbar — rendered across all pages including /features */}
+      <Navbar
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
+
       {/* Floating Checkout Notification */}
       <AnimatePresence>
         {checkoutNotification && (
@@ -86,9 +108,9 @@ export default function App() {
                 <Sparkles className="h-5 w-5 text-amber-300 animate-pulse" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold uppercase tracking-wider text-indigo-300">Activating sandbox</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-indigo-300">Activating plan</p>
                 <p className="text-sm font-bold text-white mt-0.5">Creating 14-day trial for {checkoutNotification.plan}...</p>
-                <p className="text-xs text-slate-400 mt-1">Redirecting you to the connected Features Simulator...</p>
+                <p className="text-xs text-slate-400 mt-1">Redirecting you to Features...</p>
               </div>
             </div>
           </motion.div>
@@ -105,13 +127,7 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Navbar + Hero share a relative container — navbar floats over hero */}
             <div className="relative">
-              <Navbar
-                viewMode={viewMode}
-                setViewMode={setViewMode}
-                onSelectFeature={(featureId) => setSelectedFeature(featureId)}
-              />
               <Hero onGetStarted={() => setViewMode('features')} />
             </div>
 
@@ -128,11 +144,6 @@ export default function App() {
             transition={{ duration: 0.3 }}
             className="relative pt-24 bg-[#FFF9F6]"
           >
-            <Navbar
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              onSelectFeature={(featureId) => setSelectedFeature(featureId)}
-            />
             <Pricing />
           </motion.div>
         ) : viewMode === 'link-in-bio' ? (
@@ -142,6 +153,7 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            className="relative pt-24"
           >
             <LinkInBio onBack={() => setViewMode('landing')} />
           </motion.div>
@@ -155,6 +167,7 @@ export default function App() {
           >
             <FeaturesPage
               initialFeatureId={selectedFeature}
+              setViewMode={setViewMode}
               onBack={() => {
                 setSelectedFeature(undefined);
                 setViewMode('landing');
@@ -168,8 +181,49 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            className="relative pt-24"
           >
             <MySlotsPage onBack={() => setViewMode('landing')} />
+          </motion.div>
+        ) : viewMode === 'affiliate' ? (
+          <motion.div
+            key="affiliate-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <AffiliatePage setViewMode={setViewMode} />
+          </motion.div>
+        ) : viewMode === 'terms' ? (
+          <motion.div
+            key="terms-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <TermsPage setViewMode={setViewMode} />
+          </motion.div>
+        ) : viewMode === 'privacy' ? (
+          <motion.div
+            key="privacy-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <PrivacyPage setViewMode={setViewMode} />
+          </motion.div>
+        ) : viewMode === 'refund' ? (
+          <motion.div
+            key="refund-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <RefundPage setViewMode={setViewMode} />
           </motion.div>
         ) : (
           <motion.div
@@ -180,17 +234,12 @@ export default function App() {
             transition={{ duration: 0.3 }}
             className="relative pt-24 bg-white"
           >
-            <Navbar
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              onSelectFeature={(featureId) => setSelectedFeature(featureId)}
-            />
             <FAQ />
           </motion.div>
         )}
       </AnimatePresence>
 
-      <Footer setViewMode={setViewMode} />
+      {viewMode !== 'affiliate' && <Footer setViewMode={setViewMode} />}
     </div>
   );
 }

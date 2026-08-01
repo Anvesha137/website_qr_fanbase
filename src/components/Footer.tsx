@@ -1,8 +1,9 @@
 import React from 'react';
 import { Instagram, Youtube } from 'lucide-react';
+import { ViewMode } from './Navbar';
 
 interface FooterProps {
-  setViewMode?: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help') => void;
+  setViewMode?: (mode: ViewMode) => void;
 }
 
 export default function Footer({ setViewMode }: FooterProps) {
@@ -48,9 +49,9 @@ export default function Footer({ setViewMode }: FooterProps) {
             </a>
           </div>
           
-          {/* Copyright */}
-          <p className="text-slate-400 text-xs font-sans mb-6 select-none">
-            © 2026 QuickRevert. All rights reserved.
+          {/* Copyright & Disclaimer */}
+          <p className="text-slate-400 text-xs font-sans mb-6 leading-relaxed max-w-md">
+            © 2026 QuickRevert. All rights reserved. QuickRevert is an independent service. We use the Official Instagram Graph API and are fully compliant with Meta's Platform Policies and Developer Terms.
           </p>
         </div>
 
@@ -78,31 +79,59 @@ export default function Footer({ setViewMode }: FooterProps) {
             Help Center
           </a>
           <a 
-            href="https://copilot.quickrevert.gg/terms-of-services" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            href="/affiliate"
+            onClick={(e) => {
+              if (setViewMode) {
+                e.preventDefault();
+                setViewMode('affiliate');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            Collab & Affiliate
+          </a>
+          <a 
+            href="/terms" 
+            onClick={(e) => {
+              if (setViewMode) {
+                e.preventDefault();
+                setViewMode('terms');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
             className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           >
             Terms & Conditions
           </a>
           <a 
-            href="https://copilot.quickrevert.gg/privacy-policies" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+            href="/privacy" 
+            onClick={(e) => {
+              if (setViewMode) {
+                e.preventDefault();
+                setViewMode('privacy');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-[#1b1b1b] transition-colors cursor-pointer"
           >
             Privacy Policy
           </a>
           <a 
-            href="mailto:support@quickrevert.gg" 
+            href="mailto:connect@quickrevert.tech" 
             className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           >
             Contact Us
           </a>
           <a 
-            href="https://copilot.quickrevert.gg/refund-policy" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            href="/refund" 
+            onClick={(e) => {
+              if (setViewMode) {
+                e.preventDefault();
+                setViewMode('refund');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
             className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           >
             Refund Policy
