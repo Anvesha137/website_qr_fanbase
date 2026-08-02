@@ -76,20 +76,20 @@ export default function SplashLoader({ onComplete }: SplashLoaderProps) {
       }, 1100);
       return () => clearTimeout(moveTimer);
     } else if (phase === 'eclipse') {
-      // Trigger completion immediately so hero typewriter starts right as eclipse reveals the hero
-      onComplete();
-
       const startTime = performance.now();
-      const duration = 1200; // Snappy 1.2-second eclipse opening
+      const duration = 1100; // Snappy 1.1-second eclipse opening
 
       const animateEclipse = (now: number) => {
         const elapsed = now - startTime;
         const progress = Math.min(1, elapsed / duration);
-        const easeProgress = 1 - Math.pow(1 - progress, 4);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
         setEclipseRadius(easeProgress * 2800);
 
         if (progress < 1) {
           requestAnimationFrame(animateEclipse);
+        } else {
+          // Unmount splash loader AFTER the eclipse iris has fully opened!
+          onComplete();
         }
       };
 
