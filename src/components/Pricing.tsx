@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Check, X, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 type Feature = {
   text: string;
@@ -23,10 +24,11 @@ type Plan = {
 
 export default function Pricing() {
   const [isAnnually, setIsAnnually] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const plans: Plan[] = [
     {
-      name: 'FREE',
+      name: 'Free',
       description: 'Best for getting started.',
       btn: 'Start Free',
       price: '0',
@@ -42,7 +44,7 @@ export default function Pricing() {
       ],
     },
     {
-      name: 'TRY ME OUT',
+      name: 'Try Me Out',
       description: 'Test the core experience quickly.',
       btn: 'Try Now',
       badge: 'first month only',
@@ -59,7 +61,7 @@ export default function Pricing() {
       ],
     },
     {
-      name: 'PREMIUM',
+      name: 'Premium',
       description: 'For creators ready to scale.',
       btn: 'Start Premium',
       quarterlyMonthlyEffective: 399,
@@ -76,7 +78,7 @@ export default function Pricing() {
       ],
     },
     {
-      name: 'PROFESSIONAL',
+      name: 'Professional',
       description: 'Advanced tools for high-growth accounts.',
       btn: 'Go Professional',
       popular: true,
@@ -171,18 +173,31 @@ export default function Pricing() {
   };
 
   return (
-    <section id="pricing" className="py-12 lg:py-20 bg-slate-50">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 font-onest">
-            Simple, scalable pricing
+    <section
+      id="pricing"
+      className="py-12 lg:py-20 bg-[#703ded] relative text-white"
+      style={{
+        backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)`,
+        backgroundSize: '48px 48px',
+      }}
+    >
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2 font-onest drop-shadow-md">
+            Plans Built for Every Stage.
           </h2>
-          <p className="text-slate-500 text-lg font-medium font-sans">
-            Choose the plan that fits your growth stage.
-          </p>
 
-          <div className="mt-8 inline-flex flex-col items-center select-none">
-            <div className="inline-flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+          <div className="mt-8 relative inline-flex flex-col items-center select-none">
+            {/* Floating Tooltip Badge overlapping Annually button */}
+            <div className="absolute -top-6 right-1 z-10 pointer-events-none">
+              <div className="relative bg-white border border-slate-200 shadow-xl rounded-lg px-3 py-0.5 text-[11px] font-extrabold text-slate-900 tracking-tight flex items-center justify-center font-onest whitespace-nowrap">
+                <span>Save up to 15%</span>
+                {/* Pointer Caret overlapping the top border of Annually */}
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-b border-r border-slate-200 rotate-45 z-20" />
+              </div>
+            </div>
+
+            <div className="inline-flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-md relative z-0">
               <button
                 onClick={() => setIsAnnually(false)}
                 className={`px-6 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${!isAnnually
@@ -202,11 +217,6 @@ export default function Pricing() {
                 Annually
               </button>
             </div>
-            <div className="w-full flex justify-end pr-2 mt-1.5">
-              <span className="text-[10px] font-black text-orange-500 tracking-widest animate-pulse">
-                Save ₹600/year
-              </span>
-            </div>
           </div>
         </div>
 
@@ -214,9 +224,9 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <div
               key={i}
-              className={`p-5 rounded-[2rem] border flex flex-col relative transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${plan.dark
+              className={`p-5 rounded-[2rem] border flex flex-col relative transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${plan.dark
                 ? 'bg-slate-900 border-slate-800 text-white'
-                : 'bg-white border-slate-100'
+                : 'bg-white border-slate-100 text-slate-900'
                 } ${plan.popular ? 'border-[#695dd4] ring-2 ring-[#695dd4]/5' : ''}`}
             >
               {plan.popular && (
@@ -233,7 +243,7 @@ export default function Pricing() {
 
               <div className="mb-4">
                 <h3
-                  className={`text-xl font-semibold tracking-tight font-onest mb-1 ${plan.dark ? 'text-white' : 'text-slate-900'
+                  className={`text-2xl font-extrabold tracking-tight font-onest mb-1 ${plan.dark ? 'text-white' : 'text-slate-900'
                     }`}
                 >
                   {plan.name}
@@ -250,7 +260,7 @@ export default function Pricing() {
 
               <a
                 href="https://app.quickrevert.tech"
-                className={`w-full py-3 rounded-xl font-semibold text-xs text-center transition-all mb-6 cursor-pointer font-sans ${plan.name === 'FREE' || plan.name === 'TRY ME OUT'
+                className={`w-full py-3 rounded-xl font-semibold text-xs text-center transition-all mb-6 cursor-pointer font-sans ${plan.name === 'Free' || plan.name === 'Try Me Out'
                   ? 'border border-slate-300 text-slate-600 hover:border-[#695dd4] hover:text-[#695dd4]'
                   : plan.dark
                     ? 'bg-[#695dd4] text-white hover:bg-[#5a50c6] shadow-lg shadow-[#695dd4]/30'
@@ -262,13 +272,13 @@ export default function Pricing() {
 
               <div className="space-y-3 flex-1">
                 {plan.features.map((feature, j) => (
-                  <div key={j} className="flex gap-2 text-[10px] font-medium leading-tight">
+                  <div key={j} className="flex gap-2.5 items-start text-[11px] sm:text-xs font-semibold leading-tight">
                     {feature.included ? (
-                      <Check className="w-3.5 h-3.5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <Check className="w-4.5 h-4.5 text-emerald-500 shrink-0 mt-0.5 stroke-[2.8]" />
                     ) : (
-                      <X className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
+                      <X className="w-4.5 h-4.5 text-rose-500 shrink-0 mt-0.5 stroke-[2.2]" />
                     )}
-                    <span className={plan.dark ? 'text-slate-300' : 'text-slate-600'}>
+                    <span className={plan.dark ? 'text-slate-300' : 'text-slate-700'}>
                       {feature.text}
                     </span>
                   </div>
@@ -279,17 +289,20 @@ export default function Pricing() {
         </div>
 
         {/* SEO-friendly Pricing FAQ Section */}
-        <div className="mt-24 max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="font-onest text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <div className="mt-20 sm:mt-28 max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="text-[11px] font-mono font-bold tracking-widest text-indigo-100 uppercase bg-white/15 border border-white/25 px-3.5 py-1 rounded-full shadow-xs mb-3 inline-block">
+              ✨ Got Questions?
+            </span>
+            <h3 className="font-onest text-3xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
               Pricing FAQs
             </h3>
-            <p className="text-slate-500 font-sans text-sm sm:text-base mt-2">
-              Common questions about our plans, limits, and billing
+            <p className="text-white/90 font-sans text-sm sm:text-base mt-2 font-medium">
+              Everything you need to know about our plans, limits, and billing
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
             {[
               {
                 q: "Is there a free plan available?",
@@ -323,22 +336,44 @@ export default function Pricing() {
                 q: "Can I downgrade or cancel anytime?",
                 a: "Yes, no lock-in contracts. You can downgrade or cancel whenever you like from your account settings."
               }
-            ].map((faq, idx) => (
-              <details
-                key={idx}
-                className="group border border-slate-200 bg-white rounded-2xl p-5 [&_summary::-webkit-details-marker]:hidden transition-all duration-300 open:shadow-md text-left"
-              >
-                <summary className="flex items-center justify-between font-onest font-bold text-slate-800 cursor-pointer list-none text-base sm:text-lg focus:outline-none select-none">
-                  <span>{faq.q}</span>
-                  <span className="transition-transform duration-300 group-open:rotate-180 shrink-0 ml-4">
-                    <ChevronDown className="h-5 w-5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-                  </span>
-                </summary>
-                <p className="mt-3 text-slate-600 font-sans text-sm sm:text-base leading-relaxed border-t border-slate-100 pt-3">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
+            ].map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                  className={`rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden text-left ${isOpen
+                      ? 'bg-white border-white shadow-2xl ring-2 ring-white/50'
+                      : 'bg-white/90 border-white/40 hover:bg-white hover:border-white/70 shadow-lg hover:shadow-xl backdrop-blur-xl'
+                    }`}
+                >
+                  <div className="p-5 flex items-center justify-between font-onest font-bold text-slate-900 text-base sm:text-lg select-none">
+                    <span className="text-slate-900">{faq.q}</span>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ml-4 transition-all duration-300 ${isOpen ? 'bg-[#695dd4] text-white rotate-180 shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-[#695dd4] hover:text-white'
+                        }`}
+                    >
+                      <ChevronDown className="h-4.5 w-4.5" />
+                    </div>
+                  </div>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <div className="px-5 pb-5 pt-2 text-slate-600 font-sans text-sm sm:text-base leading-relaxed border-t border-slate-100">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </div>
         </div>
 

@@ -394,6 +394,50 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
     }
   };
 
+  // Card 2 auto-scroll ref
+  const card2Ref = useRef<HTMLDivElement>(null);
+  const hasAutoScrolledRef = useRef(false);
+
+  useEffect(() => {
+    const el = card2Ref.current;
+    if (!el) return;
+
+    let lastScrollY = window.scrollY;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const currentScrollY = window.scrollY;
+          const isScrollingDown = currentScrollY > lastScrollY;
+          lastScrollY = currentScrollY;
+
+          // Auto-scroll when ~25-30% of Card 2 is visible scrolling down
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.25 && isScrollingDown && !hasAutoScrolledRef.current) {
+            hasAutoScrolledRef.current = true;
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      },
+      {
+        threshold: [0.25, 0.3],
+      }
+    );
+
+    observer.observe(el);
+
+    const handleScroll = () => {
+      if (window.scrollY < 200) {
+        hasAutoScrolledRef.current = false;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const handleSelect = (index: number) => {
     setSelectedIndex(index);
     setIsManual(true);
@@ -419,10 +463,10 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
           backgroundSize: '48px 48px',
         }}
       >
-        <div className="w-full max-w-[1440px] mx-auto space-y-12 sm:space-y-16">
+        <div className="w-full max-w-[1440px] mx-auto space-y-5 sm:space-y-6">
 
           {/* CARD 1 (Female Model f-c1.png) */}
-          <div className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[540px] sm:min-h-[600px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
+          <div className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[500px] sm:min-h-[560px] lg:min-h-[580px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
             <img
               src="/f-c1.png"
               alt="Female Creator using Instagram DM Automation"
@@ -524,7 +568,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
           </div>
 
           {/* CARD 2 (Male Model f-c2.png) */}
-          <div className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[540px] sm:min-h-[600px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
+          <div ref={card2Ref} className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[500px] sm:min-h-[560px] lg:min-h-[580px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
             <img
               src="/f-c2.png"
               alt="Male Creator using Instagram DM Automation"
