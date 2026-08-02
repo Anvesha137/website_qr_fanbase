@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { CheckCircle2, Sparkles, Send, ShieldCheck, Instagram, ArrowRight } from 'lucide-react';
 
+import { ViewMode } from './Navbar';
+
 interface AffiliatePageProps {
   onBack?: () => void;
-  setViewMode: (mode: 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help' | 'affiliate') => void;
+  setViewMode: (mode: ViewMode) => void;
 }
 
 export default function AffiliatePage({ setViewMode }: AffiliatePageProps) {

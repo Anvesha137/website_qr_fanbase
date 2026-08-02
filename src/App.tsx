@@ -16,8 +16,11 @@ import RefundPage from './components/RefundPage';
 import Footer from './components/Footer';
 import { Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import SplashLoader from './components/SplashLoader';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
   // Initial path mapping for direct page loading (no dashboard)
   const getInitialView = (): ViewMode => {
     const path = window.location.pathname;
@@ -87,6 +90,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-slate-800 selection:bg-brand-primary selection:text-white font-sans antialiased">
+
+      {/* Website Loading Splash Video Loader */}
+      <AnimatePresence>
+        {showSplash && (
+          <SplashLoader onComplete={() => setShowSplash(false)} />
+        )}
+      </AnimatePresence>
 
       {/* Global Navbar — rendered across all pages including /features */}
       <Navbar

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useSpring } from "motion/react";
 import {
   CheckCheck, MessageSquare, UserPlus, Sliders, Database,
   Tv, Send, Flame, Sparkles, Calendar, ShoppingBag, ArrowRight,
-  ChevronLeft, ChevronRight, Heart, CheckCircle2, Image, Smile
+  ChevronLeft, ChevronRight, Heart, CheckCircle2, Image, Smile,
+  RefreshCw, Receipt
 } from "lucide-react";
 import { ViewMode } from "./Navbar";
 
@@ -195,7 +196,7 @@ const ADVANCED_FEATURES = [
     bubbles: [
       {
         type: "creator-card-1",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+        avatar: "/f-c2.png",
         text: "Hey! Glad you're here... Tap below and I'll send you a message shortly",
         subtext: "Powered by QuickRevert",
         button: "Send link"
@@ -206,7 +207,7 @@ const ADVANCED_FEATURES = [
       },
       {
         type: "creator-card-2",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200",
+        avatar: "/f-c2.png",
         text: "Hey _chetan_prasad_! Thanks so much for your comment 💌 Everything's been sent your way ✨",
         buttons: ["Red Trip DW 291", "Grey Trip DW 291"]
       }
@@ -350,6 +351,9 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
   const [carouselSlide, setCarouselSlide] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
+  // Capabilities row hover state (0 = Followups active by default)
+  const [hoveredCapabilityRow, setHoveredCapabilityRow] = useState<number | null>(0);
+
   useEffect(() => {
     if (isManual) return;
     const interval = setInterval(() => {
@@ -407,291 +411,65 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
   return (
     <div className="min-h-screen bg-[#fafafa] text-slate-800 flex flex-col font-sans selection:bg-[#695dd4] selection:text-white antialiased">
 
-      {/* BOX 1: FULL BLEED PURPLE HERO SECTION (GIRL MODEL) */}
+      {/* TWO FEATURE CARDS SECTION (CARD 1 & CARD 2 BELOW IT) */}
       <section
-        className="w-full bg-[#703ded] pt-28 pb-10 px-4 sm:px-8 relative overflow-hidden flex justify-center"
+        className="w-full bg-[#703ded] py-16 sm:py-24 px-4 sm:px-8 relative"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
         }}
       >
-        {/* Inner Card Container */}
-        <div className="w-full max-w-[1440px] mx-auto rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[540px] sm:min-h-[600px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
+        <div className="w-full max-w-[1440px] mx-auto space-y-12 sm:space-y-16">
 
-          {/* Background Image of Female Model */}
-          <img
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=1600"
-            alt="Female Creator using Instagram DM Automation"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
+          {/* CARD 1 (Female Model f-c1.png) */}
+          <div className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[540px] sm:min-h-[600px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
+            <img
+              src="/f-c1.png"
+              alt="Female Creator using Instagram DM Automation"
+              className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent pointer-events-none" />
 
-          {/* Dark & Purple Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-950/85 via-black/45 to-purple-950/75 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/35 pointer-events-none" />
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full flex-1">
+              {/* Left Column: 4 Automatic Items */}
+              <div className="lg:col-span-7 space-y-4 text-left self-start pt-2 sm:pt-4">
+                <p className="text-[10px] sm:text-xs font-bold tracking-widest text-white/70 uppercase">
+                  Automatically
+                </p>
 
-          {/* Content Grid */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full flex-1">
-
-            {/* Left Column: 4 Selectable Automatic Items */}
-            <div className="lg:col-span-7 space-y-4 text-left self-start pt-2 sm:pt-4">
-              <p className="text-[10px] sm:text-xs font-bold tracking-widest text-white/70 uppercase">
-                Automatically
-              </p>
-
-              <div className="space-y-2.5 sm:space-y-3">
-                {AUTOMATIC_FEATURES.map((feat, idx) => {
-                  const isSelected = selectedIndex === idx;
-                  return (
-                    <div
-                      key={feat.id}
-                      onClick={() => handleSelect(idx)}
-                      className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
-                        }`}
-                    >
-                      <div className={`shrink-0 transition-colors ${isSelected ? 'text-white' : 'text-white/50'}`}>
-                        <CheckCheck className={`w-5 h-5 sm:w-6 sm:h-6 ${isSelected ? 'stroke-[2.8]' : 'stroke-[1.5]'}`} />
+                <div className="space-y-2.5 sm:space-y-3">
+                  {AUTOMATIC_FEATURES.map((feat, idx) => {
+                    const isSelected = selectedIndex === idx;
+                    return (
+                      <div
+                        key={feat.id}
+                        onClick={() => handleSelect(idx)}
+                        className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
+                          }`}
+                      >
+                        <div className={`shrink-0 transition-colors ${isSelected ? 'text-white' : 'text-white/50'}`}>
+                          <CheckCheck className={`w-5 h-5 sm:w-6 sm:h-6 ${isSelected ? 'stroke-[2.8]' : 'stroke-[1.5]'}`} />
+                        </div>
+                        <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
+                          }`}>
+                          {feat.title}
+                        </span>
                       </div>
-                      <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
-                        }`}>
-                        {feat.title}
-                      </span>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Right Column: Chat Bubbles Animation (Bottom In -> Top Out) */}
-            <div className="lg:col-span-5 flex flex-col justify-end items-end relative min-h-[280px] w-full">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={selectedIndex}
-                  className="w-full max-w-[320px] sm:max-w-[340px] flex flex-col gap-3"
-                >
-                  {AUTOMATIC_FEATURES[selectedIndex].bubbles.map((bubble, bIdx) => (
-                    <motion.div
-                      key={`${selectedIndex}-${bIdx}`}
-                      initial={{ opacity: 0, y: 35, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -35, scale: 0.95 }}
-                      transition={{
-                        duration: 0.45,
-                        delay: bIdx * 0.16,
-                        ease: [0.25, 0.1, 0.25, 1.0]
-                      }}
-                      className={`flex items-end gap-2.5 ${
-                        bubble.type === "user" || bubble.type === "user-comment"
-                          ? "justify-end self-end" 
-                          : "justify-start self-start"
-                      }`}
-                    >
-                      {bubble.type === "user-comment" ? (
-                        <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] border border-white/15 text-white text-xs p-3.5 rounded-2xl rounded-tr-none shadow-xl max-w-[280px]">
-                          <div className="flex items-center gap-1.5 mb-1">
-                            <span className="font-bold text-white/90 text-[11px]">@{bubble.sender}</span>
-                            <span className="text-[8px] text-white/40">2m</span>
-                          </div>
-                          <p className="text-white/90 font-medium">{bubble.text}</p>
-                        </div>
-                      ) : bubble.type === "creator-reply" ? (
-                        <div className="bg-[#1e252a]/95 border border-white/10 text-white text-xs p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[280px]">
-                          <div className="flex items-center gap-1.5 mb-1">
-                            <span className="font-bold text-white/90 text-[11px]">{bubble.sender}</span>
-                            <span className="bg-white/15 px-1.5 py-0.5 rounded text-[8px] font-bold">Author</span>
-                          </div>
-                          <p className="text-white/90 font-medium">{bubble.text}</p>
-                        </div>
-                      ) : bubble.type === "user" ? (
-                        <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-xs px-4 py-3 rounded-2xl rounded-tr-none shadow-lg max-w-[260px] font-semibold border border-white/15">
-                          {bubble.text}
-                        </div>
-                      ) : (
-                        <div className="bg-[#1e252a]/95 text-white p-4 rounded-2xl rounded-tl-none shadow-2xl max-w-[290px] border border-white/10">
-                          <p className="text-xs font-medium leading-relaxed text-white/95">
-                            {bubble.text}
-                          </p>
-                          {bubble.button && (
-                            <button className="mt-3 w-full py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs">
-                              {bubble.button}
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* BOX 2: FULL BLEED PURPLE SECTION (GUY MODEL & 4 ADVANCED FEATURES) */}
-      <section
-        className="w-full bg-[#6533e4] pb-14 px-4 sm:px-8 relative overflow-hidden flex justify-center"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)`,
-          backgroundSize: '48px 48px',
-        }}
-      >
-        {/* Inner Card Container */}
-        <div className="w-full max-w-[1440px] mx-auto rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[540px] sm:min-h-[600px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
-
-          {/* Background Image of Male Model */}
-          <img
-            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1600"
-            alt="Male Creator using Instagram DM Automation"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          />
-
-          {/* Dark & Purple Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-950/85 via-black/45 to-purple-950/75 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/35 pointer-events-none" />
-
-          {/* Content Grid */}
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full flex-1">
-
-            {/* Left Column: 4 Selectable Advanced Items */}
-            <div className="lg:col-span-7 space-y-4 text-left self-start pt-2 sm:pt-4">
-              <p className="text-[10px] sm:text-xs font-bold tracking-widest text-white/70 uppercase">
-                Automatically
-              </p>
-
-              <div className="space-y-2.5 sm:space-y-3">
-                {ADVANCED_FEATURES.map((feat, idx) => {
-                  const isSelected = box2Index === idx;
-                  return (
-                    <div
-                      key={feat.id}
-                      onClick={() => handleSelectBox2(idx)}
-                      className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
-                        }`}
-                    >
-                      <div className={`shrink-0 transition-colors ${isSelected ? 'text-white' : 'text-white/50'}`}>
-                        <CheckCheck className={`w-5 h-5 sm:w-6 sm:h-6 ${isSelected ? 'stroke-[2.8]' : 'stroke-[1.5]'}`} />
-                      </div>
-                      <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
-                        }`}>
-                        {feat.title}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right Column: Chat Bubbles or Horizontal Swipe Carousel for Box 2 */}
-            <div className="lg:col-span-5 flex flex-col justify-end items-end relative min-h-[280px] w-full">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={box2Index}
-                  className="w-full flex flex-col gap-3"
-                >
-                  {ADVANCED_FEATURES[box2Index].isCarousel ? (
-                    <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] flex flex-col gap-3">
-                      {/* 1. User Comment Bubble (Right Aligned - Purple) */}
+              {/* Right Column: Chat Bubbles Animation */}
+              <div className="lg:col-span-5 flex flex-col justify-end items-end relative min-h-[280px] w-full">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={selectedIndex}
+                    className="w-full max-w-[320px] sm:max-w-[340px] flex flex-col gap-3"
+                  >
+                    {AUTOMATIC_FEATURES[selectedIndex].bubbles.map((bubble, bIdx) => (
                       <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35 }}
-                        className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] border border-white/15 text-white text-xs p-3 rounded-2xl rounded-tr-none shadow-xl max-w-[280px] self-end"
-                      >
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <span className="font-bold text-white/90 text-[11px]">@alex_design</span>
-                          <span className="text-[8px] text-white/40">2m</span>
-                        </div>
-                        <p className="text-white/90 font-medium">Commented 'CATALOG' 📸</p>
-                      </motion.div>
-
-                      {/* 2. Creator DM Intro Bubble (Left Aligned - Dark) */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, delay: 0.15 }}
-                        className="bg-[#1e252a]/95 text-white p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[300px] border border-white/10 self-start"
-                      >
-                        <p className="text-xs font-medium leading-relaxed text-white/95">
-                          Here is our exclusive fashion catalog! Swipe through the 6 items below to shop 🛍️✨
-                        </p>
-                      </motion.div>
-
-                      {/* 3. DM Carousel Navigation Controls & Swipable Card Deck */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, delay: 0.3 }}
-                        className="flex flex-col gap-2 pt-1"
-                      >
-                        <div className="flex items-center justify-end text-white/80 text-xs px-1 font-semibold">
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              onClick={() => scrollCarousel('left')}
-                              className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer transition shadow-xs"
-                              title="Previous Card"
-                            >
-                              <ChevronLeft className="w-4 h-4" />
-                            </button>
-                            <button
-                              onClick={() => scrollCarousel('right')}
-                              className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer transition shadow-xs"
-                              title="Next Card"
-                            >
-                              <ChevronRight className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Horizontal Swipable Cards Container */}
-                        <div
-                          ref={carouselRef}
-                          className="flex gap-3 overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-1 scroll-smooth"
-                        >
-                          {ADVANCED_FEATURES[box2Index].carouselCards?.map((card, cIdx) => (
-                            <motion.div
-                              key={card.id}
-                              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              transition={{ duration: 0.35, delay: cIdx * 0.08 }}
-                              className="w-[200px] sm:w-[220px] shrink-0 snap-center bg-gradient-to-b from-[#25174f] to-[#170e34] border border-white/20 rounded-2xl overflow-hidden shadow-2xl flex flex-col justify-between group hover:border-white/45 transition-all text-left"
-                            >
-                              {/* Card Image */}
-                              <div className="relative h-28 sm:h-32 w-full overflow-hidden bg-slate-800">
-                                <img
-                                  src={card.image}
-                                  alt={card.headline}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                                <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] font-mono font-bold text-white border border-white/15">
-                                  {cIdx + 1}/6
-                                </div>
-                              </div>
-
-                              {/* Card Details */}
-                              <div className="p-3.5 flex flex-col justify-between flex-1 gap-3">
-                                <div className="space-y-1">
-                                  <h4 className="font-bold text-xs sm:text-sm text-white line-clamp-1">
-                                    {card.headline}
-                                  </h4>
-                                  <p className="text-[11px] text-white/70 line-clamp-2 leading-relaxed">
-                                    {card.desc}
-                                  </p>
-                                </div>
-
-                                {/* Button */}
-                                <button className="w-full py-2 bg-gradient-to-r from-[#804bf2] to-[#6939dc] hover:from-[#8f5cf5] hover:to-[#7846e3] text-white text-xs font-bold rounded-xl transition cursor-pointer text-center shadow-md border border-white/15">
-                                  {card.button}
-                                </button>
-                              </div>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    </div>
-                  ) : (
-                    ADVANCED_FEATURES[box2Index].bubbles.map((bubble, bIdx) => (
-                      <motion.div
-                        key={`box2-${box2Index}-${bIdx}`}
+                        key={`${selectedIndex}-${bIdx}`}
                         initial={{ opacity: 0, y: 35, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -35, scale: 0.95 }}
@@ -700,65 +478,26 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                           delay: bIdx * 0.16,
                           ease: [0.25, 0.1, 0.25, 1.0]
                         }}
-                        className={`flex items-end gap-2.5 ${
-                          bubble.type === "user" || bubble.type === "user-pill" 
-                            ? "justify-end self-end" 
+                        className={`flex items-end gap-2.5 ${bubble.type === "user" || bubble.type === "user-comment"
+                            ? "justify-end self-end"
                             : "justify-start self-start"
-                        }`}
+                          }`}
                       >
                         {bubble.type === "user-comment" ? (
-                          <div className="bg-[#1b272c]/95 border border-white/10 text-white text-xs p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[280px]">
+                          <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] border border-white/15 text-white text-xs p-3.5 rounded-2xl rounded-tr-none shadow-xl max-w-[280px]">
                             <div className="flex items-center gap-1.5 mb-1">
                               <span className="font-bold text-white/90 text-[11px]">@{bubble.sender}</span>
                               <span className="text-[8px] text-white/40">2m</span>
                             </div>
                             <p className="text-white/90 font-medium">{bubble.text}</p>
                           </div>
-                        ) : bubble.type === "creator-card-1" ? (
-                          <div className="flex items-start gap-2.5 self-start max-w-[310px]">
-                            <img 
-                              src={bubble.avatar} 
-                              alt="Creator Avatar" 
-                              className="w-7 h-7 rounded-full object-cover shrink-0 border border-white/20 mt-1 shadow-md"
-                            />
-                            <div className="bg-[#1e252a]/95 border border-white/10 text-white p-3.5 rounded-2xl rounded-tl-xs shadow-xl space-y-2.5 w-full text-left">
-                              <p className="text-xs sm:text-[13px] font-medium leading-relaxed text-white/95">
-                                {bubble.text}
-                              </p>
-                              <p className="text-[10px] text-white/45 font-medium">
-                                {bubble.subtext}
-                              </p>
-                              <button className="w-full py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs">
-                                {bubble.button}
-                              </button>
+                        ) : bubble.type === "creator-reply" ? (
+                          <div className="bg-[#1e252a]/95 border border-white/10 text-white text-xs p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[280px]">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="font-bold text-white/90 text-[11px]">{bubble.sender}</span>
+                              <span className="bg-white/15 px-1.5 py-0.5 rounded text-[8px] font-bold">Author</span>
                             </div>
-                          </div>
-                        ) : bubble.type === "user-pill" ? (
-                          <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-xs font-bold px-4.5 py-2.5 rounded-full shadow-xl border border-white/15">
-                            {bubble.text}
-                          </div>
-                        ) : bubble.type === "creator-card-2" ? (
-                          <div className="flex items-start gap-2.5 self-start max-w-[310px]">
-                            <img 
-                              src={bubble.avatar} 
-                              alt="Creator Avatar" 
-                              className="w-7 h-7 rounded-full object-cover shrink-0 border border-white/20 mt-1 shadow-md"
-                            />
-                            <div className="bg-[#1e252a]/95 border border-white/10 text-white p-3.5 rounded-2xl rounded-tl-xs shadow-xl space-y-2.5 w-full text-left">
-                              <p className="text-xs sm:text-[13px] font-medium leading-relaxed text-white/95">
-                                {bubble.text}
-                              </p>
-                              <div className="space-y-2 pt-1">
-                                {bubble.buttons?.map((btnText: string, bIndex: number) => (
-                                  <button 
-                                    key={bIndex}
-                                    className="w-full py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs"
-                                  >
-                                    {btnText}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
+                            <p className="text-white/90 font-medium">{bubble.text}</p>
                           </div>
                         ) : bubble.type === "user" ? (
                           <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-xs px-4 py-3 rounded-2xl rounded-tr-none shadow-lg max-w-[260px] font-semibold border border-white/15">
@@ -777,113 +516,464 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                           </div>
                         )}
                       </motion.div>
-                    ))
-                  )}
-                </motion.div>
-              </AnimatePresence>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
-
           </div>
+
+          {/* CARD 2 (Male Model f-c2.png) */}
+          <div className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[540px] sm:min-h-[600px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
+            <img
+              src="/f-c2.png"
+              alt="Male Creator using Instagram DM Automation"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent pointer-events-none" />
+
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full flex-1">
+              {/* Left Column: 4 Advanced Items */}
+              <div className="lg:col-span-7 space-y-4 text-left self-start pt-2 sm:pt-4">
+                <p className="text-[10px] sm:text-xs font-bold tracking-widest text-white/70 uppercase">
+                  Automatically
+                </p>
+
+                <div className="space-y-2.5 sm:space-y-3">
+                  {ADVANCED_FEATURES.map((feat, idx) => {
+                    const isSelected = box2Index === idx;
+                    return (
+                      <div
+                        key={feat.id}
+                        onClick={() => handleSelectBox2(idx)}
+                        className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
+                          }`}
+                      >
+                        <div className={`shrink-0 transition-colors ${isSelected ? 'text-white' : 'text-white/50'}`}>
+                          <CheckCheck className={`w-5 h-5 sm:w-6 sm:h-6 ${isSelected ? 'stroke-[2.8]' : 'stroke-[1.5]'}`} />
+                        </div>
+                        <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
+                          }`}>
+                          {feat.title}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Right Column: Chat Bubbles or Carousel */}
+              <div className="lg:col-span-5 flex flex-col justify-end items-end relative min-h-[280px] w-full">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={box2Index}
+                    className="w-full flex flex-col gap-3"
+                  >
+                    {ADVANCED_FEATURES[box2Index].isCarousel ? (
+                      <div className="w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px] flex flex-col gap-3">
+                        <motion.div
+                          initial={{ opacity: 0, y: 25 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35 }}
+                          className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] border border-white/15 text-white text-xs p-3 rounded-2xl rounded-tr-none shadow-xl max-w-[280px] self-end"
+                        >
+                          <div className="flex items-center gap-1.5 mb-1">
+                            <span className="font-bold text-white/90 text-[11px]">@alex_design</span>
+                            <span className="text-[8px] text-white/40">2m</span>
+                          </div>
+                          <p className="text-white/90 font-medium">Commented 'CATALOG' 📸</p>
+                        </motion.div>
+
+                        <motion.div
+                          initial={{ opacity: 0, y: 25 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35, delay: 0.15 }}
+                          className="bg-[#1e252a]/95 text-white p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[300px] border border-white/10 self-start"
+                        >
+                          <p className="text-xs font-medium leading-relaxed text-white/95">
+                            Here is our exclusive fashion catalog! Swipe through the 6 items below to shop 🛍️✨
+                          </p>
+                        </motion.div>
+
+                        <motion.div
+                          initial={{ opacity: 0, y: 25 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35, delay: 0.3 }}
+                          className="flex flex-col gap-2 pt-1"
+                        >
+                          <div className="flex items-center justify-end text-white/80 text-xs px-1 font-semibold">
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={() => scrollCarousel('left')}
+                                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer transition shadow-xs"
+                                title="Previous Card"
+                              >
+                                <ChevronLeft className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => scrollCarousel('right')}
+                                className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer transition shadow-xs"
+                                title="Next Card"
+                              >
+                                <ChevronRight className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <div
+                            ref={carouselRef}
+                            className="flex gap-3 overflow-x-auto scrollbar-none snap-x snap-mandatory py-2 px-1 scroll-smooth"
+                          >
+                            {ADVANCED_FEATURES[box2Index].carouselCards?.map((card, cIdx) => (
+                              <motion.div
+                                key={card.id}
+                                initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                transition={{ duration: 0.35, delay: cIdx * 0.08 }}
+                                className="w-[200px] sm:w-[220px] shrink-0 snap-center bg-gradient-to-b from-[#25174f] to-[#170e34] border border-white/20 rounded-2xl overflow-hidden shadow-2xl flex flex-col justify-between group hover:border-white/45 transition-all text-left"
+                              >
+                                <div className="relative h-28 sm:h-32 w-full overflow-hidden bg-slate-800">
+                                  <img
+                                    src={card.image}
+                                    alt={card.headline}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                  />
+                                  <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded-md text-[10px] font-mono font-bold text-[#fafafa] border border-white/15">
+                                    {cIdx + 1}/6
+                                  </div>
+                                </div>
+
+                                <div className="p-3.5 flex flex-col justify-between flex-1 gap-3">
+                                  <div className="space-y-1">
+                                    <h4 className="font-bold text-xs sm:text-sm text-white line-clamp-1">
+                                      {card.headline}
+                                    </h4>
+                                    <p className="text-[11px] text-white/70 line-clamp-2 leading-relaxed">
+                                      {card.desc}
+                                    </p>
+                                  </div>
+
+                                  <button className="w-full py-2 bg-gradient-to-r from-[#804bf2] to-[#6939dc] hover:from-[#8f5cf5] hover:to-[#7846e3] text-white text-xs font-bold rounded-xl transition cursor-pointer text-center shadow-md border border-white/15">
+                                    {card.button}
+                                  </button>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      </div>
+                    ) : (
+                      ADVANCED_FEATURES[box2Index].bubbles.map((bubble, bIdx) => (
+                        <motion.div
+                          key={`box2-${box2Index}-${bIdx}`}
+                          initial={{ opacity: 0, y: 35, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -35, scale: 0.95 }}
+                          transition={{
+                            duration: 0.45,
+                            delay: bIdx * 0.16,
+                            ease: [0.25, 0.1, 0.25, 1.0]
+                          }}
+                          className={`flex items-end gap-2.5 ${bubble.type === "user" || bubble.type === "user-pill"
+                              ? "justify-end self-end"
+                              : "justify-start self-start"
+                            }`}
+                        >
+                          {bubble.type === "user-comment" ? (
+                            <div className="bg-[#1b272c]/95 border border-white/10 text-white text-xs p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[280px]">
+                              <div className="flex items-center gap-1.5 mb-1">
+                                <span className="font-bold text-white/90 text-[11px]">@{bubble.sender}</span>
+                                <span className="text-[8px] text-white/40">2m</span>
+                              </div>
+                              <p className="text-white/90 font-medium">{bubble.text}</p>
+                            </div>
+                          ) : bubble.type === "creator-card-1" ? (
+                            <div className="flex items-start gap-2.5 self-start max-w-[310px]">
+                              <img
+                                src={bubble.avatar}
+                                alt="Creator Avatar"
+                                className="w-7 h-7 rounded-full object-cover shrink-0 border border-white/20 mt-1 shadow-md"
+                              />
+                              <div className="bg-[#1e252a]/95 border border-white/10 text-white p-3.5 rounded-2xl rounded-tl-xs shadow-xl space-y-2.5 w-full text-left">
+                                <p className="text-xs sm:text-[13px] font-medium leading-relaxed text-white/95">
+                                  {bubble.text}
+                                </p>
+                                <p className="text-[10px] text-white/45 font-medium">
+                                  {bubble.subtext}
+                                </p>
+                                <button className="w-full py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs">
+                                  {bubble.button}
+                                </button>
+                              </div>
+                            </div>
+                          ) : bubble.type === "user-pill" ? (
+                            <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-xs font-bold px-4.5 py-2.5 rounded-full shadow-xl border border-white/15">
+                              {bubble.text}
+                            </div>
+                          ) : bubble.type === "creator-card-2" ? (
+                            <div className="flex items-start gap-2.5 self-start max-w-[310px]">
+                              <img
+                                src={bubble.avatar}
+                                alt="Creator Avatar"
+                                className="w-7 h-7 rounded-full object-cover shrink-0 border border-white/20 mt-1 shadow-md"
+                              />
+                              <div className="bg-[#1e252a]/95 border border-white/10 text-white p-3.5 rounded-2xl rounded-tl-xs shadow-xl space-y-2.5 w-full text-left">
+                                <p className="text-xs sm:text-[13px] font-medium leading-relaxed text-white/95">
+                                  {bubble.text}
+                                </p>
+                                <div className="space-y-2 pt-1">
+                                  {bubble.buttons?.map((btnText: string, bIndex: number) => (
+                                    <button
+                                      key={bIndex}
+                                      className="w-full py-2.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs"
+                                    >
+                                      {btnText}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          ) : bubble.type === "user" ? (
+                            <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-xs px-4 py-3 rounded-2xl rounded-tr-none shadow-lg max-w-[260px] font-semibold border border-white/15">
+                              {bubble.text}
+                            </div>
+                          ) : (
+                            <div className="bg-[#1e252a]/95 text-white p-4 rounded-2xl rounded-tl-none shadow-2xl max-w-[290px] border border-white/10">
+                              <p className="text-xs font-medium leading-relaxed text-white/95">
+                                {bubble.text}
+                              </p>
+                              {bubble.button && (
+                                <button className="mt-3 w-full py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs">
+                                  {bubble.button}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </motion.div>
+                      ))
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      {/* 2 SQUARES BELOW MEN'S RECTANGLE (1:1 APPOINTMENTS & MY STORE) */}
+      {/* CAPABILITIES ROWS SECTION */}
       <section
-        className="w-full bg-[#5d2bd6] pb-16 px-4 sm:px-8 relative overflow-hidden flex justify-center"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)`,
-          backgroundSize: '48px 48px',
-        }}
+        className="w-full bg-[#faf8f4] py-28 sm:py-36 px-4 sm:px-8 relative overflow-visible"
       >
-        <div className="w-full max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="w-full max-w-[1320px] mx-auto space-y-0">
 
-          {/* 1. Left Square - 1:1 Appointments */}
-          <div
-            onClick={() => setViewMode && setViewMode('slots')}
-            className="rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[320px] sm:min-h-[360px] p-8 sm:p-12 flex flex-col justify-between group hover:border-white/35 transition-all cursor-pointer text-left"
+          {/* Section Label */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-[11px] font-mono font-bold tracking-[0.25em] text-slate-500 uppercase mb-8 sm:mb-12"
           >
-            {/* Background Gradient & Glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/90 via-slate-900/90 to-purple-950/90 pointer-events-none" />
-            <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-[#695dd4]/20 rounded-full blur-3xl group-hover:bg-[#695dd4]/35 transition-all pointer-events-none" />
+            CAPABILITIES
+          </motion.p>
 
-            <div className="relative z-10 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#695dd4] to-indigo-600 text-white flex items-center justify-center shadow-lg">
-                  <Calendar className="w-7 h-7" />
-                </div>
-                <span className="text-[10px] font-mono font-bold tracking-widest text-[#a79cfc] uppercase bg-white/10 px-3 py-1.5 rounded-full border border-white/15">
-                  1:1 BOOKINGS
-                </span>
-              </div>
-
-              <div className="space-y-2 pt-2">
-                <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-white group-hover:text-[#a79cfc] transition-colors">
-                  1:1 Appointments
-                </h3>
-                <p className="text-sm text-white/70 leading-relaxed max-w-md">
-                  Let followers book 1:1 strategy calls, consulting sessions, and paid coaching appointments directly inside Instagram DMs.
-                </p>
+          {/* Row 1 — Followups */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            onMouseEnter={() => setHoveredCapabilityRow(0)}
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+              hoveredCapabilityRow === 0 ? 'bg-[#c6d2ff]' : 'bg-transparent hover:bg-[#c6d2ff]/30'
+            }`}
+          >
+            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">1</div>
+            
+            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
+            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
+              <div
+                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                  hoveredCapabilityRow === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              >
+                <img src="/followup.png" alt="Followups" className="w-full h-full object-contain object-center" />
               </div>
             </div>
 
-            <div className="relative z-10 pt-6 flex items-center gap-2 text-sm font-bold text-white group-hover:text-[#a79cfc] transition-colors">
-              <span>Explore 1:1 Appointments</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            {/* Title */}
+            <div className="md:col-span-4 px-2">
+              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                Followups
+              </h3>
             </div>
-          </div>
 
-          {/* 2. Right Square - My Store */}
-          <div
+            {/* Right List */}
+            <div className="md:col-span-3 space-y-1.5 text-sm sm:text-base text-[#333742] font-normal leading-relaxed">
+              <p>Timed DM sequences</p>
+              <p>Cold lead re-engagement</p>
+              <p>Abandoned cart recovery</p>
+              <p>Inactive follower nudges</p>
+              <p>Smart delay scheduling</p>
+              <p>Auto-stop on reply</p>
+            </div>
+          </motion.div>
+
+          {/* Row 2 — My Store */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            onMouseEnter={() => setHoveredCapabilityRow(1)}
             onClick={() => setViewMode && setViewMode('link-in-bio')}
-            className="rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[320px] sm:min-h-[360px] p-8 sm:p-12 flex flex-col justify-between group hover:border-white/35 transition-all cursor-pointer text-left"
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+              hoveredCapabilityRow === 1 ? 'bg-[#fae2cb]' : 'bg-transparent hover:bg-[#fae2cb]/30'
+            }`}
           >
-            {/* Background Gradient & Glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-950/90 via-slate-900/90 to-pink-950/90 pointer-events-none" />
-            <div className="absolute -right-16 -bottom-16 w-64 h-64 bg-pink-600/20 rounded-full blur-3xl group-hover:bg-pink-600/35 transition-all pointer-events-none" />
-
-            <div className="relative z-10 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-lg">
-                  <ShoppingBag className="w-7 h-7" />
-                </div>
-                <span className="text-[10px] font-mono font-bold tracking-widest text-pink-300 uppercase bg-white/10 px-3 py-1.5 rounded-full border border-white/15">
-                  LINK-IN-BIO STORE
-                </span>
-              </div>
-
-              <div className="space-y-2 pt-2">
-                <h3 className="font-display font-extrabold text-2xl sm:text-3xl text-white group-hover:text-pink-300 transition-colors">
-                  My Store
-                </h3>
-                <p className="text-sm text-white/70 leading-relaxed max-w-md">
-                  Convert Instagram traffic into instant sales with a modern link-in-bio storefront for digital products, guides, and store links.
-                </p>
+            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">2</div>
+            
+            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
+            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
+              <div
+                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                  hoveredCapabilityRow === 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              >
+                <img src="/store.png" alt="My Store" className="w-full h-full object-contain object-center" />
               </div>
             </div>
 
-            <div className="relative z-10 pt-6 flex items-center gap-2 text-sm font-bold text-white group-hover:text-pink-300 transition-colors">
-              <span>Explore My Store</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            {/* Title */}
+            <div className="md:col-span-4 px-2">
+              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                My Store
+              </h3>
             </div>
-          </div>
+
+            {/* Right List */}
+            <div className="md:col-span-3 space-y-1.5 text-sm sm:text-base text-[#333742] font-normal leading-relaxed">
+              <p>Link-in-bio storefront</p>
+              <p>Digital product sales</p>
+              <p>Instant checkout</p>
+              <p>Custom themes</p>
+              <p>Analytics dashboard</p>
+              <p>Guide & course hosting</p>
+            </div>
+          </motion.div>
+
+          {/* Row 3 — 1:1 Appointments */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            onMouseEnter={() => setHoveredCapabilityRow(2)}
+            onClick={() => setViewMode && setViewMode('slots')}
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+              hoveredCapabilityRow === 2 ? 'bg-[#dcf0e3]' : 'bg-transparent hover:bg-[#dcf0e3]/30'
+            }`}
+          >
+            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">3</div>
+            
+            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
+            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
+              <div
+                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                  hoveredCapabilityRow === 2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              >
+                <img src="/calender.png" alt="1:1 Appointments" className="w-full h-full object-contain object-center" />
+              </div>
+            </div>
+
+            {/* Title */}
+            <div className="md:col-span-4 px-2">
+              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                1:1 Appointments
+              </h3>
+            </div>
+
+            {/* Right List */}
+            <div className="md:col-span-3 space-y-1.5 text-sm sm:text-base text-[#333742] font-normal leading-relaxed">
+              <p>In-DM booking flow</p>
+              <p>Google Calendar sync</p>
+              <p>Auto Meet link generation</p>
+              <p>Paid session support</p>
+              <p>Reminder notifications</p>
+              <p>Strategy call templates</p>
+            </div>
+          </motion.div>
+
+          {/* Row 4 — Invoice Generator & Financial Planner */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            onMouseEnter={() => setHoveredCapabilityRow(3)}
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+              hoveredCapabilityRow === 3 ? 'bg-[#f3dbf7]' : 'bg-transparent hover:bg-[#f3dbf7]/30'
+            }`}
+          >
+            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">4</div>
+            
+            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
+            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
+              <div
+                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                  hoveredCapabilityRow === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              >
+                <img src="/invoice.png" alt="Invoice Generator & Financial Planner" className="w-full h-full object-contain object-center" />
+              </div>
+            </div>
+
+            {/* Title */}
+            <div className="md:col-span-4 px-2">
+              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                Invoice Generator & Financial Planner
+              </h3>
+            </div>
+
+            {/* Right List */}
+            <div className="md:col-span-3 space-y-1.5 text-sm sm:text-base text-[#333742] font-normal leading-relaxed">
+              <p>Professional invoices</p>
+              <p>Payment tracking</p>
+              <p>Revenue dashboard</p>
+              <p>Expense management</p>
+              <p>Tax-ready reports</p>
+              <p>DM sales pipeline sync</p>
+            </div>
+          </motion.div>
 
         </div>
       </section>
 
       {/* LOWER SECTION WITH ALL AUTOMATION CHANNELS */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 flex flex-col gap-10 pt-10">
-        <div className="space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4"
+        >
           <h2 className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight text-slate-900 text-left">
             All Automation Channels
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {ALL_FEATURES.map((feat) => {
+            {ALL_FEATURES.map((feat, idx) => {
               const FeatIcon = feat.icon;
               return (
                 <motion.div
                   key={feat.id}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.2 }}
+                  initial={{ opacity: 0, y: 35, scale: 0.96 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.55, delay: (idx % 4) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
                   className="bg-white border border-slate-200/80 hover:border-[#695dd4]/40 rounded-3xl p-6 shadow-xs hover:shadow-[0_20px_50px_rgba(105,93,212,0.12)] flex flex-col justify-between space-y-6 transition-all group relative overflow-hidden text-left"
                 >
                   {/* Background subtle gradient glow */}
@@ -924,7 +1014,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
               );
             })}
           </div>
-        </div>
+        </motion.div>
 
       </main>
 

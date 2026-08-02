@@ -23,6 +23,8 @@ export default function Hero({ onGetStarted }: HeroProps) {
     const fullText = "Consider them answered.";
     let currentText = "";
     let currentIndex = 0;
+
+    // Delay start until eclipse opening reveals the hero section (~4.2s)
     const startDelay = setTimeout(() => {
       const typingInterval = setInterval(() => {
         if (currentIndex < fullText.length) {
@@ -33,9 +35,9 @@ export default function Hero({ onGetStarted }: HeroProps) {
           setIsTypingDone(true);
           clearInterval(typingInterval);
         }
-      }, 70);
+      }, 55);
       return () => clearInterval(typingInterval);
-    }, 600);
+    }, 4200);
 
     return () => clearTimeout(startDelay);
   }, []);
@@ -73,9 +75,9 @@ export default function Hero({ onGetStarted }: HeroProps) {
               id="hero-title"
             >
               Comments?<br />
-              <span>{typedText}</span>
+              <span className="text-white drop-shadow-md">{typedText}</span>
               {!isTypingDone && (
-                <span className="inline-block w-[4px] h-[0.7em] bg-white ml-2 animate-pulse rounded-full align-middle"></span>
+                <span className="inline-block w-[5px] h-[0.7em] bg-white ml-2 animate-pulse rounded-full align-middle shadow-[0_0_12px_rgba(255,255,255,0.9)]"></span>
               )}
             </motion.h1>
 
@@ -115,14 +117,15 @@ export default function Hero({ onGetStarted }: HeroProps) {
           {/* ── Right Column: Instagram Comment & DM Mockups ── */}
           <div className="hidden lg:block relative h-[500px]">
 
-            {/* Comments Mockup (Floating bubbles, no sheet wrapper) */}
-            <AnimatePresence>
+            {/* Comments Mockup (Floating bubbles) */}
+            <AnimatePresence mode="wait">
               {(step === 1 || step === 2) && (
                 <motion.div
-                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                  key="comments-container"
+                  initial={{ opacity: 0, y: 45, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 22 }}
+                  exit={{ opacity: 0, y: -45, scale: 0.95 }}
+                  transition={{ duration: 0.45, ease: [0.25, 1, 0.35, 1] }}
                   className="absolute w-[260px] flex flex-col gap-3 select-none"
                   style={{ top: '22%', right: '38%' }}
                 >
@@ -147,10 +150,11 @@ export default function Hero({ onGetStarted }: HeroProps) {
                   <AnimatePresence>
                     {step === 2 && (
                       <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        key="creator-reply"
+                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.25 }}
+                        exit={{ opacity: 0, y: -30, scale: 0.95 }}
+                        transition={{ duration: 0.35, ease: [0.25, 1, 0.35, 1] }}
                         className="flex items-start gap-2 pl-6 mt-1"
                       >
                         {/* Creator Avatar with gradient border */}
@@ -180,14 +184,15 @@ export default function Hero({ onGetStarted }: HeroProps) {
               )}
             </AnimatePresence>
 
-            {/* DM Chat Bubbles Mockup (No back box, completely transparent floating chat) */}
-            <AnimatePresence>
+            {/* DM Chat Bubbles Mockup ("Hey! Thanks so much...") */}
+            <AnimatePresence mode="wait">
               {step === 3 && (
                 <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  key="dm-message"
+                  initial={{ opacity: 0, y: 45, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                  transition={{ type: 'spring', stiffness: 200, damping: 22 }}
+                  exit={{ opacity: 0, y: -45, scale: 0.95 }}
+                  transition={{ duration: 0.45, ease: [0.25, 1, 0.35, 1] }}
                   className="absolute w-[260px] flex flex-col select-none"
                   style={{ top: '22%', right: '38%' }}
                 >
