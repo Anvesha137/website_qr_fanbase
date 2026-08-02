@@ -76,21 +76,20 @@ export default function SplashLoader({ onComplete }: SplashLoaderProps) {
       }, 1100);
       return () => clearTimeout(moveTimer);
     } else if (phase === 'eclipse') {
-      // Animate eclipse radius from 0px to 2800px over 2.0s for a smooth, gradual reveal
+      // Trigger completion immediately so hero typewriter starts right as eclipse reveals the hero
+      onComplete();
+
       const startTime = performance.now();
-      const duration = 2000; // ms (smooth 2-second eclipse opening)
+      const duration = 1200; // Snappy 1.2-second eclipse opening
 
       const animateEclipse = (now: number) => {
         const elapsed = now - startTime;
         const progress = Math.min(1, elapsed / duration);
-        // Smooth easeOutQuart curve for a gradual, elegant expansion
         const easeProgress = 1 - Math.pow(1 - progress, 4);
         setEclipseRadius(easeProgress * 2800);
 
         if (progress < 1) {
           requestAnimationFrame(animateEclipse);
-        } else {
-          onComplete();
         }
       };
 

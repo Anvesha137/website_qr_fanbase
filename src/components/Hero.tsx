@@ -22,15 +22,15 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
   }, []);
 
   useEffect(() => {
+    // Wait until splash screen finishes (when isInitialLoad becomes false)
+    if (isInitialLoad) return;
+
     setTypedText("");
     setIsTypingDone(false);
 
     const fullText = "Consider them answered.";
     let currentText = "";
     let currentIndex = 0;
-
-    // Fast 300ms delay when navigating in-app from Features to Home, or 3800ms delay during splash screen refresh
-    const delayTime = isInitialLoad ? 3800 : 300;
 
     const startDelay = setTimeout(() => {
       const typingInterval = setInterval(() => {
@@ -42,9 +42,8 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
           setIsTypingDone(true);
           clearInterval(typingInterval);
         }
-      }, 55);
-      return () => clearInterval(typingInterval);
-    }, delayTime);
+      }, 40);
+    }, 20);
 
     return () => clearTimeout(startDelay);
   }, [isInitialLoad]);
@@ -96,7 +95,11 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
               className="text-lg sm:text-xl text-white/90 font-medium leading-relaxed max-w-lg mb-6"
               id="hero-subtitle"
             >
-              Reply to <span className="font-instagram text-[1.35em] leading-none inline-block align-middle px-1 pb-1.5 font-normal text-white select-none italic">Instagram</span> comments instantly with DMs, keeping followers engaged and the algorithm on your side.
+              Reply to <img
+                src="/insta.png"
+                alt="Instagram"
+                className="inline-block h-10 sm:h-12 lg:h-14 mx-1.5 -mt-1.5 align-middle object-contain drop-shadow-md"
+              /> comments instantly with DMs, keeping followers engaged and the algorithm on your side.
             </motion.p>
 
             {/* CTAs */}
