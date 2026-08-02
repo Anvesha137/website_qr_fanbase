@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Check, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -25,6 +25,14 @@ type Plan = {
 export default function Pricing() {
   const [isAnnually, setIsAnnually] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const premiumCardRef = useRef<HTMLDivElement>(null);
+
+  const handleAnnuallyClick = () => {
+    setIsAnnually(true);
+    setTimeout(() => {
+      premiumCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+  };
 
   const plans: Plan[] = [
     {
@@ -33,14 +41,13 @@ export default function Pricing() {
       btn: 'Start Free',
       price: '0',
       features: [
-        { text: '1 Instagram Account', included: true },
         { text: '5 Automations', included: true },
         { text: '2,000 DMs', included: true },
         { text: 'Ask to follow', included: false },
-        { text: 'Carousel msgs', included: false },
+        { text: 'Carousel messages', included: false },
         { text: 'Lead Manager', included: false },
-        { text: 'Follow up msgs', included: false },
-        { text: '1:1 appointment manager*', included: false },
+        { text: 'Follow up messages', included: false },
+        { text: '1:1 appointment manager', included: false },
       ],
     },
     {
@@ -50,14 +57,13 @@ export default function Pricing() {
       badge: 'first month only',
       oneTimePrice: 249,
       features: [
-        { text: '1 Instagram Account', included: true },
         { text: '10 Automations', included: true },
         { text: '10,000 DMs', included: true },
         { text: 'Ask to follow', included: true },
-        { text: 'Carousel msgs', included: true },
+        { text: 'Carousel messages', included: true },
         { text: 'Lead Manager', included: true },
-        { text: 'Follow up msgs', included: true },
-        { text: '1:1 appointment manager*', included: true },
+        { text: 'Follow up messages', included: true },
+        { text: '1:1 appointment manager', included: true },
       ],
     },
     {
@@ -67,14 +73,13 @@ export default function Pricing() {
       quarterlyMonthlyEffective: 399,
       annuallyMonthlyEffective: 349,
       features: [
-        { text: '1 Instagram Account', included: true },
         { text: 'Unlimited automations', included: true },
         { text: 'Unlimited DMs', included: true },
         { text: 'Ask to follow', included: true },
-        { text: 'Carousel msgs', included: false },
+        { text: 'Carousel messages', included: false },
         { text: 'Lead Manager', included: false },
-        { text: 'Follow up msgs', included: false },
-        { text: '1:1 appointment manager*', included: false },
+        { text: 'Follow up messages', included: false },
+        { text: '1:1 appointment manager', included: false },
       ],
     },
     {
@@ -89,10 +94,10 @@ export default function Pricing() {
         { text: 'Unlimited automations', included: true },
         { text: 'Unlimited DMs', included: true },
         { text: 'Ask to follow', included: true },
-        { text: 'Carousel msgs', included: true },
+        { text: 'Carousel messages', included: true },
         { text: 'Lead Manager', included: true },
-        { text: 'Follow up msgs', included: true },
-        { text: '1:1 appointment manager*', included: true },
+        { text: 'Follow up messages', included: true },
+        { text: '1:1 appointment manager', included: true },
       ],
     },
   ];
@@ -183,14 +188,14 @@ export default function Pricing() {
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2 font-onest drop-shadow-md">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-2 font-onest drop-shadow-md">
             Plans Built for Every Stage.
           </h2>
 
           <div className="mt-8 relative inline-flex flex-col items-center select-none">
             {/* Floating Tooltip Badge overlapping Annually button */}
             <div className="absolute -top-6 right-1 z-10 pointer-events-none">
-              <div className="relative bg-white border border-slate-200 shadow-xl rounded-lg px-3 py-0.5 text-[11px] font-extrabold text-slate-900 tracking-tight flex items-center justify-center font-onest whitespace-nowrap">
+              <div className="relative bg-white border border-slate-200 shadow-xl rounded-lg px-3 py-0.5 text-[11px] font-bold text-slate-500 tracking-tight flex items-center justify-center font-onest whitespace-nowrap">
                 <span>Save up to 15%</span>
                 {/* Pointer Caret overlapping the top border of Annually */}
                 <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-b border-r border-slate-200 rotate-45 z-20" />
@@ -200,18 +205,18 @@ export default function Pricing() {
             <div className="inline-flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-md relative z-0">
               <button
                 onClick={() => setIsAnnually(false)}
-                className={`px-6 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${!isAnnually
+                className={`px-6 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${!isAnnually
                   ? 'bg-[#695dd4] text-white shadow-md'
-                  : 'text-slate-500 hover:text-slate-900'
+                  : 'text-slate-900 hover:text-black'
                   }`}
               >
                 Quarterly
               </button>
               <button
-                onClick={() => setIsAnnually(true)}
-                className={`px-6 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isAnnually
+                onClick={handleAnnuallyClick}
+                className={`px-6 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${isAnnually
                   ? 'bg-[#695dd4] text-white shadow-md'
-                  : 'text-slate-500 hover:text-slate-900'
+                  : 'text-slate-900 hover:text-black'
                   }`}
               >
                 Annually
@@ -224,6 +229,7 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <div
               key={i}
+              ref={plan.name === 'Premium' ? premiumCardRef : null}
               className={`p-5 rounded-[2rem] border flex flex-col relative transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl ${plan.dark
                 ? 'bg-slate-900 border-slate-800 text-white'
                 : 'bg-white border-slate-100 text-slate-900'
@@ -343,8 +349,8 @@ export default function Pricing() {
                   key={idx}
                   onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
                   className={`rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden text-left ${isOpen
-                      ? 'bg-white border-white shadow-2xl ring-2 ring-white/50'
-                      : 'bg-white/90 border-white/40 hover:bg-white hover:border-white/70 shadow-lg hover:shadow-xl backdrop-blur-xl'
+                    ? 'bg-white border-white shadow-2xl ring-2 ring-white/50'
+                    : 'bg-white/90 border-white/40 hover:bg-white hover:border-white/70 shadow-lg hover:shadow-xl backdrop-blur-xl'
                     }`}
                 >
                   <div className="p-5 flex items-center justify-between font-onest font-bold text-slate-900 text-base sm:text-lg select-none">
