@@ -394,50 +394,6 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
     }
   };
 
-  // Card 2 auto-scroll ref
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const hasAutoScrolledRef = useRef(false);
-
-  useEffect(() => {
-    const el = card2Ref.current;
-    if (!el) return;
-
-    let lastScrollY = window.scrollY;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const currentScrollY = window.scrollY;
-          const isScrollingDown = currentScrollY > lastScrollY;
-          lastScrollY = currentScrollY;
-
-          // Auto-scroll when ~25-30% of Card 2 is visible scrolling down
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.25 && isScrollingDown && !hasAutoScrolledRef.current) {
-            hasAutoScrolledRef.current = true;
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        });
-      },
-      {
-        threshold: [0.25, 0.3],
-      }
-    );
-
-    observer.observe(el);
-
-    const handleScroll = () => {
-      if (window.scrollY < 200) {
-        hasAutoScrolledRef.current = false;
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   const handleSelect = (index: number) => {
     setSelectedIndex(index);
     setIsManual(true);
@@ -457,7 +413,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
 
       {/* TWO FEATURE CARDS SECTION (CARD 1 & CARD 2 BELOW IT) */}
       <section
-        className="w-full bg-[#703ded] py-16 sm:py-24 px-4 sm:px-8 relative"
+        className="w-full bg-[#703ded] pt-2 pb-16 sm:pb-24 px-4 sm:px-8 relative"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
@@ -491,8 +447,8 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                         className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
                           }`}
                       >
-                        <div className={`shrink-0 transition-all ${isSelected ? 'opacity-100 scale-105' : 'opacity-50 grayscale hover:opacity-80'}`}>
-                          <img src="/icon.png" alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain shrink-0" />
+                        <div className={`shrink-0 transition-all ${isSelected ? 'opacity-100 scale-110' : 'opacity-70 hover:opacity-95'}`}>
+                          <img src="/icon.png" alt="" className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain shrink-0 drop-shadow-md min-w-[36px] sm:min-w-[48px]" />
                         </div>
                         <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
                           }`}>
@@ -568,7 +524,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
           </div>
 
           {/* CARD 2 (Male Model f-c2.png) */}
-          <div ref={card2Ref} className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[500px] sm:min-h-[560px] lg:min-h-[580px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
+          <div className="w-full rounded-[32px] sm:rounded-[36px] overflow-hidden relative shadow-2xl bg-slate-900 border border-white/15 min-h-[500px] sm:min-h-[560px] lg:min-h-[580px] flex flex-col justify-between p-6 sm:p-12 lg:p-14">
             <img
               src="/f-c2.png"
               alt="Male Creator using Instagram DM Automation"
@@ -593,8 +549,8 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                         className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
                           }`}
                       >
-                        <div className={`shrink-0 transition-all ${isSelected ? 'opacity-100 scale-105' : 'opacity-50 grayscale hover:opacity-80'}`}>
-                          <img src="/icon.png" alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain shrink-0" />
+                        <div className={`shrink-0 transition-all ${isSelected ? 'opacity-100 scale-110' : 'opacity-70 hover:opacity-95'}`}>
+                          <img src="/icon.png" alt="" className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain shrink-0 drop-shadow-md min-w-[36px] sm:min-w-[48px]" />
                         </div>
                         <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
                           }`}>
