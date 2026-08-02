@@ -45,7 +45,7 @@ export default function Pricing() {
       name: 'TRY ME OUT',
       description: 'Test the core experience quickly.',
       btn: 'Try Now',
-      badge: '1 month only',
+      badge: 'first month only',
       oneTimePrice: 249,
       features: [
         { text: '1 Instagram Account', included: true },
