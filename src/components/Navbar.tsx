@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import TextRoll from './TextRoll';
 
 export type ViewMode = 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help' | 'affiliate' | 'terms' | 'privacy' | 'refund';
 
@@ -37,21 +38,21 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
               {/* Pricing */}
               <button
                 onClick={() => setViewMode('pricing')}
-                className={`text-base font-semibold transition-colors cursor-pointer ${
+                className={`group text-base font-semibold transition-colors cursor-pointer ${
                   viewMode === 'pricing' ? 'text-[#695dd4]' : 'text-[#1b1b1b]/70 hover:text-[#1b1b1b]'
                 }`}
               >
-                Pricing
+                <TextRoll>Pricing</TextRoll>
               </button>
 
               {/* Features */}
               <button
                 onClick={() => setViewMode('features')}
-                className={`text-base font-semibold transition-colors cursor-pointer ${
+                className={`group text-base font-semibold transition-colors cursor-pointer ${
                   viewMode === 'features' ? 'text-[#695dd4]' : 'text-[#1b1b1b]/70 hover:text-[#1b1b1b]'
                 }`}
               >
-                Features
+                <TextRoll>Features</TextRoll>
               </button>
 
               {/* Affiliate */}
@@ -60,11 +61,11 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
                   setViewMode('affiliate');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`text-base font-semibold transition-colors cursor-pointer ${
+                className={`group text-base font-semibold transition-colors cursor-pointer ${
                   viewMode === 'affiliate' ? 'text-[#695dd4]' : 'text-[#1b1b1b]/70 hover:text-[#1b1b1b]'
                 }`}
               >
-                Affiliate
+                <TextRoll>Affiliate</TextRoll>
               </button>
 
               {/* Help */}
@@ -73,11 +74,11 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
                   setViewMode('help');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className={`text-base font-semibold transition-colors cursor-pointer ${
+                className={`group text-base font-semibold transition-colors cursor-pointer ${
                   viewMode === 'help' ? 'text-[#695dd4]' : 'text-[#1b1b1b]/70 hover:text-[#1b1b1b]'
                 }`}
               >
-                Help
+                <TextRoll>Help</TextRoll>
               </button>
             </div>
 
@@ -85,10 +86,10 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
             <div className="hidden md:flex items-center">
               <button
                 onClick={() => setViewMode('pricing')}
-                className="rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 cursor-pointer"
+                className="group rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 cursor-pointer"
                 id="nav-get-started-btn"
               >
-                Get Started
+                <TextRoll>Get Started</TextRoll>
               </button>
             </div>
 

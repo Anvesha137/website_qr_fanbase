@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Check, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import TextRoll from './TextRoll';
 
 type Feature = {
   text: string;
@@ -24,7 +25,7 @@ type Plan = {
 
 export default function Pricing() {
   const [isAnnually, setIsAnnually] = useState(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const premiumCardRef = useRef<HTMLDivElement>(null);
 
   const handleAnnuallyClick = () => {
@@ -205,21 +206,21 @@ export default function Pricing() {
             <div className="inline-flex items-center bg-white p-1 rounded-xl border border-slate-200 shadow-md relative z-0">
               <button
                 onClick={() => setIsAnnually(false)}
-                className={`px-6 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${!isAnnually
+                className={`group px-6 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${!isAnnually
                   ? 'bg-[#695dd4] text-white shadow-md'
                   : 'text-slate-900 hover:text-black'
                   }`}
               >
-                Quarterly
+                <TextRoll>Quarterly</TextRoll>
               </button>
               <button
                 onClick={handleAnnuallyClick}
-                className={`px-6 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${isAnnually
+                className={`group px-6 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${isAnnually
                   ? 'bg-[#695dd4] text-white shadow-md'
                   : 'text-slate-900 hover:text-black'
                   }`}
               >
-                Annually
+                <TextRoll>Annually</TextRoll>
               </button>
             </div>
           </div>
@@ -266,14 +267,14 @@ export default function Pricing() {
 
               <a
                 href="https://app.quickrevert.tech"
-                className={`w-full py-3 rounded-xl font-semibold text-xs text-center transition-all mb-6 cursor-pointer font-sans ${plan.name === 'Free' || plan.name === 'Try Me Out'
+                className={`group w-full py-3 rounded-xl font-semibold text-xs text-center transition-all mb-6 cursor-pointer font-sans ${plan.name === 'Free' || plan.name === 'Try Me Out'
                   ? 'border border-slate-300 text-slate-600 hover:border-[#695dd4] hover:text-[#695dd4]'
                   : plan.dark
                     ? 'bg-[#695dd4] text-white hover:bg-[#5a50c6] shadow-lg shadow-[#695dd4]/30'
                     : 'border border-slate-300 text-slate-600 hover:border-[#695dd4] hover:text-[#695dd4]'
                   }`}
               >
-                {plan.btn}
+                <TextRoll>{plan.btn}</TextRoll>
               </a>
 
               <div className="space-y-3 flex-1">
@@ -312,7 +313,7 @@ export default function Pricing() {
             {[
               {
                 q: "Is there a free plan available?",
-                a: "Yes. Our Free plan includes 3 automations and a 2,000 DM limit every month — no card required, no time limit on how long you can use it."
+                a: "Yes. Our Free plan includes 5 automations and a 2,000 DM limit every month — no card required, no time limit on how long you can use it."
               },
               {
                 q: 'What is the "Try Me Out" plan?',
@@ -320,7 +321,7 @@ export default function Pricing() {
               },
               {
                 q: 'What happens after my "Try Me Out" month ends?',
-                a: "You'll automatically move back to the Free plan (3 automations, 2,000 DMs/month) unless you upgrade to a paid plan before it ends. We'll remind you a few days before it expires."
+                a: "You'll automatically move back to the Free plan (5 automations, 2,000 DMs/month) unless you upgrade to a paid plan before it ends. We'll remind you a few days before it expires."
               },
               {
                 q: "How does billing work?",

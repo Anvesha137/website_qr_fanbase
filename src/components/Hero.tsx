@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Check } from 'lucide-react';
+import TextRoll from './TextRoll';
 
 interface HeroProps {
   onGetStarted: () => void;
@@ -95,7 +96,7 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
               className="text-lg sm:text-xl text-white/90 font-medium leading-relaxed max-w-lg mb-6"
               id="hero-subtitle"
             >
-              Reply to <img
+              Reply to<img
                 src="/insta.png"
                 alt="Instagram"
                 className="inline-block h-10 sm:h-12 lg:h-14 mx-1.5 -mt-1.5 align-middle object-contain drop-shadow-md"
@@ -110,12 +111,12 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
               className="flex flex-col items-start gap-2.5"
             >
               <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                {/* Book a Demo CTA - Left side with exact Get Started button color */}
+                {/* Book a Demo CTA - Instagram Brand Gradient */}
                 <button
                   onClick={onBookCall}
-                  className="rounded-2xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-base font-bold text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-white/20"
+                  className="group rounded-2xl bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 px-6 py-2.5 text-base font-bold text-white shadow-xl hover:shadow-2xl hover:shadow-pink-500/30 transition-all duration-300 cursor-pointer active:scale-95 border border-white/20"
                 >
-                  Book a Demo
+                  <TextRoll>Book a Demo</TextRoll>
                 </button>
 
                 {/* Trusted Meta Tech Providers Badge */}
@@ -129,7 +130,7 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
 
               {/* Official APIs Caption */}
               <p className="text-xs text-white/70 font-medium select-none pl-2 tracking-tight">
-                *We use 100% official Meta APIs
+                *Powered by Official Meta APIs
               </p>
             </motion.div>
           </div>
