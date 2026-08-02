@@ -4,9 +4,10 @@ import { Check } from 'lucide-react';
 
 interface HeroProps {
   onGetStarted: () => void;
+  isInitialLoad?: boolean;
 }
 
-export default function Hero({ onGetStarted }: HeroProps) {
+export default function Hero({ onGetStarted, isInitialLoad = false }: HeroProps) {
   // 4-step cycle: 0=reset/blank, 1=comment, 2=creator reply, 3=DM received
   const [step, setStep] = useState(0);
   const [typedText, setTypedText] = useState("");
@@ -20,11 +21,16 @@ export default function Hero({ onGetStarted }: HeroProps) {
   }, []);
 
   useEffect(() => {
+    setTypedText("");
+    setIsTypingDone(false);
+
     const fullText = "Consider them answered.";
     let currentText = "";
     let currentIndex = 0;
 
-    // Delay start until eclipse opening reveals the hero section (~4.2s)
+    // Fast 300ms delay when navigating in-app from Features to Home, or 3800ms delay during splash screen refresh
+    const delayTime = isInitialLoad ? 3800 : 300;
+
     const startDelay = setTimeout(() => {
       const typingInterval = setInterval(() => {
         if (currentIndex < fullText.length) {
@@ -37,10 +43,10 @@ export default function Hero({ onGetStarted }: HeroProps) {
         }
       }, 55);
       return () => clearInterval(typingInterval);
-    }, 4200);
+    }, delayTime);
 
     return () => clearTimeout(startDelay);
-  }, []);
+  }, [isInitialLoad]);
 
   return (
     <section className="relative overflow-hidden min-h-screen flex items-center">

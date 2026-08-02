@@ -794,7 +794,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
             <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
               <div
-                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
                   hoveredCapabilityRow === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 }`}
               >
@@ -837,7 +837,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
             <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
               <div
-                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
                   hoveredCapabilityRow === 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 }`}
               >
@@ -880,7 +880,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
             <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
               <div
-                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
                   hoveredCapabilityRow === 2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 }`}
               >
@@ -922,7 +922,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
             <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
               <div
-                className={`w-[210px] sm:w-[260px] lg:w-[290px] h-[270px] sm:h-[350px] lg:h-[400px] bg-white border border-[#22252a] shadow-2xl rounded-none flex items-center justify-center p-2 transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 ${
+                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
                   hoveredCapabilityRow === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 }`}
               >
