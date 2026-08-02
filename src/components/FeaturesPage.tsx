@@ -470,7 +470,7 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             <img
               src="/f-c1.png"
               alt="Female Creator using Instagram DM Automation"
-              className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover object-[82%_center] sm:object-center pointer-events-none"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent pointer-events-none" />
 
@@ -491,8 +491,8 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                         className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
                           }`}
                       >
-                        <div className={`shrink-0 transition-colors ${isSelected ? 'text-white' : 'text-white/50'}`}>
-                          <CheckCheck className={`w-5 h-5 sm:w-6 sm:h-6 ${isSelected ? 'stroke-[2.8]' : 'stroke-[1.5]'}`} />
+                        <div className={`shrink-0 transition-all ${isSelected ? 'opacity-100 scale-105' : 'opacity-50 grayscale hover:opacity-80'}`}>
+                          <img src="/icon.png" alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain shrink-0" />
                         </div>
                         <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
                           }`}>
@@ -505,11 +505,11 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
               </div>
 
               {/* Right Column: Chat Bubbles Animation */}
-              <div className="lg:col-span-5 flex flex-col justify-end items-end relative min-h-[280px] w-full">
+              <div className="lg:col-span-5 flex flex-col justify-end items-end relative min-h-[260px] sm:min-h-[280px] w-full">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={selectedIndex}
-                    className="w-full max-w-[320px] sm:max-w-[340px] flex flex-col gap-3"
+                    className="w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[340px] flex flex-col gap-2.5 sm:gap-3"
                   >
                     {AUTOMATIC_FEATURES[selectedIndex].bubbles.map((bubble, bIdx) => (
                       <motion.div
@@ -528,32 +528,32 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                           }`}
                       >
                         {bubble.type === "user-comment" ? (
-                          <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] border border-white/15 text-white text-xs p-3.5 rounded-2xl rounded-tr-none shadow-xl max-w-[280px]">
-                            <div className="flex items-center gap-1.5 mb-1">
-                              <span className="font-bold text-white/90 text-[11px]">@{bubble.sender}</span>
+                          <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] border border-white/15 text-white text-[10px] sm:text-xs p-2.5 sm:p-3.5 rounded-2xl rounded-tr-none shadow-xl max-w-[220px] sm:max-w-[280px]">
+                            <div className="flex items-center gap-1.5 mb-0.5 sm:mb-1">
+                              <span className="font-bold text-white/90 text-[10px] sm:text-[11px]">@{bubble.sender}</span>
                               <span className="text-[8px] text-white/40">2m</span>
                             </div>
                             <p className="text-white/90 font-medium">{bubble.text}</p>
                           </div>
                         ) : bubble.type === "creator-reply" ? (
-                          <div className="bg-[#1e252a]/95 border border-white/10 text-white text-xs p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[280px]">
-                            <div className="flex items-center gap-1.5 mb-1">
-                              <span className="font-bold text-white/90 text-[11px]">{bubble.sender}</span>
+                          <div className="bg-[#1e252a]/95 border border-white/10 text-white text-[10px] sm:text-xs p-2.5 sm:p-3.5 rounded-2xl rounded-tl-none shadow-xl max-w-[220px] sm:max-w-[280px]">
+                            <div className="flex items-center gap-1.5 mb-0.5 sm:mb-1">
+                              <span className="font-bold text-white/90 text-[10px] sm:text-[11px]">{bubble.sender}</span>
                               <span className="bg-white/15 px-1.5 py-0.5 rounded text-[8px] font-bold">Author</span>
                             </div>
                             <p className="text-white/90 font-medium">{bubble.text}</p>
                           </div>
                         ) : bubble.type === "user" ? (
-                          <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-xs px-4 py-3 rounded-2xl rounded-tr-none shadow-lg max-w-[260px] font-semibold border border-white/15">
+                          <div className="bg-gradient-to-r from-[#804bf2] to-[#6939dc] text-white text-[10px] sm:text-xs px-3 sm:px-4 py-2 sm:py-3 rounded-2xl rounded-tr-none shadow-lg max-w-[200px] sm:max-w-[260px] font-semibold border border-white/15">
                             {bubble.text}
                           </div>
                         ) : (
-                          <div className="bg-[#1e252a]/95 text-white p-4 rounded-2xl rounded-tl-none shadow-2xl max-w-[290px] border border-white/10">
-                            <p className="text-xs font-medium leading-relaxed text-white/95">
+                          <div className="bg-[#1e252a]/95 text-white p-3 sm:p-4 rounded-2xl rounded-tl-none shadow-2xl max-w-[230px] sm:max-w-[290px] border border-white/10">
+                            <p className="text-[10px] sm:text-xs font-medium leading-relaxed text-white/95">
                               {bubble.text}
                             </p>
                             {bubble.button && (
-                              <button className="mt-3 w-full py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs">
+                              <button className="mt-2 sm:mt-3 w-full py-2 sm:py-2.5 bg-white/10 hover:bg-white/20 text-white text-[10px] sm:text-xs font-bold rounded-xl transition cursor-pointer text-center border border-white/10 shadow-xs">
                                 {bubble.button}
                               </button>
                             )}
@@ -593,8 +593,8 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
                         className={`flex items-center gap-2.5 sm:gap-3 text-left cursor-pointer transition-all duration-300 group ${isSelected ? 'translate-x-1.5 opacity-100' : 'opacity-55 hover:opacity-85'
                           }`}
                       >
-                        <div className={`shrink-0 transition-colors ${isSelected ? 'text-white' : 'text-white/50'}`}>
-                          <CheckCheck className={`w-5 h-5 sm:w-6 sm:h-6 ${isSelected ? 'stroke-[2.8]' : 'stroke-[1.5]'}`} />
+                        <div className={`shrink-0 transition-all ${isSelected ? 'opacity-100 scale-105' : 'opacity-50 grayscale hover:opacity-80'}`}>
+                          <img src="/icon.png" alt="" className="w-5 h-5 sm:w-6 sm:h-6 object-contain shrink-0" />
                         </div>
                         <span className={`font-display text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug transition-all ${isSelected ? 'text-white drop-shadow-md' : 'text-white/70'
                           }`}>
@@ -829,28 +829,30 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => setHoveredCapabilityRow(0)}
-            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
               hoveredCapabilityRow === 0 ? 'bg-[#c6d2ff]' : 'bg-transparent hover:bg-[#c6d2ff]/30'
             }`}
           >
-            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">1</div>
-            
-            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
-            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
-              <div
-                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
-                  hoveredCapabilityRow === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                }`}
-              >
-                <img src="/followup.png" alt="Followups" className="w-full h-full object-contain object-center" />
+            <div className="flex items-baseline gap-3.5 md:contents">
+              <div className="md:col-span-1 text-lg sm:text-base font-sans text-[#2d323e] font-normal shrink-0">1</div>
+              
+              {/* Breakout Overlapping Image Container - Visible ONLY on md+ when hovered */}
+              <div className="hidden md:flex md:col-span-4 justify-start items-center relative pointer-events-none">
+                <div
+                  className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
+                    hoveredCapabilityRow === 0 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                >
+                  <img src="/followup.png" alt="Followups" className="w-full h-full object-contain object-center" />
+                </div>
               </div>
-            </div>
 
-            {/* Title */}
-            <div className="md:col-span-4 px-2">
-              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
-                Followups
-              </h3>
+              {/* Title */}
+              <div className="md:col-span-4 px-0 md:px-2">
+                <h3 className="font-display font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                  Followups
+                </h3>
+              </div>
             </div>
 
             {/* Right List */}
@@ -872,28 +874,30 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => setHoveredCapabilityRow(1)}
             onClick={() => setViewMode && setViewMode('link-in-bio')}
-            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
               hoveredCapabilityRow === 1 ? 'bg-[#fae2cb]' : 'bg-transparent hover:bg-[#fae2cb]/30'
             }`}
           >
-            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">2</div>
-            
-            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
-            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
-              <div
-                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
-                  hoveredCapabilityRow === 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                }`}
-              >
-                <img src="/store.png" alt="My Store" className="w-full h-full object-contain object-center" />
+            <div className="flex items-baseline gap-3.5 md:contents">
+              <div className="md:col-span-1 text-lg sm:text-base font-sans text-[#2d323e] font-normal shrink-0">2</div>
+              
+              {/* Breakout Overlapping Image Container - Visible ONLY on md+ when hovered */}
+              <div className="hidden md:flex md:col-span-4 justify-start items-center relative pointer-events-none">
+                <div
+                  className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
+                    hoveredCapabilityRow === 1 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                >
+                  <img src="/store.png" alt="My Store" className="w-full h-full object-contain object-center" />
+                </div>
               </div>
-            </div>
 
-            {/* Title */}
-            <div className="md:col-span-4 px-2">
-              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
-                My Store
-              </h3>
+              {/* Title */}
+              <div className="md:col-span-4 px-0 md:px-2">
+                <h3 className="font-display font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                  My Store
+                </h3>
+              </div>
             </div>
 
             {/* Right List */}
@@ -915,28 +919,30 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => setHoveredCapabilityRow(2)}
             onClick={() => setViewMode && setViewMode('slots')}
-            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
               hoveredCapabilityRow === 2 ? 'bg-[#dcf0e3]' : 'bg-transparent hover:bg-[#dcf0e3]/30'
             }`}
           >
-            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">3</div>
-            
-            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
-            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
-              <div
-                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
-                  hoveredCapabilityRow === 2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                }`}
-              >
-                <img src="/calender.png" alt="1:1 Appointments" className="w-full h-full object-contain object-center" />
+            <div className="flex items-baseline gap-3.5 md:contents">
+              <div className="md:col-span-1 text-lg sm:text-base font-sans text-[#2d323e] font-normal shrink-0">3</div>
+              
+              {/* Breakout Overlapping Image Container - Visible ONLY on md+ when hovered */}
+              <div className="hidden md:flex md:col-span-4 justify-start items-center relative pointer-events-none">
+                <div
+                  className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
+                    hoveredCapabilityRow === 2 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                >
+                  <img src="/calender.png" alt="1:1 Appointments" className="w-full h-full object-contain object-center" />
+                </div>
               </div>
-            </div>
 
-            {/* Title */}
-            <div className="md:col-span-4 px-2">
-              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
-                1:1 Appointments
-              </h3>
+              {/* Title */}
+              <div className="md:col-span-4 px-0 md:px-2">
+                <h3 className="font-display font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                  1:1 Appointments
+                </h3>
+              </div>
             </div>
 
             {/* Right List */}
@@ -957,28 +963,30 @@ export default function FeaturesPage({ setViewMode }: FeaturesPageProps) {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => setHoveredCapabilityRow(3)}
-            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
+            className={`rounded-none py-10 sm:py-14 px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-center relative group cursor-pointer transition-colors duration-300 ${
               hoveredCapabilityRow === 3 ? 'bg-[#f3dbf7]' : 'bg-transparent hover:bg-[#f3dbf7]/30'
             }`}
           >
-            <div className="md:col-span-1 text-sm sm:text-base font-sans text-[#2d323e] font-normal">4</div>
-            
-            {/* Breakout Overlapping Image Container - Visible ONLY when hovered */}
-            <div className="md:col-span-4 flex justify-start items-center relative pointer-events-none">
-              <div
-                className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
-                  hoveredCapabilityRow === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                }`}
-              >
-                <img src="/invoice.png" alt="Invoice Generator & Financial Planner" className="w-full h-full object-contain object-center" />
+            <div className="flex items-baseline gap-3.5 md:contents">
+              <div className="md:col-span-1 text-lg sm:text-base font-sans text-[#2d323e] font-normal shrink-0">4</div>
+              
+              {/* Breakout Overlapping Image Container - Visible ONLY on md+ when hovered */}
+              <div className="hidden md:flex md:col-span-4 justify-start items-center relative pointer-events-none">
+                <div
+                  className={`w-[200px] sm:w-[250px] lg:w-[285px] h-[280px] sm:h-[360px] lg:h-[420px] transition-all duration-300 relative z-30 -my-16 sm:-my-24 lg:-my-28 drop-shadow-[0_20px_35px_rgba(0,0,0,0.3)] ${
+                    hoveredCapabilityRow === 3 ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                  }`}
+                >
+                  <img src="/invoice.png" alt="Invoice Generator & Financial Planner" className="w-full h-full object-contain object-center" />
+                </div>
               </div>
-            </div>
 
-            {/* Title */}
-            <div className="md:col-span-4 px-2">
-              <h3 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
-                Invoice Generator & Financial Planner
-              </h3>
+              {/* Title */}
+              <div className="md:col-span-4 px-0 md:px-2">
+                <h3 className="font-display font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[#1a1d24] tracking-tight leading-[1.08]">
+                  Invoice Generator & Financial Planner
+                </h3>
+              </div>
             </div>
 
             {/* Right List */}
