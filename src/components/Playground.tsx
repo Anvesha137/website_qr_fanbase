@@ -5,13 +5,35 @@ import TextRoll from './TextRoll';
 
 export default function Playground() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const [scrollRange, setScrollRange] = React.useState(0);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
 
-  // Map vertical scroll progress → horizontal translate
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-45%']);
+  React.useEffect(() => {
+    const updateRange = () => {
+      if (trackRef.current && containerRef.current) {
+        const range = trackRef.current.scrollWidth - containerRef.current.clientWidth;
+        setScrollRange(range > 0 ? range : 0);
+      }
+    };
+
+    updateRange();
+    const timer = setTimeout(updateRange, 150);
+    window.addEventListener('resize', updateRange);
+    return () => {
+      window.removeEventListener('resize', updateRange);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  // Map vertical scroll progress → exact horizontal translate in pixels
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   const capabilities = [
     {
@@ -107,9 +129,10 @@ export default function Playground() {
 
   return (
     /* Tall outer wrapper creates the scroll runway */
-    <section ref={sectionRef} className="relative h-[200vh]" id="capabilities">
+    <section ref={sectionRef} className="relative h-[300vh] sm:h-[240vh]" id="capabilities">
       {/* Sticky inner container — stays pinned while you scroll */}
       <div
+        ref={containerRef}
         className="sticky top-0 h-screen flex items-center overflow-hidden border-t border-white/10"
         style={{
           backgroundColor: '#703ded',
@@ -119,19 +142,20 @@ export default function Playground() {
       >
         {/* Horizontal track: text block + cards */}
         <motion.div
+          ref={trackRef}
           style={{ x }}
-          className="flex items-stretch gap-10 pl-8 sm:pl-12 lg:pl-20 will-change-transform"
+          className="flex items-stretch gap-5 sm:gap-8 lg:gap-10 pl-5 sm:pl-12 lg:pl-20 pr-5 sm:pr-12 lg:pr-20 will-change-transform"
         >
           {/* LEFT: Pinned text block */}
-          <div className="w-[380px] sm:w-[440px] lg:w-[480px] shrink-0 flex flex-col justify-center pr-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-xs font-extrabold uppercase tracking-wider mb-5 w-fit">
+          <div className="w-[280px] sm:w-[380px] lg:w-[480px] shrink-0 flex flex-col justify-center pr-2 sm:pr-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-[11px] sm:text-xs font-extrabold uppercase tracking-wider mb-4 sm:mb-5 w-fit">
               <Sparkles className="h-3.5 w-3.5" />
               Core Capabilities
             </div>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-5 leading-[1.1]">
+            <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-3 sm:mb-5 leading-[1.1]">
               Four powerful tools.<br /> Built for Instagram growth.
             </h2>
-            <p className="text-white/70 font-sans text-sm sm:text-base font-medium leading-relaxed max-w-sm">
+            <p className="text-white/70 font-sans text-xs sm:text-base font-medium leading-relaxed max-w-sm">
               Everything you need to automate conversations, monetize followers, and scale your business in DMs.
             </p>
           </div>
@@ -144,12 +168,12 @@ export default function Playground() {
                 key={cap.id}
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className={`w-[400px] sm:w-[440px] lg:w-[480px] shrink-0 bg-white rounded-3xl p-8 sm:p-9 border border-slate-200/80 shadow-md hover:shadow-2xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between group min-h-[420px] ${cap.hoverBg}`}
+                className={`w-[290px] sm:w-[400px] lg:w-[480px] shrink-0 bg-white rounded-3xl p-6 sm:p-8 lg:p-9 border border-slate-200/80 shadow-md hover:shadow-2xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between group min-h-[380px] sm:min-h-[420px] ${cap.hoverBg}`}
               >
                 <div>
                   {/* Top Bar */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`h-11 w-11 rounded-2xl bg-gradient-to-tr ${cap.gradient} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-all`}>
+                  <div className="flex items-center justify-between mb-5 sm:mb-6">
+                    <div className={`h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-gradient-to-tr ${cap.gradient} text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-all`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border ${cap.tagBg} transition-all`}>
@@ -157,10 +181,10 @@ export default function Playground() {
                     </span>
                   </div>
 
-                  <h3 className="font-display text-xl font-extrabold text-slate-900 mb-2 transition-colors">
+                  <h3 className="font-display text-lg sm:text-xl font-extrabold text-slate-900 mb-2 transition-colors">
                     {cap.title}
                   </h3>
-                  <p className="text-slate-500 text-xs font-medium leading-relaxed mb-6 transition-colors">
+                  <p className="text-slate-500 text-xs font-medium leading-relaxed mb-5 sm:mb-6 transition-colors">
                     {cap.description}
                   </p>
                 </div>
