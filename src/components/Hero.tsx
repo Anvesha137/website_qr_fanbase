@@ -4,10 +4,11 @@ import { Check } from 'lucide-react';
 
 interface HeroProps {
   onGetStarted: () => void;
+  onBookCall?: () => void;
   isInitialLoad?: boolean;
 }
 
-export default function Hero({ onGetStarted, isInitialLoad = false }: HeroProps) {
+export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }: HeroProps) {
   // 4-step cycle: 0=reset/blank, 1=comment, 2=creator reply, 3=DM received
   const [step, setStep] = useState(0);
   const [typedText, setTypedText] = useState("");
@@ -103,14 +104,24 @@ export default function Hero({ onGetStarted, isInitialLoad = false }: HeroProps)
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col items-start gap-2"
+              className="flex flex-col items-start gap-2.5"
             >
-              {/* Trusted Meta Tech Providers Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-2xl bg-white border border-white/20 shadow-lg px-5 py-2.5 text-slate-800 select-none">
-                <img src="/meta.png" className="h-5 w-auto object-contain shrink-0" alt="Meta Logo" />
-                <span className="text-base font-bold tracking-tight text-slate-800">
-                  Trusted Meta Tech Providers
-                </span>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                {/* Book a Demo CTA - Left side with exact Get Started button color */}
+                <button
+                  onClick={onBookCall}
+                  className="rounded-2xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-base font-bold text-white shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer active:scale-95 border border-white/20"
+                >
+                  Book a Demo
+                </button>
+
+                {/* Trusted Meta Tech Providers Badge */}
+                <div className="inline-flex items-center gap-2.5 rounded-2xl bg-white border border-white/20 shadow-lg px-5 py-2.5 text-slate-800 select-none">
+                  <img src="/meta.png" className="h-5 w-auto object-contain shrink-0" alt="Meta Logo" />
+                  <span className="text-base font-bold tracking-tight text-slate-800">
+                    Trusted Meta Tech Providers
+                  </span>
+                </div>
               </div>
 
               {/* Official APIs Caption */}

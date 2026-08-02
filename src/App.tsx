@@ -138,7 +138,11 @@ export default function App() {
             transition={{ duration: 0.3 }}
           >
             <div className="relative">
-              <Hero onGetStarted={() => setViewMode('features')} isInitialLoad={showSplash} />
+              <Hero
+                onGetStarted={() => setViewMode('features')}
+                onBookCall={() => setViewMode('slots')}
+                isInitialLoad={showSplash}
+              />
             </div>
 
             <Playground />
