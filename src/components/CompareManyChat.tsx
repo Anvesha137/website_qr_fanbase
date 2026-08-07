@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, X, ArrowRight, Zap, Shield, DollarSign, Star, ChevronDown, Instagram } from 'lucide-react';
+import { Check, X, ArrowRight, Zap, Shield, DollarSign, ChevronDown, Instagram } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ViewMode } from './Navbar';
 
@@ -515,67 +515,6 @@ export default function CompareManyChat({ setViewMode }: Props) {
         </div>
       </section>
 
-      {/* ── Social Proof ─────────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="text-[11px] font-mono font-bold tracking-widest text-[#695dd4] uppercase bg-[#695dd4]/8 border border-[#695dd4]/20 px-4 py-1.5 rounded-full mb-4 inline-block">
-              Real Results
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-onest mt-3">
-              Creators who made the switch
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: "I was paying $85/month on ManyChat just because my list grew to 10K. Switched to QuickRevert and now I pay $14 and get more features. Should have done it sooner.",
-                name: 'Priya S.',
-                role: 'Fitness Coach, 45K followers',
-                stars: 5,
-              },
-              {
-                quote: "The Lead Manager and Appointment Booking are game changers. On ManyChat I had to set up Zapier just to do the basics. QuickRevert has everything built in.",
-                name: 'Arjun M.',
-                role: 'Business Consultant',
-                stars: 5,
-              },
-              {
-                quote: "Ask to Follow alone made the switch worth it. My follower count went up 1,200 in the first month just from people interacting with my DM flows.",
-                name: 'Riya K.',
-                role: 'Lifestyle Creator, 22K followers',
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: i * 0.1 }}
-                className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: t.stars }).map((_, si) => (
-                    <Star key={si} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-slate-600 text-sm leading-relaxed mb-5">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#695dd4] to-[#a78bfa] flex items-center justify-center text-white font-bold text-sm shrink-0">
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-slate-900">{t.name}</p>
-                    <p className="text-xs text-slate-400">{t.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────── */}
       <section className="py-20 px-4 sm:px-6 bg-slate-50">
