@@ -27,10 +27,8 @@ const rows: Row[] = [
   { feature: 'Menu Flows',                  qr: 'blank', qr_pro: true,        manychat: true           },
   { feature: 'Lead Manager',               qr: 'blank', qr_pro: true,        manychat: 'via-integrations' },
   { feature: 'Lead Follow-Ups',            qr: 'blank', qr_pro: true,        manychat: 'via-integrations' },
-  { feature: 'Appointment Booking',        qr: 'blank', qr_pro: true,        manychat: 'via-integrations' },
-  { feature: 'Invoice Generator',          qr: 'blank', qr_pro: true,        manychat: false          },
-  { feature: 'Creator Store',              qr: 'blank', qr_pro: true,        manychat: false          },
-  { feature: 'Financial Planner',          qr: 'blank', qr_pro: true,        manychat: false          },
+  { feature: 'Creator Invoice Generator',  qr: 'blank', qr_pro: true,        manychat: false          },
+  { feature: 'MyStore (Link-in-Bio)',      qr: true,    qr_pro: true,        manychat: false          },
   { feature: 'AI Replies',                 qr: 'blank', qr_pro: 'planned',   manychat: 'available'    },
   { feature: 'Multi-channel Automation',   qr: false,   qr_pro: false,       manychat: true           },
 ];

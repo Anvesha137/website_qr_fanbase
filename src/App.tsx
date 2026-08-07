@@ -144,7 +144,7 @@ export default function App() {
             <div className="relative">
               <Hero
                 onGetStarted={() => setViewMode('features')}
-                onBookCall={() => setViewMode('slots')}
+                onBookCall={() => window.open('https://wa.me/917619479099?text=Tell%20me%20more%20about%20QuickRevert', '_blank')}
                 isInitialLoad={showSplash}
               />
             </div>

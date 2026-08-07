@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Manrope:wght@200..800&family=JetBrains+Mono:wght@400;500;600&family=Onest:wght@100..900&family=Pacifico&display=swap');
 @import "tailwindcss";
 
+html {
+  overflow-x: hidden;
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Onest", sans-serif;
@@ -17,4 +21,74 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@keyframes borderRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.moving-border-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px -5px rgba(253, 29, 29, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.moving-border-wrapper:hover {
+  box-shadow: 0 16px 36px -4px rgba(253, 29, 29, 0.45);
+}
+
+.moving-border-wrapper:active {
+  transform: scale(0.96);
+}
+
+.moving-border-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
+  background: conic-gradient(
+    from 0deg,
+    #833ab4 0deg,
+    #fd1d1d 90deg,
+    #fcb045 180deg,
+    #833ab4 270deg,
+    #833ab4 360deg
+  );
+  animation: borderRotate 3s linear infinite;
+  z-index: 0;
+}
+
+.moving-border-inner {
+  position: relative;
+  z-index: 1;
+  background-color: #ffffff;
+  border-radius: 13.5px;
+  padding: 10px 24px;
+  color: #1b1b1b;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  height: 100%;
+}
+
+.moving-border-wrapper:hover .moving-border-inner {
+  background-color: #f8fafc;
 }

@@ -111,13 +111,17 @@ export default function Hero({ onGetStarted, onBookCall, isInitialLoad = false }
               className="flex flex-col items-start gap-2.5"
             >
               <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                {/* Book a Demo CTA - Instagram Brand Gradient */}
-                <button
-                  onClick={onBookCall}
-                  className="group rounded-2xl bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 px-6 py-2.5 text-base font-bold text-white shadow-xl hover:shadow-2xl hover:shadow-pink-500/30 transition-all duration-300 cursor-pointer active:scale-95 border border-white/20"
+                {/* Book a Demo CTA - White Button with Moving Colorful Boundary */}
+                <a
+                  href="https://wa.me/917619479099?text=Tell%20me%20more%20about%20QuickRevert"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="moving-border-wrapper cursor-pointer select-none"
                 >
-                  <TextRoll>Book a Demo</TextRoll>
-                </button>
+                  <span className="moving-border-inner font-extrabold text-base">
+                    <TextRoll>Book a Demo</TextRoll>
+                  </span>
+                </a>
 
                 {/* Trusted Meta Tech Providers Badge */}
                 <div className="inline-flex items-center gap-2.5 rounded-2xl bg-white border border-white/20 shadow-lg px-5 py-2.5 text-slate-800 select-none">

@@ -82,11 +82,21 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
               </button>
             </div>
 
-            {/* Right: Get Started Button */}
-            <div className="hidden md:flex items-center">
+            {/* Right: Book Demo & Get Started Buttons */}
+            <div className="hidden md:flex items-center space-x-3">
+              <a
+                href="https://wa.me/917619479099?text=Tell%20me%20more%20about%20QuickRevert"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="moving-border-wrapper cursor-pointer select-none"
+              >
+                <span className="moving-border-inner font-extrabold text-xs px-4 py-2">
+                  <TextRoll>Book a Demo</TextRoll>
+                </span>
+              </a>
               <button
                 onClick={() => setViewMode('pricing')}
-                className="group rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] px-6 py-2.5 text-sm font-bold text-white shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 cursor-pointer"
+                className="group rounded-xl bg-[#695dd4] hover:bg-[#5a50c6] px-5 py-2 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all duration-300 active:scale-95 cursor-pointer"
                 id="nav-get-started-btn"
               >
                 <TextRoll>Get Started</TextRoll>

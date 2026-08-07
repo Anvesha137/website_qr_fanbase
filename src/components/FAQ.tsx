@@ -82,9 +82,34 @@ const SwitchAccountGuide = () => (
   </div>
 );
 
+// Sub-component: YouTube Video Embed Card
+const YouTubeEmbed = ({ videoId = "dQw4w9WgXcQ", title }: { videoId?: string; title: string }) => (
+  <div className="my-4 rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-900">
+    <div className="relative pb-[56.25%] h-0">
+      <iframe
+        className="absolute top-0 left-0 w-full h-full"
+        src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+    <div className="bg-slate-900 px-4 py-2.5 flex items-center justify-between text-white text-xs font-semibold">
+      <span className="flex items-center gap-1.5">
+        <span className="text-red-500 font-bold">▶ Video Tutorial:</span> {title}
+      </span>
+      <a href="https://www.youtube.com/@QuickReverttech" target="_blank" rel="noopener noreferrer" className="text-indigo-300 hover:text-white text-[11px] font-bold underline">
+        Watch on YouTube
+      </a>
+    </div>
+  </div>
+);
+
 // Sub-component: Troubleshooting Guide for Automations
 const TroubleshootGuide = () => (
   <div className="space-y-6 mt-4">
+    <YouTubeEmbed videoId="dQw4w9WgXcQ" title="How to Fix & Troubleshoot Instagram Automations" />
+
     <div className="space-y-2">
       <h4 className="font-bold text-slate-900 text-sm sm:text-base">
         1. Reason: Automation is Turned Off
@@ -117,6 +142,19 @@ const TroubleshootGuide = () => (
         💡 If you have exceeded limits, upgrade to Premium or Professional to resume automations.
       </p>
     </div>
+
+    <div className="space-y-2 border-t border-slate-100 pt-4">
+      <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
+        <span>4. Reason: Changed your Instagram Password</span>
+      </h4>
+      <p className="text-xs sm:text-sm text-slate-500 font-medium">
+        Instagram security automatically invalidates all active API session tokens whenever you change your account password.
+      </p>
+      <div className="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-amber-900 text-xs font-semibold">
+        <strong>How to Resolve:</strong> Re-authenticate your account to generate a fresh Meta access token:
+      </div>
+      <FlowPath steps={["Menu", "My Account", "Connected Accounts", "Click Refresh Token (or Re-connect Instagram)"]} />
+    </div>
   </div>
 );
 
@@ -126,7 +164,9 @@ const AutoDMGuide = () => (
     <p className="text-slate-600 text-sm sm:text-base font-semibold">
       Auto DM automatically replies to users when they send you a direct message on Instagram:
     </p>
-    
+
+    <YouTubeEmbed videoId="dQw4w9WgXcQ" title="How to Create Auto DM Automations Step-by-Step" />
+
     <div className="space-y-5 border-l-2 border-slate-100 pl-4 py-1">
       <div className="space-y-1">
         <h5 className="font-bold text-slate-900 text-sm sm:text-base">1. Open Automations</h5>
@@ -524,10 +564,10 @@ export default function FAQ() {
               <p className="text-xs text-slate-400 font-semibold leading-relaxed">
                 Still need help? Email our support team available 24/7 at{' '}
                 <a
-                  href="mailto:support@quickrevert.gg"
+                  href="mailto:connect@quickrevert.tech"
                   className="font-bold text-[#695dd4] hover:underline transition-colors"
                 >
-                  support@quickrevert.gg
+                  connect@quickrevert.tech
                 </a>
               </p>
             </div>
