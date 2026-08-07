@@ -259,7 +259,11 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative pt-24 bg-white"
+            className="relative pt-24 bg-[#703ded]"
+            style={{
+              backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)`,
+              backgroundSize: '48px 48px',
+            }}
           >
             <CompareManyChat setViewMode={setViewMode} />
           </motion.div>

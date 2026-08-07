@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, X, ArrowRight, Zap, Shield, DollarSign, ChevronDown, Instagram } from 'lucide-react';
+import { Check, X, ArrowRight, Zap, Shield, DollarSign, Star, ChevronDown, Instagram } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ViewMode } from './Navbar';
 
@@ -437,80 +437,6 @@ export default function CompareManyChat({ setViewMode }: Props) {
               <span className="text-[10px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full">Via Integrations</span>
               Needs External Tools
             </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Pricing Math ──────────────────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 bg-gradient-to-br from-slate-900 via-[#2d1f6e] to-[#1a1040] relative overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none opacity-40"
-          style={{
-            backgroundImage: `linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-          }}
-        />
-        <div className="max-w-4xl mx-auto relative z-10">
-          <div className="text-center mb-14">
-            <span className="text-[11px] font-mono font-bold tracking-widest text-violet-300 uppercase bg-white/8 border border-white/15 px-4 py-1.5 rounded-full mb-4 inline-block">
-              The Real Cost
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-onest mt-3">
-              What you actually pay
-            </h2>
-            <p className="text-indigo-200/80 text-base mt-3 max-w-xl mx-auto">
-              ManyChat's contact-based pricing punishes growth. QuickRevert never does.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* ManyChat cost scaling */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-6 backdrop-blur-sm">
-              <h3 className="text-base font-extrabold text-rose-300 font-onest mb-5 flex items-center gap-2">
-                <X className="w-4 h-4" /> ManyChat — Cost Grows With You
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { contacts: '500 contacts', price: '$15' },
-                  { contacts: '2,500 contacts', price: '$25' },
-                  { contacts: '5,000 contacts', price: '$45' },
-                  { contacts: '10,000 contacts', price: '$85' },
-                  { contacts: '25,000 contacts', price: '$209' },
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <span className="text-sm text-slate-300">{row.contacts}</span>
-                    <div className="flex-1 mx-4 h-px bg-white/5" />
-                    <span className="text-sm font-bold text-rose-300">{row.price}<span className="text-[10px] text-rose-400/70 ml-1">/mo</span></span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-rose-300/60 text-xs mt-5 font-medium">* Approximate. ManyChat prices may vary.</p>
-            </div>
-
-            {/* QuickRevert flat */}
-            <div className="bg-[#695dd4]/20 border border-[#695dd4]/30 rounded-3xl p-6 backdrop-blur-sm">
-              <h3 className="text-base font-extrabold text-emerald-300 font-onest mb-5 flex items-center gap-2">
-                <Check className="w-4 h-4" /> QuickRevert — Always Flat
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { contacts: '500 contacts', price: '$8' },
-                  { contacts: '2,500 contacts', price: '$8' },
-                  { contacts: '5,000 contacts', price: '$8' },
-                  { contacts: '10,000 contacts', price: '$8' },
-                  { contacts: '25,000 contacts', price: '$8' },
-                ].map((row, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <span className="text-sm text-slate-300">{row.contacts}</span>
-                    <div className="flex-1 mx-4 h-px bg-white/10" />
-                    <span className="text-sm font-bold text-emerald-300">{row.price}<span className="text-[10px] text-emerald-400/70 ml-1">/mo</span></span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 text-center">
-                <span className="text-emerald-300 text-xs font-bold">No contact limits. No price surprises. Ever.</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
