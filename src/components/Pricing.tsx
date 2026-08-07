@@ -338,10 +338,6 @@ export default function Pricing() {
               {
                 q: "Can I upgrade my plan later?",
                 a: "Absolutely — you can upgrade anytime, and it takes effect immediately. No waiting for your next billing cycle."
-              },
-              {
-                q: "Can I downgrade or cancel anytime?",
-                a: "Yes, no lock-in contracts. You can downgrade or cancel whenever you like from your account settings."
               }
             ].map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
