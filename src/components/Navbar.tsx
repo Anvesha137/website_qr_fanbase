@@ -3,7 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import TextRoll from './TextRoll';
 
-export type ViewMode = 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help' | 'affiliate' | 'terms' | 'privacy' | 'refund';
+export type ViewMode = 'landing' | 'link-in-bio' | 'features' | 'slots' | 'pricing' | 'help' | 'affiliate' | 'terms' | 'privacy' | 'refund' | 'compare-manychat';
 
 interface NavbarProps {
   viewMode: ViewMode;

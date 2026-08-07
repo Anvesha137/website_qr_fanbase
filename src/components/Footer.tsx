@@ -141,9 +141,19 @@ export default function Footer({ setViewMode }: FooterProps) {
         {/* Compare Column */}
         <div className="md:col-span-3 flex flex-col space-y-3.5">
           <span className="font-sans font-bold text-slate-800 text-sm select-none">Compare</span>
-          <span className="font-sans text-xs sm:text-sm text-slate-400 select-none cursor-default">
-            Vs Manychat
-          </span>
+          <a
+            href="/compare/manychat"
+            onClick={(e) => {
+              if (setViewMode) {
+                e.preventDefault();
+                setViewMode('compare-manychat');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            className="font-sans text-xs sm:text-sm text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+          >
+            Vs ManyChat
+          </a>
           <span className="font-sans text-xs sm:text-sm text-slate-400 select-none cursor-default">
             Vs LinkDM
           </span>

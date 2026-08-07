@@ -13,6 +13,7 @@ import AffiliatePage from './components/AffiliatePage';
 import TermsPage from './components/TermsPage';
 import PrivacyPage from './components/PrivacyPage';
 import RefundPage from './components/RefundPage';
+import CompareManyChat from './components/CompareManyChat';
 import Footer from './components/Footer';
 import { Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -33,6 +34,7 @@ export default function App() {
     if (path === '/terms') return 'terms';
     if (path === '/privacy') return 'privacy';
     if (path === '/refund') return 'refund';
+    if (path === '/compare/manychat') return 'compare-manychat';
     return 'landing';
   };
 
@@ -53,6 +55,7 @@ export default function App() {
       else if (path === '/terms') setViewModeState('terms');
       else if (path === '/privacy') setViewModeState('privacy');
       else if (path === '/refund') setViewModeState('refund');
+      else if (path === '/compare/manychat') setViewModeState('compare-manychat');
       else setViewModeState('landing');
     };
 
@@ -73,6 +76,7 @@ export default function App() {
     else if (mode === 'terms') targetPath = '/terms';
     else if (mode === 'privacy') targetPath = '/privacy';
     else if (mode === 'refund') targetPath = '/refund';
+    else if (mode === 'compare-manychat') targetPath = '/compare/manychat';
 
     if (window.location.pathname !== targetPath) {
       window.history.pushState(null, '', targetPath);
@@ -247,6 +251,17 @@ export default function App() {
             transition={{ duration: 0.3 }}
           >
             <RefundPage setViewMode={setViewMode} />
+          </motion.div>
+        ) : viewMode === 'compare-manychat' ? (
+          <motion.div
+            key="compare-manychat-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative pt-24 bg-white"
+          >
+            <CompareManyChat setViewMode={setViewMode} />
           </motion.div>
         ) : (
           <motion.div
