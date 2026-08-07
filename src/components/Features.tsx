@@ -82,6 +82,184 @@ function ChatBubble({ msg, visible, index }: { msg: typeof STEP0_MSGS[0]; visibl
   );
 }
 
+function PhoneFrame({ step, step0Visible, step1Visible, step2Visible, phoneScrollRef }: {
+  step: number;
+  step0Visible: number;
+  step1Visible: number;
+  step2Visible: number;
+  phoneScrollRef?: React.RefObject<HTMLDivElement | null>;
+}) {
+  return (
+    <div className="relative w-[300px] sm:w-[340px] h-[500px] sm:h-[540px] rounded-[40px] bg-slate-950 border-[8px] border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col select-none">
+      {/* Notch */}
+      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-[14px] bg-slate-900 rounded-full z-30 flex items-center justify-center pointer-events-none">
+        <div className="h-2 w-2 rounded-full bg-slate-700 mr-2" />
+        <div className="h-1.5 w-10 rounded-full bg-slate-700" />
+      </div>
+
+      <AnimatePresence mode="wait">
+        {step === 0 && (
+          <motion.div
+            key="step0"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="w-full h-full flex flex-col bg-[#121212] text-white font-sans text-xs"
+          >
+            {/* DM Header */}
+            <div className="flex items-center justify-between px-3 pt-8 pb-2 border-b border-white/10 shrink-0">
+              <div className="flex items-center space-x-2">
+                <span className="text-white/70 text-sm">←</span>
+                <img src="/Logo_optimized.png" className="h-6 w-6 object-contain shrink-0" alt="QuickRevert" />
+                <div>
+                  <span className="font-bold text-white text-xs block">quickrevert.tech</span>
+                  <p className="text-[8px] text-white/50">Business chat</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 text-white/70 text-xs">📹 📞</div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-center text-[10px] font-bold border-b border-white/10 pb-2 shrink-0 px-3 pt-2">
+              <div className="bg-white/10 py-1.5 rounded-lg">Inquire</div>
+              <div className="bg-white/10 py-1.5 rounded-lg">View Profile</div>
+            </div>
+            <p className="text-[9px] text-indigo-300/90 text-center font-medium pt-2 px-3 shrink-0">quickrevert.tech messaged you about a comment. <span className="underline">See Post</span></p>
+            <div className="text-[9px] text-white/40 text-center uppercase tracking-wider font-semibold pt-1 shrink-0">16 JUL, 1:54 PM</div>
+
+            {/* Messages */}
+            <div ref={phoneScrollRef} className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] px-3 py-3 flex flex-col gap-3">
+              {STEP0_MSGS.map((msg, i) => (
+                <ChatBubble key={msg.id} msg={msg} visible={step0Visible > i} index={i} />
+              ))}
+              {step0Visible < STEP0_MSGS.length && step0Visible > 0 && step0Visible % 2 === 0 && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1 px-3 py-2 bg-[#262626] rounded-2xl rounded-tl-none w-16">
+                  {[0, 1, 2].map(i => <span key={i} className="h-1.5 w-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {step === 1 && (
+          <motion.div
+            key="step1"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="w-full h-full flex flex-col bg-[#121212] text-white font-sans text-xs"
+          >
+            <div className="flex items-center justify-between px-3 pt-8 pb-2 border-b border-white/10 shrink-0">
+              <div className="flex items-center space-x-2">
+                <span className="text-white/70 text-sm">←</span>
+                <img src="/Logo_optimized.png" className="h-6 w-6 object-contain shrink-0" alt="QuickRevert" />
+                <div>
+                  <span className="font-bold text-white text-xs block">quickrevert.tech</span>
+                  <p className="text-[8px] text-white/50">Business chat</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 text-white/70 text-xs">📹 📞</div>
+            </div>
+            <p className="text-[9px] text-indigo-300/90 text-center font-medium pt-2 px-3 shrink-0">quickrevert.tech messaged you about a comment. <span className="underline">See post</span></p>
+
+            <div ref={phoneScrollRef} className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] px-3 py-3 flex flex-col gap-3">
+              {STEP1_MSGS.map((msg, i) => (
+                <ChatBubble key={msg.id} msg={msg} visible={step1Visible > i} index={i} />
+              ))}
+              {step1Visible < STEP1_MSGS.length && step1Visible > 0 && step1Visible % 2 === 0 && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1 px-3 py-2 bg-[#262626] rounded-2xl rounded-tl-none w-16">
+                  {[0, 1, 2].map(i => <span key={i} className="h-1.5 w-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {step === 2 && (
+          <motion.div
+            key="step2"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="w-full h-full flex flex-col bg-[#fafafa] text-slate-800 font-sans text-xs"
+          >
+            <div className="flex items-center justify-between px-3 pt-8 pb-2.5 border-b border-slate-200 shrink-0">
+              <span className="font-bold text-slate-900 text-xs">Shahini</span>
+              <div className="flex space-x-2 text-[10px] font-semibold text-slate-500">
+                <span>Shop</span><span>Bookings</span>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] px-3 py-3 flex flex-col gap-3">
+              {/* Profile Card */}
+              <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
+                className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center space-y-1.5 shrink-0">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 p-[2px]">
+                  <div className="h-full w-full bg-[#5b52e0] rounded-full flex items-center justify-center text-white font-extrabold text-sm">SH</div>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 text-xs">Shahini</h4>
+                  <p className="text-[8.5px] text-pink-600 font-bold">@shahini_mehendi_artist</p>
+                </div>
+                <p className="text-[8.5px] text-slate-500 leading-tight">Organic Henna Cones Fresh | Chemical-Free | Dark Stain</p>
+                <div className="flex items-center text-[7.5px] text-slate-400 font-semibold gap-0.5"><span>📍</span> YELAHANKA, BENGALURU</div>
+                <div className="grid grid-cols-2 gap-1 w-full pt-0.5">
+                  <div className="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-1 rounded-xl text-[8.5px] text-center">Follow</div>
+                  <div className="bg-slate-50 border border-slate-200 text-slate-800 font-bold py-1 rounded-xl text-[8.5px] text-center">Message</div>
+                </div>
+              </motion.div>
+
+              {/* Booking Banner */}
+              <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
+                className="bg-gradient-to-r from-[#9333ea] to-[#695dd4] text-white p-3 rounded-2xl shadow-md space-y-0.5 shrink-0">
+                <span className="text-[7px] font-black uppercase tracking-widest text-indigo-200">EXCLUSIVE ACCESS</span>
+                <h5 className="font-bold text-[11px]">Booking</h5>
+                <p className="text-[8.5px] text-white/80">Napkin and stool</p>
+                <div className="mt-1.5 inline-block bg-white text-[#695dd4] font-extrabold text-[8.5px] px-2.5 py-0.5 rounded-full cursor-pointer">Check Availability</div>
+              </motion.div>
+
+              {/* Products */}
+              <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
+                className="space-y-1">
+                <div className="flex justify-between items-center">
+                  <span className="text-[9.5px] font-bold text-slate-800">Featured Products</span>
+                  <span className="text-[7.5px] text-slate-400">Search products...</span>
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {[{ name: 'Bridal mehendi cones', desc: 'Freshly prepared Organic...', price: '₹50' }, { name: 'Essential oils for mehendi', desc: 'Essential oils for making...', price: '₹100' }].map(p => (
+                    <div key={p.name} className="bg-white p-2 rounded-xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                      <div className="h-10 bg-indigo-50 rounded-lg flex items-center justify-center mb-1">
+                        <img src="/Logo_optimized.png" className="h-5 w-5 object-contain" alt="Product" />
+                      </div>
+                      <p className="font-bold text-slate-900 text-[8.5px] line-clamp-1">{p.name}</p>
+                      <p className="text-[7.5px] text-slate-400 line-clamp-1">{p.desc}</p>
+                      <p className="font-extrabold text-[#695dd4] text-[9px] mt-0.5">{p.price}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Brand Collabs */}
+              <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
+                className="bg-white p-2 rounded-xl border border-slate-200/80 shadow-sm shrink-0">
+                <div className="flex justify-between items-center mb-0.5">
+                  <span className="text-[8.5px] font-bold text-slate-800">Brand Collaborations</span>
+                  <span className="text-[7px] text-slate-400">1 partners</span>
+                </div>
+                <div className="flex items-center justify-between bg-slate-50 p-1 rounded-lg border border-slate-100">
+                  <div className="flex items-center gap-1">
+                    <div className="h-5 w-5 rounded bg-pink-100 text-pink-600 font-bold text-[7.5px] flex items-center justify-center">GE</div>
+                    <div>
+                      <p className="text-[8.5px] font-bold text-slate-800">Geetanjali mehendi</p>
+                      <span className="bg-pink-100 text-pink-600 text-[6.5px] font-extrabold px-1 rounded">MEHENDI</span>
+                    </div>
+                  </div>
+                  <span className="text-[7.5px] text-slate-400 font-medium">June 2025</span>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function SmarterOverTimeSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -112,10 +290,8 @@ function SmarterOverTimeSection() {
     }
   };
 
-  // Sequential reveal for each step — slower delays so first msg is readable
   const step0Visible = useSequentialReveal(STEP0_MSGS.length, 1400, activeStep === 0);
   const step1Visible = useSequentialReveal(STEP1_MSGS.length, 1200, activeStep === 1);
-  // step 2 cards
   const step2Visible = useSequentialReveal(4, 1000, activeStep === 2);
 
   const phoneScrollRef = useRef<HTMLDivElement>(null);
@@ -125,11 +301,9 @@ function SmarterOverTimeSection() {
     }
   }, [activeStep]);
 
-  // Auto-scroll phone as messages appear — only after 3rd message so first msg stays visible
   useEffect(() => {
     const el = phoneScrollRef.current;
     if (!el) return;
-    // Only scroll down once there are enough messages to fill the view
     const shouldScroll = (activeStep === 0 && step0Visible > 2) ||
       (activeStep === 1 && step1Visible > 2) ||
       (activeStep === 2 && step2Visible > 2);
@@ -147,18 +321,42 @@ function SmarterOverTimeSection() {
       {/* CSS Grid Pattern Lines across full section width */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff18_1px,transparent_1px),linear-gradient(to_bottom,#ffffff18_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
 
-      {/* Glowing Ambient Light Orbs — inset so they don't cause horizontal overflow */}
+      {/* Glowing Ambient Light Orbs */}
       <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-400/20 rounded-full blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-3xl pointer-events-none translate-x-1/2 translate-y-1/2" />
 
-      {/* Sticky Container */}
-      <div className="relative h-[450vh] z-10" id="crm">
+      {/* MOBILE LAYOUT: Non-sticky stacked Tile 1 -> Phone 1 -> Tile 2 -> Phone 2 -> Tile 3 -> Phone 3 */}
+      <div className="block lg:hidden relative z-10 py-16 px-4 max-w-lg mx-auto space-y-10">
+        {smartSteps.map((step, idx) => (
+          <div key={step.id} className="flex flex-col items-center space-y-4">
+            {/* Tile Card */}
+            <div className="w-full bg-white text-slate-900 rounded-2xl p-5 shadow-xl border border-white ring-4 ring-white/20">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="font-display text-base font-bold text-slate-900">{step.title}</h3>
+                <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-[#695dd4] text-white">{step.badge}</span>
+              </div>
+              <p className="text-xs font-medium text-slate-600 leading-relaxed">{step.description}</p>
+            </div>
+
+            {/* Phone Mockup for this step */}
+            <PhoneFrame
+              step={idx}
+              step0Visible={idx === 0 ? 99 : 0}
+              step1Visible={idx === 1 ? 99 : 0}
+              step2Visible={idx === 2 ? 99 : 0}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* DESKTOP LAYOUT: Interactive Sticky 2-Column */}
+      <div className="hidden lg:block relative h-[450vh] z-10" id="crm">
         <div className="sticky top-16 flex flex-col justify-center h-[calc(100vh-4rem)] py-4">
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-12 gap-8 items-center max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
 
             {/* Left: Steps */}
-            <div className="lg:col-span-5 flex flex-col space-y-3.5">
+            <div className="col-span-5 flex flex-col space-y-3.5">
               {/* Progress Dashes */}
               <div className="flex items-center space-x-2 mb-1 select-none pl-1">
                 {[0, 1, 2].map((idx) => (
@@ -193,181 +391,15 @@ function SmarterOverTimeSection() {
               })}
             </div>
 
-            {/* Right: Big Phone */}
-            <div className="lg:col-span-7 flex justify-center items-end pb-10">
-              <div className="relative w-[320px] sm:w-[360px] h-[540px] sm:h-[590px] rounded-[44px] bg-slate-950 border-[9px] border-slate-800 shadow-[0_30px_80px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col select-none">
-
-                {/* Notch */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-[14px] bg-slate-900 rounded-full z-30 flex items-center justify-center pointer-events-none">
-                  <div className="h-2 w-2 rounded-full bg-slate-700 mr-2" />
-                  <div className="h-1.5 w-10 rounded-full bg-slate-700" />
-                </div>
-
-                <AnimatePresence mode="wait">
-                  {/* â”€â”€ STEP 0 â”€â”€ */}
-                  {/* ——— STEP 0 ——— */}
-                  {activeStep === 0 && (
-                    <motion.div
-                      key="step0"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="w-full h-full flex flex-col bg-[#121212] text-white font-sans text-xs"
-                    >
-                      {/* DM Header */}
-                      <div className="flex items-center justify-between px-3 pt-8 pb-2 border-b border-white/10 shrink-0">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-white/70 text-sm">←</span>
-                          <img src="/Logo_optimized.png" className="h-6 w-6 object-contain shrink-0" alt="QuickRevert" />
-                          <div>
-                            <span className="font-bold text-white text-xs block">quickrevert.tech</span>
-                            <p className="text-[8px] text-white/50">Business chat</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2 text-white/70 text-xs">📹 📞</div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 text-center text-[10px] font-bold border-b border-white/10 pb-2 shrink-0 px-3 pt-2">
-                        <div className="bg-white/10 py-1.5 rounded-lg">Inquire</div>
-                        <div className="bg-white/10 py-1.5 rounded-lg">View Profile</div>
-                      </div>
-                      <p className="text-[9px] text-indigo-300/90 text-center font-medium pt-2 px-3 shrink-0">quickrevert.tech messaged you about a comment. <span className="underline">See Post</span></p>
-                      <div className="text-[9px] text-white/40 text-center uppercase tracking-wider font-semibold pt-1 shrink-0">16 JUL, 1:54 PM</div>
-
-                      {/* Messages */}
-                      <div ref={phoneScrollRef} className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] px-3 py-3 flex flex-col gap-3">
-                        {STEP0_MSGS.map((msg, i) => (
-                          <ChatBubble key={msg.id} msg={msg} visible={step0Visible > i} index={i} />
-                        ))}
-                        {/* Typing indicator */}
-                        {step0Visible < STEP0_MSGS.length && step0Visible > 0 && step0Visible % 2 === 0 && (
-                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1 px-3 py-2 bg-[#262626] rounded-2xl rounded-tl-none w-16">
-                            {[0, 1, 2].map(i => <span key={i} className="h-1.5 w-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
-                          </motion.div>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* â”€â”€ STEP 1 â”€â”€ */}
-                  {activeStep === 1 && (
-                    <motion.div
-                      key="step1"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="w-full h-full flex flex-col bg-[#121212] text-white font-sans text-xs"
-                    >
-                      <div className="flex items-center justify-between px-3 pt-8 pb-2 border-b border-white/10 shrink-0">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-white/70 text-sm">←</span>
-                          <img src="/Logo_optimized.png" className="h-6 w-6 object-contain shrink-0" alt="QuickRevert" />
-                          <div>
-                            <span className="font-bold text-white text-xs block">quickrevert.tech</span>
-                            <p className="text-[8px] text-white/50">Business chat</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2 text-white/70 text-xs">📹 📞</div>
-                      </div>
-                      <p className="text-[9px] text-indigo-300/90 text-center font-medium pt-2 px-3 shrink-0">quickrevert.tech messaged you about a comment. <span className="underline">See post</span></p>
-
-                      <div ref={activeStep === 1 ? phoneScrollRef : undefined} className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] px-3 py-3 flex flex-col gap-3">
-                        {STEP1_MSGS.map((msg, i) => (
-                          <ChatBubble key={msg.id} msg={msg} visible={step1Visible > i} index={i} />
-                        ))}
-                        {step1Visible < STEP1_MSGS.length && step1Visible > 0 && step1Visible % 2 === 0 && (
-                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1 px-3 py-2 bg-[#262626] rounded-2xl rounded-tl-none w-16">
-                            {[0, 1, 2].map(i => <span key={i} className="h-1.5 w-1.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
-                          </motion.div>
-                        )}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* â”€â”€ STEP 2 â”€â”€ */}
-                  {activeStep === 2 && (
-                    <motion.div
-                      key="step2"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="w-full h-full flex flex-col bg-[#fafafa] text-slate-800 font-sans text-xs"
-                    >
-                      <div className="flex items-center justify-between px-3 pt-8 pb-2.5 border-b border-slate-200 shrink-0">
-                        <span className="font-bold text-slate-900 text-xs">Shahini</span>
-                        <div className="flex space-x-2 text-[10px] font-semibold text-slate-500">
-                          <span>Shop</span><span>Bookings</span>
-                        </div>
-                      </div>
-
-                      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none] px-3 py-3 flex flex-col gap-3">
-                        {/* Profile Card */}
-                        <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 0 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
-                          className="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center space-y-1.5 shrink-0">
-                          <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 p-[2px]">
-                            <div className="h-full w-full bg-[#5b52e0] rounded-full flex items-center justify-center text-white font-extrabold text-sm">SH</div>
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-slate-900 text-xs">Shahini</h4>
-                            <p className="text-[8.5px] text-pink-600 font-bold">@shahini_mehendi_artist</p>
-                          </div>
-                          <p className="text-[8.5px] text-slate-500 leading-tight">Organic Henna Cones Fresh | Chemical-Free | Dark Stain</p>
-                          <div className="flex items-center text-[7.5px] text-slate-400 font-semibold gap-0.5"><span>📍</span> YELAHANKA, BENGALURU</div>
-                          <div className="grid grid-cols-2 gap-1 w-full pt-0.5">
-                            <div className="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-1 rounded-xl text-[8.5px] text-center">Follow</div>
-                            <div className="bg-slate-50 border border-slate-200 text-slate-800 font-bold py-1 rounded-xl text-[8.5px] text-center">Message</div>
-                          </div>
-                        </motion.div>
-
-                        {/* Booking Banner */}
-                        <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
-                          className="bg-gradient-to-r from-[#9333ea] to-[#695dd4] text-white p-3 rounded-2xl shadow-md space-y-0.5 shrink-0">
-                          <span className="text-[7px] font-black uppercase tracking-widest text-indigo-200">EXCLUSIVE ACCESS</span>
-                          <h5 className="font-bold text-[11px]">Booking</h5>
-                          <p className="text-[8.5px] text-white/80">Napkin and stool</p>
-                          <div className="mt-1.5 inline-block bg-white text-[#695dd4] font-extrabold text-[8.5px] px-2.5 py-0.5 rounded-full cursor-pointer">Check Availability</div>
-                        </motion.div>
-
-                        {/* Products */}
-                        <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
-                          className="space-y-1">
-                          <div className="flex justify-between items-center">
-                            <span className="text-[9.5px] font-bold text-slate-800">Featured Products</span>
-                            <span className="text-[7.5px] text-slate-400">Search products...</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-1.5">
-                            {[{ name: 'Bridal mehendi cones', desc: 'Freshly prepared Organic...', price: '₹50' }, { name: 'Essential oils for mehendi', desc: 'Essential oils for making...', price: '₹100' }].map(p => (
-                              <div key={p.name} className="bg-white p-2 rounded-xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
-                                <div className="h-10 bg-indigo-50 rounded-lg flex items-center justify-center mb-1">
-                                  <img src="/Logo_optimized.png" className="h-5 w-5 object-contain" alt="Product" />
-                                </div>
-                                <p className="font-bold text-slate-900 text-[8.5px] line-clamp-1">{p.name}</p>
-                                <p className="text-[7.5px] text-slate-400 line-clamp-1">{p.desc}</p>
-                                <p className="font-extrabold text-[#695dd4] text-[9px] mt-0.5">{p.price}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-
-                        {/* Brand Collabs */}
-                        <motion.div initial={{ opacity: 0, y: 14 }} animate={step2Visible > 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }} transition={{ duration: 0.3 }}
-                          className="bg-white p-2 rounded-xl border border-slate-200/80 shadow-sm shrink-0">
-                          <div className="flex justify-between items-center mb-0.5">
-                            <span className="text-[8.5px] font-bold text-slate-800">Brand Collaborations</span>
-                            <span className="text-[7px] text-slate-400">1 partners</span>
-                          </div>
-                          <div className="flex items-center justify-between bg-slate-50 p-1 rounded-lg border border-slate-100">
-                            <div className="flex items-center gap-1">
-                              <div className="h-5 w-5 rounded bg-pink-100 text-pink-600 font-bold text-[7.5px] flex items-center justify-center">GE</div>
-                              <div>
-                                <p className="text-[8.5px] font-bold text-slate-800">Geetanjali mehendi</p>
-                                <span className="bg-pink-100 text-pink-600 text-[6.5px] font-extrabold px-1 rounded">MEHENDI</span>
-                              </div>
-                            </div>
-                            <span className="text-[7.5px] text-slate-400 font-medium">June 2025</span>
-                          </div>
-                        </motion.div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+            {/* Right: Big Sticky Phone */}
+            <div className="col-span-7 flex justify-center items-end pb-10">
+              <PhoneFrame
+                step={activeStep}
+                step0Visible={step0Visible}
+                step1Visible={step1Visible}
+                step2Visible={step2Visible}
+                phoneScrollRef={phoneScrollRef}
+              />
             </div>
 
           </div>
@@ -427,12 +459,41 @@ function SimpleToStart() {
   const allChars = (headingText + subtitleText).split('');
   // Pre-compute deterministic scatter destinations for each character
   const scatterData = React.useMemo(() => {
-    return allChars.map((_, i) => ({
-      x: ((i * 137 + 43) % 200 - 100) * 8, // -800 to +800
-      y: ((i * 89 + 17) % 200 - 100) * 5,  // -500 to +500
-      rotate: ((i * 53 + 29) % 360) - 180,  // -180 to +180
-      scale: 0.6 + ((i * 31) % 40) / 40 * 2, // 0.6 to 2.6
-    }));
+    // Deterministic LCG shuffle for a range [0..n-1]
+    function deterministicShuffle(n: number, seed: number): number[] {
+      const arr = Array.from({ length: n }, (_, i) => i);
+      let s = seed;
+      for (let i = n - 1; i > 0; i--) {
+        s = ((s * 1664525) + 1013904223) >>> 0;
+        const j = s % (i + 1);
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Build revealAt for heading chars (range: 0..headingText.length-1)
+    const hLen = headingText.length;
+    const hShuffle = deterministicShuffle(hLen, 42);
+    const hRevealAt = new Array(hLen);
+    hShuffle.forEach((charIdx, seqPos) => { hRevealAt[charIdx] = seqPos; });
+
+    // Build revealAt for subtitle chars (range: 0..subtitleText.length-1)
+    const sLen = subtitleText.length;
+    const sShuffle = deterministicShuffle(sLen, 137);
+    const sRevealAt = new Array(sLen);
+    sShuffle.forEach((charIdx, seqPos) => { sRevealAt[charIdx] = seqPos; });
+
+    return allChars.map((_, i) => {
+      const isHeading = i < hLen;
+      const localIdx = isHeading ? i : i - hLen;
+      return {
+        x: ((i * 137 + 43) % 200 - 100) * 8,
+        y: ((i * 89 + 17) % 200 - 100) * 5,
+        rotate: ((i * 53 + 29) % 360) - 180,
+        scale: 0.6 + ((i * 31) % 40) / 40 * 2,
+        revealAt: isHeading ? hRevealAt[localIdx] : sRevealAt[localIdx],
+      };
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -576,6 +637,7 @@ function SimpleToStart() {
                     key={`h-${i}`}
                     char={char}
                     index={i}
+                    revealIndex={scatterData[i].revealAt}
                     totalBefore={0}
                     totalChars={headingText.length}
                     charCountMV={headingCharCount}
@@ -592,6 +654,7 @@ function SimpleToStart() {
                     key={`s-${i}`}
                     char={char}
                     index={i}
+                    revealIndex={scatterData[headingText.length + i].revealAt}
                     totalBefore={headingText.length}
                     totalChars={subtitleText.length}
                     charCountMV={subtitleCharCount}
@@ -673,6 +736,7 @@ function ArcTitle({ text, id }: { text: string; id: string }) {
 function ScatterChar({
   char,
   index,
+  revealIndex,
   totalChars,
   charCountMV,
   scatterProgress,
@@ -681,20 +745,22 @@ function ScatterChar({
   key: string;
   char: string;
   index: number;
+  revealIndex: number;
   totalBefore: number;
   totalChars: number;
   charCountMV: any;
   scatterProgress: any;
-  scatterData: { x: number; y: number; rotate: number; scale: number };
+  scatterData: { x: number; y: number; rotate: number; scale: number; revealAt: number };
 }) {
   const [visible, setVisible] = React.useState(false);
 
   React.useEffect(() => {
     const unsub = charCountMV.on('change', (v: number) => {
-      setVisible(Math.round(v) > index);
+      // Use revealIndex so chars appear in shuffled random order
+      setVisible(Math.round(v) > revealIndex);
     });
     return unsub;
-  }, [charCountMV, index]);
+  }, [charCountMV, revealIndex]);
 
   // Scatter transforms & fade out opacity during scatter
   const x = useTransform(scatterProgress, [0, 1], [0, scatterData.x]);
