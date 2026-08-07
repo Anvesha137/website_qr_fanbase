@@ -345,12 +345,12 @@ export default function Pricing() {
                 <div
                   key={idx}
                   onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className={`rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden text-left ${isOpen
+                  className={`rounded-2xl border transition-all duration-300 cursor-pointer overflow-hidden ${idx === 6 ? 'md:col-span-2 text-center' : 'text-left'} ${isOpen
                     ? 'bg-white border-white shadow-2xl ring-2 ring-white/50'
                     : 'bg-white/90 border-white/40 hover:bg-white hover:border-white/70 shadow-lg hover:shadow-xl backdrop-blur-xl'
                     }`}
                 >
-                  <div className="p-5 flex items-center justify-between font-onest font-bold text-slate-900 text-base sm:text-lg select-none">
+                  <div className={`p-5 flex items-center font-onest font-bold text-slate-900 text-base sm:text-lg select-none ${idx === 6 ? 'justify-center gap-4' : 'justify-between'}`}>
                     <span className="text-slate-900">{faq.q}</span>
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ml-4 transition-all duration-300 ${isOpen ? 'bg-[#695dd4] text-white rotate-180 shadow-md' : 'bg-slate-100 text-slate-600 hover:bg-[#695dd4] hover:text-white'
