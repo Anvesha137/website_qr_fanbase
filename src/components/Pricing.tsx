@@ -50,7 +50,7 @@ export default function Pricing() {
         { text: 'Conversational Flow', included: false },
         { text: 'Lead Manager', included: false },
         { text: 'Followup Messages', included: false },
-        { text: 'My Store', included: true },
+        { text: 'My Store', included: false },
         { text: '1:1 Appointments', included: false },
         { text: 'Invoice Generator', included: false },
       ],
