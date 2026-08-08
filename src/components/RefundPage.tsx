@@ -136,7 +136,7 @@ export default function RefundPage({ setViewMode }: RefundPageProps) {
           </aside>
 
           {/* CENTER: Main Word-for-Word Refund Text Document */}
-          <main className="lg:col-span-6 space-y-6 text-left">
+          <main className="lg:col-span-9 space-y-6 text-left">
             <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-10 space-y-10">
               
               {/* Intro Section */}
@@ -246,62 +246,7 @@ export default function RefundPage({ setViewMode }: RefundPageProps) {
             </div>
           </main>
 
-          {/* RIGHT SIDEBAR: Subscription Highlights & Management */}
-          <aside className="lg:col-span-3 lg:sticky lg:top-28 space-y-6 text-left">
-            
-            {/* Quick Rules Card */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5 space-y-4">
-              <span className="font-display font-extrabold text-slate-900 text-sm uppercase tracking-wider block border-b border-slate-100 pb-3">
-                Subscription Summary
-              </span>
 
-              <div className="space-y-3 text-xs text-slate-600">
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">Self-Serve Cancel:</strong> Cancel anytime inside account settings.
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">Keep Access:</strong> Access stays active until period end.
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">Final Sale:</strong> Subscriptions are non-refundable.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Support Card */}
-            <div className="bg-slate-900 text-white rounded-3xl p-5 space-y-3 shadow-lg">
-              <div className="flex items-center gap-2 text-rose-300 text-xs font-bold uppercase tracking-wider">
-                <AlertCircle className="w-4 h-4 text-rose-400" />
-                <span>Need Billing Assistance?</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                If you encounter any issues during billing or cancellation, our support team responds within 24 hours.
-              </p>
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <span>Fast Resolution</span>
-                <span className="text-rose-400 font-bold">Priority Support</span>
-              </div>
-            </div>
-
-            {/* Print Action */}
-            <button
-              onClick={() => window.print()}
-              className="w-full py-3 px-4 bg-white border border-slate-200 hover:border-slate-300 rounded-2xl text-slate-700 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
-            >
-              <Printer className="w-4 h-4" />
-              <span>Print / Save Copy</span>
-            </button>
-
-          </aside>
 
         </div>
       </div>

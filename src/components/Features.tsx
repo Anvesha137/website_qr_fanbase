@@ -47,7 +47,7 @@ function useSequentialReveal(count: number, delayBetween = 600, active = true) {
   return visibleCount;
 }
 
-function ChatBubble({ msg, visible, index }: { msg: typeof STEP0_MSGS[0]; visible: boolean; index: number }) {
+function ChatBubble({ msg, visible, index }: { msg: any; visible: boolean; index: number; key?: React.Key }) {
   const isUser = msg.side === 'user';
   return (
     <motion.div
@@ -90,7 +90,7 @@ function PhoneFrame({ step, step0Visible, step1Visible, step2Visible, phoneScrol
   phoneScrollRef?: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
-    <div className="relative w-[300px] sm:w-[340px] h-[500px] sm:h-[540px] rounded-[40px] bg-slate-950 border-[8px] border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col select-none">
+    <div className="relative w-[280px] sm:w-[300px] h-[580px] sm:h-[620px] rounded-[40px] bg-slate-950 border-[8px] border-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col select-none">
       {/* Notch */}
       <div className="absolute top-2 left-1/2 -translate-x-1/2 w-28 h-[14px] bg-slate-900 rounded-full z-30 flex items-center justify-center pointer-events-none">
         <div className="h-2 w-2 rounded-full bg-slate-700 mr-2" />
@@ -512,30 +512,23 @@ function SimpleToStart() {
   // Letters fade away smoothly as Card 1 begins entering
   const lettersOpacity = useTransform(scrollYProgress, [0.25, 0.35, 0.38], [1, 0.8, 0]);
 
-  // Screen Shake Vibration Effect on every Card Impact
-  const shakeX = useTransform(scrollYProgress,
-    [0.32, 0.35, 0.38, 0.41, 0.44, 0.46, 0.49, 0.52, 0.55, 0.58, 0.60, 0.63, 0.66, 0.69, 0.72, 0.76],
-    [0, -14, 14, -8, 8, 0, -16, 16, -10, 10, 0, -18, 18, -12, 0, 0]
-  );
-  const shakeY = useTransform(scrollYProgress,
-    [0.32, 0.35, 0.38, 0.41, 0.44, 0.46, 0.49, 0.52, 0.55, 0.58, 0.60, 0.63, 0.66, 0.69, 0.72, 0.76],
-    [0, 9, -9, 6, -6, 0, 11, -11, 7, -7, 0, 13, -13, 8, 0, 0]
-  );
+  // Card 1 Float In (0.32 -> 0.48)
+  const card1Scale = useTransform(scrollYProgress, [0.32, 0.48], [0.9, 1]);
+  const card1Opacity = useTransform(scrollYProgress, [0.32, 0.42], [0, 1]);
+  const card1RotateVal = 0;
+  const card1Y = useTransform(scrollYProgress, [0.32, 0.48], [40, 0]);
 
-  // Card 1 Pop & Rigid Shake (0.32 -> 0.48)
-  const card1Scale = useTransform(scrollYProgress, [0.32, 0.38, 0.43, 0.48], [0, 1.1, 0.94, 1]);
-  const card1Opacity = useTransform(scrollYProgress, [0.32, 0.36], [0, 1]);
-  const card1RotateVal = useTransform(scrollYProgress, [0.32, 0.37, 0.41, 0.44, 0.48], [-20, -3, -10, -5, -7]);
+  // Card 2 Float In (0.46 -> 0.62)
+  const card2Scale = useTransform(scrollYProgress, [0.46, 0.62], [0.9, 1]);
+  const card2Opacity = useTransform(scrollYProgress, [0.46, 0.56], [0, 1]);
+  const card2RotateVal = 0;
+  const card2Y = useTransform(scrollYProgress, [0.46, 0.62], [40, 0]);
 
-  // Card 2 Pop & Rigid Shake (0.46 -> 0.62)
-  const card2Scale = useTransform(scrollYProgress, [0.46, 0.52, 0.57, 0.62], [0, 1.12, 0.93, 1]);
-  const card2Opacity = useTransform(scrollYProgress, [0.46, 0.49], [0, 1]);
-  const card2RotateVal = useTransform(scrollYProgress, [0.46, 0.51, 0.54, 0.58, 0.62], [16, -6, 2, -4, -2]);
-
-  // Card 3 Pop & Rigid Shake (0.60 -> 0.76)
-  const card3Scale = useTransform(scrollYProgress, [0.60, 0.66, 0.71, 0.76], [0, 1.14, 0.92, 1]);
-  const card3Opacity = useTransform(scrollYProgress, [0.60, 0.63], [0, 1]);
-  const card3RotateVal = useTransform(scrollYProgress, [0.60, 0.65, 0.69, 0.73, 0.76], [-14, 10, 2, 7, 4]);
+  // Card 3 Float In (0.60 -> 0.76)
+  const card3Scale = useTransform(scrollYProgress, [0.60, 0.76], [0.9, 1]);
+  const card3Opacity = useTransform(scrollYProgress, [0.60, 0.70], [0, 1]);
+  const card3RotateVal = 0;
+  const card3Y = useTransform(scrollYProgress, [0.60, 0.76], [40, 0]);
 
   const steps = [
     {
@@ -550,6 +543,7 @@ function SimpleToStart() {
       zIndex: 'z-10',
       scale: card1Scale,
       opacity: card1Opacity,
+      yVal: card1Y,
       mockup: (
         <div className="bg-white/90 backdrop-blur-sm rounded-xl p-2.5 shadow-md border border-black/10 flex flex-col space-y-1.5 w-full text-left text-[11px]">
           <div className="flex items-center justify-between bg-black/5 p-1.5 rounded-lg border border-black/5 font-semibold text-black">
@@ -574,6 +568,7 @@ function SimpleToStart() {
       zIndex: 'z-20',
       scale: card2Scale,
       opacity: card2Opacity,
+      yVal: card2Y,
       mockup: (
         <div className="bg-white/90 backdrop-blur-sm rounded-xl p-2.5 shadow-md border border-black/10 flex flex-col space-y-2 w-full text-left">
           <div className="flex justify-between items-center text-[9px] text-black/50 font-extrabold uppercase tracking-wider">
@@ -602,6 +597,7 @@ function SimpleToStart() {
       zIndex: 'z-30',
       scale: card3Scale,
       opacity: card3Opacity,
+      yVal: card3Y,
       mockup: (
         <div className="flex flex-col items-center space-y-2 w-full">
           <div className="bg-black/15 backdrop-blur-sm text-black rounded-full px-3 py-1 text-[10px] font-black tracking-wide uppercase flex items-center gap-1.5">
@@ -666,10 +662,9 @@ function SimpleToStart() {
             </div>
           </motion.div>
 
-          {/* â”€â”€ Cards Layer (Tightly overlapping with Screen Shake Vibration Effect) â”€â”€ */}
+          {/* ── Cards Layer (Non-overlapping side-by-side) ── */}
           <motion.div
-            style={{ x: shakeX, y: shakeY }}
-            className="relative z-10 flex items-center justify-center -space-x-14 sm:-space-x-20 lg:-space-x-24 px-4 max-w-6xl w-full will-change-transform"
+            className="relative z-10 flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 px-4 max-w-6xl w-full will-change-transform scale-[0.4] min-[360px]:scale-[0.45] min-[420px]:scale-[0.5] min-[480px]:scale-[0.58] min-[560px]:scale-[0.68] sm:scale-[0.78] md:scale-[0.9] lg:scale-100 origin-center"
           >
             {steps.map((step) => (
               <motion.div
@@ -678,6 +673,7 @@ function SimpleToStart() {
                   scale: step.scale,
                   opacity: step.opacity,
                   rotate: step.rotateVal,
+                  y: step.yVal,
                 }}
                 className={`w-[270px] sm:w-[320px] lg:w-[350px] h-[410px] sm:h-[470px] ${step.bg} ${step.zIndex} rounded-[32px] p-6 sm:p-7 flex flex-col justify-between text-center text-black shadow-2xl origin-bottom will-change-transform border border-black/10 hover:z-40 transition-transform duration-100`}
               >
@@ -742,7 +738,7 @@ function ScatterChar({
   scatterProgress,
   scatterData,
 }: {
-  key: string;
+  key?: React.Key;
   char: string;
   index: number;
   revealIndex: number;

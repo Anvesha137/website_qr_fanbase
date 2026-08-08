@@ -88,9 +88,9 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
                 href="https://wa.me/917619479099?text=Tell%20me%20more%20about%20QuickRevert"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="moving-border-wrapper cursor-pointer select-none"
+                className="moving-border-wrapper !rounded-xl cursor-pointer select-none"
               >
-                <span className="moving-border-inner font-extrabold text-xs px-4 py-2">
+                <span className="moving-border-inner font-extrabold !text-xs !py-[5.5px] !px-[17.5px] !rounded-[9.5px]">
                   <TextRoll>Book a Demo</TextRoll>
                 </span>
               </a>

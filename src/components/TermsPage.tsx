@@ -142,7 +142,7 @@ export default function TermsPage({ setViewMode }: TermsPageProps) {
           </aside>
 
           {/* CENTER: Main Word-for-Word Legal Text Document */}
-          <main className="lg:col-span-6 space-y-6 text-left">
+          <main className="lg:col-span-9 space-y-6 text-left">
             <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-10 space-y-10">
               
               {/* Intro Section */}
@@ -299,68 +299,7 @@ export default function TermsPage({ setViewMode }: TermsPageProps) {
             </div>
           </main>
 
-          {/* RIGHT SIDEBAR: Key Highlights, Trust Badges & Metadata */}
-          <aside className="lg:col-span-3 lg:sticky lg:top-28 space-y-6 text-left">
-            
-            {/* Key Takeaways */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5 space-y-4">
-              <span className="font-display font-extrabold text-slate-900 text-sm uppercase tracking-wider block border-b border-slate-100 pb-3">
-                Key Summary At A Glance
-              </span>
 
-              <div className="space-y-3 text-xs text-slate-600">
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">Age Limit:</strong> Must be 18+ years old to register.
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">License:</strong> Limited non-exclusive license for your Instagram account.
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">Jurisdiction:</strong> Governed by the laws of India (Delhi courts).
-                  </div>
-                </div>
-                <div className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <div>
-                    <strong className="text-slate-800">Support Contact:</strong> connect@quickrevert.tech
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Compliance Badge */}
-            <div className="bg-slate-900 text-white rounded-3xl p-5 space-y-3 shadow-lg">
-              <div className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4" />
-                <span>Meta API Compliance</span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                QuickRevert operates using the Official Instagram Graph API and strictly adheres to Meta Developer Terms and Platform Policies.
-              </p>
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <span>Official Partner SaaS</span>
-                <span className="text-emerald-400 font-bold">100% Compliant</span>
-              </div>
-            </div>
-
-            {/* Action Card */}
-            <button
-              onClick={() => window.print()}
-              className="w-full py-3 px-4 bg-white border border-slate-200 hover:border-slate-300 rounded-2xl text-slate-700 hover:text-slate-900 text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
-            >
-              <Printer className="w-4 h-4" />
-              <span>Print / Save Copy</span>
-            </button>
-
-          </aside>
 
         </div>
       </div>

@@ -149,7 +149,7 @@ export default function App() {
               />
             </div>
 
-            <Playground />
+            <Playground setViewMode={setViewMode} />
             <Features />
             <StayForRest />
           </motion.div>

@@ -108,8 +108,6 @@ const YouTubeEmbed = ({ videoId = "dQw4w9WgXcQ", title }: { videoId?: string; ti
 // Sub-component: Troubleshooting Guide for Automations
 const TroubleshootGuide = () => (
   <div className="space-y-6 mt-4">
-    <YouTubeEmbed videoId="dQw4w9WgXcQ" title="How to Fix & Troubleshoot Instagram Automations" />
-
     <div className="space-y-2">
       <h4 className="font-bold text-slate-900 text-sm sm:text-base">
         1. Reason: Automation is Turned Off
@@ -165,7 +163,7 @@ const AutoDMGuide = () => (
       Auto DM automatically replies to users when they send you a direct message on Instagram:
     </p>
 
-    <YouTubeEmbed videoId="dQw4w9WgXcQ" title="How to Create Auto DM Automations Step-by-Step" />
+    <YouTubeEmbed videoId="MzRqEbfqVH0" title="How to Create Auto DM Automations Step-by-Step" />
 
     <div className="space-y-5 border-l-2 border-slate-100 pl-4 py-1">
       <div className="space-y-1">
@@ -247,7 +245,7 @@ export default function FAQ() {
       id: 'general', 
       name: 'General Questions', 
       icon: HelpCircle,
-      count: 7
+      count: 5
     },
     { 
       id: 'howto', 
@@ -268,7 +266,7 @@ export default function FAQ() {
     {
       category: 'general',
       q: 'How does this product work?',
-      a: 'QuickRevert helps creators and brands turn social followers into customers. Start with Instagram DM automation: keyword-triggered DMs, auto-replies to comments, welcome messages for new followers, and follow-up flows. The full product also includes a fan CRM, cross-platform tracking across Discord, Twitch, X, and YouTube, and an AI Copilot that helps you manage your community in one place.',
+      a: 'Someone messages your Instagram → the system checks what kind of message it is and matches it to a rule you set up ("if they comment X, reply Y and DM them Z") → it sends the reply/DM automatically and saves their info as a lead.',
       keywords: ['features', 'about', 'how works', 'crm', 'instagram dm automation', 'bot', 'copilot']
     },
     {
@@ -294,18 +292,6 @@ export default function FAQ() {
       q: 'Is QuickRevert officially approved by Instagram?',
       a: 'Yes, QuickRevert is 100% official and compliant. We connect directly with Instagram and Meta official APIs. We never ask for your password, and our automated responses run entirely through secure, official Meta server infrastructure, meaning your account remains completely safe and compliant.',
       keywords: ['safe', 'official', 'compliant', 'ban', 'instagram approval', 'meta api', 'password', 'security']
-    },
-    {
-      category: 'general',
-      q: 'What is the AI Copilot?',
-      a: 'The AI Copilot is an intelligent assistant connected directly to your platforms. It tracks fan engagement, learns from what happens within your community, and automatically populates a knowledge base from your content and posts. It can suggest who to follow up with and assist with draft replies on autopilot.',
-      keywords: ['ai', 'copilot', 'assistant', 'draft replies', 'engagement', 'tracking']
-    },
-    {
-      category: 'general',
-      q: 'Who\'s the team behind QuickRevert?',
-      a: 'QuickRevert is built by XBorg, a leading digital identity and community platform that specializes in building tools for audience engagement, social credentials, and next-generation fan loyalty networks.',
-      keywords: ['team', 'about', 'xborg', 'company', 'developer', 'creator']
     },
 
     // --- How-To Category ---

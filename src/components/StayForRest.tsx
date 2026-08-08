@@ -33,7 +33,7 @@ function FlyingImage({
 
 /* ─── Word fade-up ─── */
 function Word({ children, delay, dim = false, inView }: {
-  children: React.ReactNode; delay: number; dim?: boolean; inView: boolean;
+  children: React.ReactNode; delay: number; dim?: boolean; inView: boolean; key?: React.Key;
 }) {
   return (
     <motion.span
