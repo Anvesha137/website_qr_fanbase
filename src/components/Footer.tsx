@@ -25,8 +25,42 @@ export default function Footer({ setViewMode }: FooterProps) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      // 1. Submit to FormSubmit
+      const formSubmitData = {
+        name: formData.name,
+        email: formData.email,
+        handle: formData.handle,
+        message: formData.message,
+        _subject: 'New Contact Form Submission',
+        _replyto: formData.email,
+      };
+      
+      const fsPromise = fetch('https://formsubmit.co/ajax/connect@quickrevert.tech', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formSubmitData),
+      });
+
+      // 2. Submit to local Express API
+      const apiPromise = fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          handle: formData.handle,
+          message: formData.message,
+        }),
+      });
+
+      await Promise.allSettled([fsPromise, apiPromise]);
+    } catch (err) {
+      console.error('Error submitting forms:', err);
+    }
+
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);

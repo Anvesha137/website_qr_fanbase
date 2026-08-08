@@ -27,16 +27,61 @@ export default function AffiliatePage({ setViewMode }: AffiliatePageProps) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.agreedToTerms) return;
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      // 1. Submit to FormSubmit
+      const formSubmitData = {
+        name: formData.fullName,
+        email: formData.email,
+        instagram: formData.instagramHandle,
+        location: formData.location,
+        phone: formData.phone,
+        language: formData.contentLanguage,
+        niche: formData.contentNiche,
+        usedDmTool: formData.usedDmAutomation,
+        followers: formData.followers,
+        affiliateInterest: formData.wantAffiliate,
+        _subject: 'New Collab Partner Application',
+        _replyto: formData.email,
+      };
+
+      const fsPromise = fetch('https://formsubmit.co/ajax/connect@quickrevert.tech', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formSubmitData),
+      });
+
+      // 2. Submit to local Express API
+      const apiPromise = fetch('/api/collab', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.fullName,
+          instagram: formData.instagramHandle,
+          location: formData.location,
+          phone: formData.phone,
+          language: formData.contentLanguage,
+          niche: formData.contentNiche,
+          usedDmTool: formData.usedDmAutomation,
+          followers: formData.followers,
+          affiliateInterest: formData.wantAffiliate,
+        }),
+      });
+
+      await Promise.allSettled([fsPromise, apiPromise]);
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 800);
+    } catch (err) {
+      console.error('Error submitting forms:', err);
+      alert('Failed to submit application. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
