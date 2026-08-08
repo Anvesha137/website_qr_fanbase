@@ -282,9 +282,9 @@ export default function AffiliatePage({ setViewMode }: AffiliatePageProps) {
                     className="w-full px-4 py-3 bg-slate-50/60 border border-slate-200 rounded-xl text-slate-900 text-sm font-medium focus:outline-none focus:border-[#695dd4] focus:ring-2 focus:ring-[#695dd4]/15 transition-all appearance-none cursor-pointer"
                   >
                     <option value="" disabled>Select option…</option>
-                    <option value="yes">Yes (Earn 30% recurring commission)</option>
-                    <option value="no">No (Interested in Collab / Creator sponsorship only)</option>
-                    <option value="both">Interested in both Collab & Affiliate</option>
+                    <option value="yes">I want to become an affiliate</option>
+                    <option value="no">I'm interested in collab and creator sponsorship</option>
+                    <option value="both">Interested in both</option>
                   </select>
                 </div>
 
